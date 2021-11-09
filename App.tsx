@@ -9,21 +9,23 @@
  */
 
 import React from 'react';
-import Intro from './src/screens/Intro';
+import Intro from './src/screens/Intro/Intro';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { Provider } from 'react-redux';
-const AppRedux = () => {
-  return(
+import GlobalState from './src/context/globalState';
+const AppRoot = () => {
+  return (
     <React.Fragment>
-
+      <Intro />
     </React.Fragment>
   )
 }
-const App =() => {
-  <PaperProvider>
-    {/* <Provider store={}> */}
-      <AppRedux/>
-    {/* </Provider> */}
-  </PaperProvider>
+const App = () => {
+  return (
+    <PaperProvider>
+      <GlobalState>
+        <AppRoot />
+      </GlobalState>
+    </PaperProvider>
+  )
 }
 export default App;
