@@ -29,7 +29,7 @@ const Intro = () => {
   }
   else {
     return (
-      <Swiper style={styles.container} showsButtons={true} loop={false}>
+      <Swiper style={{}} showsButtons={true} loop={false}>
         <View style={[styles.swipeScreen, { backgroundColor: '#9DD6EB' }]}>
           <Text>Màn giới thiệu 1</Text>
         </View>
