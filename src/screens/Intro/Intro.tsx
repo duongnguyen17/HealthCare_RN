@@ -6,7 +6,7 @@ import Swiper from 'react-native-swiper';
 import { SCREEN_SIZE } from '../../common';
 const Intro = () => {
   const [isNext, setIsNext] = useState<Boolean>(false)
-  const [isFirst, setIsFirst] = useState<Boolean>(true)
+  const [isFirst, setIsFirst] = useState<Boolean>(false)
   useEffect(() => {
     const wait = setTimeout(() => {
       setIsNext(true)
@@ -51,6 +51,12 @@ export default Intro;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
     alignItems: 'center',
   },
   logoContainer: {
