@@ -1,7 +1,8 @@
 import React from "react";
 import { Text, ViewProps, View, StyleSheet } from "react-native";
+import { TabViewProps } from "./OverView";
 
-const Jogging = (props: ViewProps) => {
+const Jogging = (props: TabViewProps) => {
   return (
     <View style={styles.container}>
       <Text>
