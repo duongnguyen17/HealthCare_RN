@@ -4,6 +4,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import GlobalState from './src/context/globalState';
 import MainNavigator from './src/navigator/MainNavigator';
 import { Loading } from './src/components/Loading';
+import { Provider } from 'react-redux';
+import store from './src/reduxSaga/store';
+
 const AppRoot = () => {
   return (
     <React.Fragment>
@@ -16,9 +19,9 @@ const AppRoot = () => {
 const App = () => {
   return (
     <PaperProvider>
-      <GlobalState>
+      <Provider store={store}>
         <AppRoot />
-      </GlobalState>
+      </Provider>
     </PaperProvider>
   )
 }
