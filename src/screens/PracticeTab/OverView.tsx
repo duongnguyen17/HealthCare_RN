@@ -4,7 +4,7 @@ import Frame from "../../components/Frame";
 import HairLine from "../../components/HairLine";
 
 
-const OverView = ({ scrollY }: TabViewProps) => {
+const OverView = ({ scrollY, navigation }: TabViewProps) => {
   const [isReFresh, setIsReFresh] = useState(false)
   const onRefresh = () => {
     setIsReFresh(true)
@@ -29,7 +29,7 @@ const OverView = ({ scrollY }: TabViewProps) => {
         scrollEventThrottle={2}
         refreshControl={<RefreshControl refreshing={isReFresh} onRefresh={onRefresh} />}
       >
-        <Frame style={styles.frame}>
+        <Frame style={styles.frame} >
           <View style={{ marginVertical: 16, width: '100%' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10 }}>
               <View style={{ flexDirection: 'column' }}>
@@ -44,7 +44,9 @@ const OverView = ({ scrollY }: TabViewProps) => {
             <Text>Hiện 1 ít chỉ số ở đây</Text>
           </View>
           <HairLine style={{ width: '60%' }} />
-          <TouchableOpacity style={{ width: '100%', alignItems: 'center' }}>
+          <TouchableOpacity style={{ width: '100%', alignItems: 'center' }} onPress={() => {
+            navigation.navigate("OverView")
+          }}>
             <Text style={{ marginVertical: 16 }}>Xem thêm</Text>
           </TouchableOpacity>
         </Frame>
@@ -77,5 +79,6 @@ const styles = StyleSheet.create({
 })
 
 export interface TabViewProps extends ViewProps {
-  scrollY: Animated.Value
+  scrollY: Animated.Value,
+  navigation: any,
 }

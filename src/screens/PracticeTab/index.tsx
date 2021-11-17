@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Animated, ScrollView, StyleSheet, Text, View, ViewProps } from 'react-native'
+import { Animated, ScrollView, StyleSheet, Text, View, ViewProps, ViewPropTypes } from 'react-native'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import LinearGradient from 'react-native-linear-gradient';
 import OverView from './OverView';
@@ -7,12 +7,10 @@ import Moving from './Moving';
 import { SCREEN_SIZE, TITLE } from '../../common';
 import Frame from '../../components/Frame';
 import HeartBeat from './HeartBeat';
-const renderScene = SceneMap({
-	overView: OverView,
-	moving: Moving,
-	heartBeat: HeartBeat,
-})
-const Practice = (prop: ViewProps) => {
+import { NavigationProp, RouteProp } from '@react-navigation/core';
+
+const Practice = ({ navigation }: ViewScreenProps) => {
+
 	const scrollY = useRef(new Animated.Value(0)).current
 	const [index, setIndex] = useState(0);
 	const [routes] = useState([
@@ -68,11 +66,11 @@ const Practice = (prop: ViewProps) => {
 					renderScene={({ route }) => {
 						switch (route.key) {
 							case 'overView':
-								return <OverView scrollY={scrollY} />
+								return <OverView scrollY={scrollY} navigation={navigation} />
 							case 'moving':
-								return <Moving scrollY={scrollY} />
+								return <Moving scrollY={scrollY} navigation={navigation} />
 							default:
-								return <HeartBeat scrollY={scrollY} />
+								return <HeartBeat scrollY={scrollY} navigation={navigation} />
 						}
 					}}
 					onIndexChange={setIndex}
@@ -104,3 +102,8 @@ const styles = StyleSheet.create({
 		marginVertical: 10
 	}
 })
+
+export interface ViewScreenProps {
+	navigation: NavigationProp<any>
+	route: RouteProp<any>
+}

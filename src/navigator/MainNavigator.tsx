@@ -7,6 +7,9 @@ import Practice from "../screens/PracticeTab"
 import Diary from "../screens/DiaryTab"
 import Profile from "../screens/ProfileTab"
 import { SCREEN_SIZE } from "../common"
+import OverView from "../screens/PracticeTab/OverViewScreen"
+import { TouchableOpacity } from "react-native"
+
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -49,19 +52,23 @@ const TabNavigator = () => {
     </Tab.Navigator>
   )
 }
-const StackNavigator = () => {
-  return (
-    <Stack.Navigator>
-
-    </Stack.Navigator>
-  )
-}
 const MainNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="TabNavigator" screenOptions={{ headerShown: false }}>
-        <Stack.Screen component={TabNavigator} name="TabNavigator" />
-        <Stack.Screen component={StackNavigator} name="StackNavigator" />
+      <Stack.Navigator initialRouteName="TabNavigator" >
+        <Stack.Screen component={TabNavigator} name="TabNavigator" options={{ headerShown: false }} />
+        <Stack.Screen component={OverView} name="OverView" options={({ navigation }) => ({
+          title: 'Tổng quan',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => {
+              navigation.goBack()
+            }}>
+              <MaterialIcons name="arrow-back-ios" size={23} color={"#cccccc"} />
+            </TouchableOpacity>
+          ),
+          headerTitleStyle: { fontSize: 28 },
+          headerTitleAlign: 'center'
+        })} />
       </Stack.Navigator>
     </NavigationContainer>
   )

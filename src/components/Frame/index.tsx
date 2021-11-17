@@ -1,18 +1,29 @@
 import React from "react";
-import { StyleSheet, View, ViewProps } from "react-native";
+import { StyleSheet, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native";
 // import { FrameProps } from "../../type/type";
 
-const Frame = (props: ViewProps) => {
+const Frame = (props: FrameProps) => {
+  // if (!!props.onPress) {
+  //   return (
+  //     <TouchableOpacity style={[styles.container, props.style]} onPress={props.onPress} activeOpacity={0.9} >
+  //       {props.children}
+  //     </TouchableOpacity >
+  //   )
+  // }
   return (
     <View style={[styles.container, props.style]} >
+      {!!props.onPress ? <TouchableOpacity style={{ width: '100%', height: '100%', position: 'absolute', zIndex: 1 }} onPress={props.onPress} /> : null}
       {props.children}
     </View>
   )
 }
 
 export default Frame
+export interface FrameProps extends TouchableOpacityProps, ViewProps {
+}
 const styles = StyleSheet.create({
   container: {
+    minHeight: 50,
     marginHorizontal: 5,
     alignItems: 'center',
     marginVertical: 3,
