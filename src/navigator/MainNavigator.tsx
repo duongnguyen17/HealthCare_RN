@@ -3,9 +3,9 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Practice from "../screens/Practice"
-import Diary from "../screens/Diary"
-import Profile from "../screens/Profile/profile"
+import Practice from "../screens/PracticeTab"
+import Diary from "../screens/DiaryTab"
+import Profile from "../screens/ProfileTab"
 import { SCREEN_SIZE } from "../common"
 
 const Tab = createBottomTabNavigator()

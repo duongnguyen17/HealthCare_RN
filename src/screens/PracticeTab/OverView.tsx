@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
-import { Text, ViewProps, View, StyleSheet, ScrollView, Animated, RefreshControl } from "react-native";
+import { Text, ViewProps, View, StyleSheet, ScrollView, Animated, RefreshControl, TouchableOpacity } from "react-native";
 import Frame from "../../components/Frame";
+import HairLine from "../../components/HairLine";
+
 
 const OverView = ({ scrollY }: TabViewProps) => {
   const [isReFresh, setIsReFresh] = useState(false)
@@ -27,8 +29,24 @@ const OverView = ({ scrollY }: TabViewProps) => {
         scrollEventThrottle={2}
         refreshControl={<RefreshControl refreshing={isReFresh} onRefresh={onRefresh} />}
       >
-        <Frame >
-          <View style={styles.frame}><Text>Chỗ này hiện 1 thông tin này</Text></View>
+        <Frame style={styles.frame}>
+          <View style={{ marginVertical: 16, width: '100%' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 10 }}>
+              <View style={{ flexDirection: 'column' }}>
+                <Text style={styles.textTarget}>60</Text>
+                <Text>còn 1940 bước để hoàn thành mục tiêu</Text>
+              </View>
+              <View style={{ width: 50, height: 50, backgroundColor: 'gray' }} />
+            </View>
+          </View>
+          <HairLine style={{ width: '100%' }} />
+          <View style={{ marginVertical: 10 }}>
+            <Text>Hiện 1 ít chỉ số ở đây</Text>
+          </View>
+          <HairLine style={{ width: '60%' }} />
+          <TouchableOpacity style={{ width: '100%', alignItems: 'center' }}>
+            <Text style={{ marginVertical: 16 }}>Xem thêm</Text>
+          </TouchableOpacity>
         </Frame>
         <Frame style={{ marginTop: 20 }}>
           <View style={styles.frame}><Text>Chỗ này hiện 1 thông tin này</Text></View>
@@ -40,7 +58,7 @@ const OverView = ({ scrollY }: TabViewProps) => {
           <View style={styles.frame}><Text>Chỗ này hiện 1 thông tin này</Text></View>
         </Frame>
       </Animated.ScrollView>
-    </View>
+    </View >
   )
 }
 
@@ -50,9 +68,12 @@ const styles = StyleSheet.create({
     flex: 1
   },
   frame: {
-    height: 200,
-    marginVertical: 10
-  }
+    marginVertical: 10,
+  },
+  textTarget: {
+    fontSize: 55,
+    color: 'orange'
+  },
 })
 
 export interface TabViewProps extends ViewProps {

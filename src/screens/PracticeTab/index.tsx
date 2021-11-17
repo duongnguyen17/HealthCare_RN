@@ -3,26 +3,28 @@ import { Animated, ScrollView, StyleSheet, Text, View, ViewProps } from 'react-n
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import LinearGradient from 'react-native-linear-gradient';
 import OverView from './OverView';
-import Jogging from './Jogging';
+import Moving from './Moving';
 import { SCREEN_SIZE, TITLE } from '../../common';
-import { transform } from '@babel/core';
 import Frame from '../../components/Frame';
+import HeartBeat from './HeartBeat';
 const renderScene = SceneMap({
 	overView: OverView,
-	jogging: Jogging,
+	moving: Moving,
+	heartBeat: HeartBeat,
 })
 const Practice = (prop: ViewProps) => {
 	const scrollY = useRef(new Animated.Value(0)).current
 	const [index, setIndex] = useState(0);
 	const [routes] = useState([
 		{ key: 'overView', title: TITLE.OVER_VIEW },
-		{ key: 'jogging', title: TITLE.JOGGING },
+		{ key: 'moving', title: TITLE.MOVING },
+		{ key: 'heartBeat', title: TITLE.HEART_BEAT }
 	]);
 
 	return (
 		<View style={styles.container}>
 			<LinearGradient style={{
-				height: SCREEN_SIZE.height * 2 / 3,
+				height: SCREEN_SIZE.height,
 				position: 'absolute',
 				top: 0,
 				bottom: 0,
@@ -30,7 +32,7 @@ const Practice = (prop: ViewProps) => {
 				right: 0,
 				zIndex: 0,
 			}}
-				colors={["#00aaff", "#66ccff", "#80d4ff", '#fff']}
+				colors={["#4da6ff", "#e6f2ff", '#ffffff']}
 				start={{ x: 0.5, y: 0.25 }} end={{ x: 0, y: 1.0 }}
 			/>
 			<Animated.View style={[styles.header,
@@ -67,8 +69,10 @@ const Practice = (prop: ViewProps) => {
 						switch (route.key) {
 							case 'overView':
 								return <OverView scrollY={scrollY} />
+							case 'moving':
+								return <Moving scrollY={scrollY} />
 							default:
-								return <Jogging scrollY={scrollY} />
+								return <HeartBeat scrollY={scrollY} />
 						}
 					}}
 					onIndexChange={setIndex}

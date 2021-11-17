@@ -2,17 +2,17 @@ import React from "react";
 import { Text, ViewProps, View, StyleSheet } from "react-native";
 import { TabViewProps } from "./OverView";
 
-const Jogging = (props: TabViewProps) => {
+const HeartBeat = (props: TabViewProps) => {
   return (
     <View style={styles.container}>
       <Text>
-        Jogging
+        HeartBeat
       </Text>
     </View>
   )
 }
 
-export default Jogging
+export default HeartBeat
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'gray' }
+  container: { flex: 1, backgroundColor: 'rgba(217, 217, 217,0)' }
 })
