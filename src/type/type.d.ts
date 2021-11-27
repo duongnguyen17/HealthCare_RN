@@ -1,5 +1,6 @@
+import { NavigationProp, RouteProp } from "@react-navigation/core";
 import { Reducer } from "react";
-import { ViewProps } from "react-native";
+import { Animated, ViewProps } from "react-native";
 import { AnyAction } from "redux";
 
 export interface AuthReducerType {
@@ -19,4 +20,11 @@ export interface TestStateType {
 }
 export interface RootStateType {
     testState: TestStateType
+}
+export interface ScreenProps extends ViewProps {
+    navigation: NavigationProp<any, any>,
+    route?: RouteProp<any>
+}
+export interface TabViewProps extends ScreenProps {
+    scrollY: Animated.Value,
 }

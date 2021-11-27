@@ -8,8 +8,9 @@ import { SCREEN_SIZE, TITLE } from '../../common';
 import Frame from '../../components/Frame';
 import HeartBeat from './HeartBeat';
 import { NavigationProp, RouteProp } from '@react-navigation/core';
+import { ScreenProps } from '../../type/type';
 
-const Practice = ({ navigation }: ViewScreenProps) => {
+const Practice = ({ navigation }: ScreenProps) => {
 
 	const scrollY = useRef(new Animated.Value(0)).current
 	const [index, setIndex] = useState(0);
@@ -102,8 +103,3 @@ const styles = StyleSheet.create({
 		marginVertical: 10
 	}
 })
-
-export interface ViewScreenProps {
-	navigation: NavigationProp<any>
-	route: RouteProp<any>
-}

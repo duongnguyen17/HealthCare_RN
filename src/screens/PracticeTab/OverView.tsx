@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
 import { Text, ViewProps, View, StyleSheet, ScrollView, Animated, RefreshControl, TouchableOpacity } from "react-native";
+import { SCREEN_NAME } from "../../common";
 import Frame from "../../components/Frame";
 import HairLine from "../../components/HairLine";
+import { TabViewProps } from "../../type/type";
 
 
 const OverView = ({ scrollY, navigation }: TabViewProps) => {
@@ -45,7 +47,7 @@ const OverView = ({ scrollY, navigation }: TabViewProps) => {
           </View>
           <HairLine style={{ width: '60%' }} />
           <TouchableOpacity style={{ width: '100%', alignItems: 'center' }} onPress={() => {
-            navigation.navigate("OverView")
+            navigation.navigate(SCREEN_NAME.OVERVIEW)
           }}>
             <Text style={{ marginVertical: 16 }}>Xem thêm</Text>
           </TouchableOpacity>
@@ -78,7 +80,3 @@ const styles = StyleSheet.create({
   },
 })
 
-export interface TabViewProps extends ViewProps {
-  scrollY: Animated.Value,
-  navigation: any,
-}

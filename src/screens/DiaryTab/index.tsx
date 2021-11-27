@@ -11,11 +11,11 @@ const Diary = (prop: ViewProps) => {
 	return (
 		<View style={styles.container}>
 			<Button onPress={async () => {
-				showLoading()
-				await AsyncStorage.setItem('isJoined', '0', () => {
-					console.log('setIsJoined = \'0\'')
-				})
-				hideLoading()
+				showLoading(2000)
+				// await AsyncStorage.setItem('isJoined', '0', () => {
+				// 	console.log('setIsJoined = \'0\'')
+				// })
+				// hideLoading()
 			}} title='loading' />
 			<View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
 				<Button title='increment' onPress={() => {

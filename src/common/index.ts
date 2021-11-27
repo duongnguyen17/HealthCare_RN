@@ -5,3 +5,18 @@ export const TITLE = {
   MOVING: 'Di chuyển',
   HEART_BEAT: 'Nhịp tim',
 }
+
+export const SCREEN_NAME = {
+  PRACTICE: 'Practice',
+  DIARY: 'Diary',
+  PROFILE: 'Profile',
+  TAB_NAVIGATOR: 'TabNavigator',
+  OVERVIEW: 'OverView',
+  LOGIN: 'Login',
+  REGISTER: 'Register',
+  FORGOT_PASSWORD: 'ForgotPasswordScreen',
+}
+
+export const FONT_SIZE = {}
+export const TEXT_COLOR = {}
+export const COLOR = {}

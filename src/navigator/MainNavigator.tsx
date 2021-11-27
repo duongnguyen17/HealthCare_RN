@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Practice from "../screens/PracticeTab"
 import Diary from "../screens/DiaryTab"
 import Profile from "../screens/ProfileTab"
-import { SCREEN_SIZE } from "../common"
+import { SCREEN_NAME, SCREEN_SIZE } from "../common"
 import OverView from "../screens/PracticeTab/OverViewScreen"
 import { TouchableOpacity } from "react-native"
 
@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
 const TabNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="Practice" screenOptions={({ route }) => ({
+    <Tab.Navigator initialRouteName={SCREEN_NAME.PRACTICE} screenOptions={({ route }) => ({
       headerShown: false,
       tabBarIcon: ({ focused, color }) => {
         let iconName: any;
@@ -46,18 +46,18 @@ const TabNavigator = () => {
       tabBarStyle: { height: 55 },
       tabBarLabelStyle: { fontSize: 13 }
     })}>
-      <Tab.Screen component={Practice} name="Practice" />
-      <Tab.Screen component={Diary} name="Diary" />
-      <Tab.Screen component={Profile} name="Profile" />
+      <Tab.Screen component={Practice} name={SCREEN_NAME.PRACTICE} />
+      <Tab.Screen component={Diary} name={SCREEN_NAME.DIARY} />
+      <Tab.Screen component={Profile} name={SCREEN_NAME.PROFILE} />
     </Tab.Navigator>
   )
 }
 const MainNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="TabNavigator" >
-        <Stack.Screen component={TabNavigator} name="TabNavigator" options={{ headerShown: false }} />
-        <Stack.Screen component={OverView} name="OverView" options={({ navigation }) => ({
+      <Stack.Navigator initialRouteName={SCREEN_NAME.TAB_NAVIGATOR} >
+        <Stack.Screen component={TabNavigator} name={SCREEN_NAME.TAB_NAVIGATOR} options={{ headerShown: false }} />
+        <Stack.Screen component={OverView} name={SCREEN_NAME.OVERVIEW} options={({ navigation }) => ({
           title: 'Tổng quan',
           headerLeft: () => (
             <TouchableOpacity onPress={() => {

@@ -4,7 +4,7 @@ import testSaga from "./testSaga";
 
 export default function* rootSaga() {
   yield all([
-    takeEvery('*', getInfoAction),
+    // takeEvery('*', getInfoAction),
     ...testSaga
   ])
 }

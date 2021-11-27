@@ -6,12 +6,14 @@ import MainNavigator from './src/navigator/MainNavigator';
 import { Loading } from './src/components/Loading';
 import { Provider } from 'react-redux';
 import store from './src/reduxSaga/store';
+import AuthNavigator from './src/navigator/AuthNavigator';
 
 const AppRoot = () => {
+  let isLoggin = true
   return (
     <React.Fragment>
       <Intro />
-      <MainNavigator />
+      {isLoggin ? <MainNavigator /> : <AuthNavigator />}
       <Loading />
     </React.Fragment>
   )

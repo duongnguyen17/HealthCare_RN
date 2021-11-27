@@ -1,9 +1,9 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { ViewScreenProps } from '..';
 import CardIndex from '../../../components/Frame/CardIndex';
+import { ScreenProps } from '../../../type/type';
 
-export default (props: ViewScreenProps) => {
+export default (props: ScreenProps) => {
   return (
     <View style={styles.container}>
       <ScrollView>

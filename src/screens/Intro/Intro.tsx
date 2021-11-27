@@ -20,7 +20,7 @@ const Intro = () => {
   }, [])
   const getTest = async () => {
     const isJoined: string | null = await AsyncStorage.getItem('isJoined')
-    console.log(`isJoined`, isJoined)
+    // console.log(`isJoined`, isJoined)
     if (isJoined == '1') {
       setIsFirst(false)
     } else {
@@ -48,12 +48,18 @@ const Intro = () => {
           </View>
           <View style={[styles.swipeScreen, { backgroundColor: '#92BBD9' }]}>
             <Text>Màn giới thiệu 3</Text>
-            <Button onPress={async () => {
-              setIsFirst(false)
-              await AsyncStorage.setItem('isJoined', '1', () => {
-                console.log('setIsJoined = \'1\'')
-              })
-            }}>Ấn vào đây để sang màn tiếp</Button>
+            <Button onPress={
+              async () => {
+                setIsFirst(false)
+                await AsyncStorage.setItem('isJoined', '1')
+              }
+            }>Sử dụng không cần tài khoản</Button>
+            <Button onPress={
+              async () => {
+                setIsFirst(false)
+                await AsyncStorage.setItem('isJoined', '1')
+              }
+            }>Sử dụng tài khoản</Button>
           </View>
         </Swiper>
       </View>
