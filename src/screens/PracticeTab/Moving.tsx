@@ -1,14 +1,14 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 import { TabViewProps } from "../../type/type";
 
 const Moving = (props: TabViewProps) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text>
         Moving
       </Text>
-    </View>
+    </SafeAreaView>
   )
 }
 

@@ -1,18 +1,16 @@
-import React from "react";
-import { Text, ViewProps, View, StyleSheet } from "react-native";
-import { TabViewProps } from "./OverView";
+import React from 'react';
+import {Text, ViewProps, View, StyleSheet, SafeAreaView} from 'react-native';
+import {TabViewProps} from '../../type/type';
 
 const HeartBeat = (props: TabViewProps) => {
   return (
-    <View style={styles.container}>
-      <Text>
-        HeartBeat
-      </Text>
-    </View>
-  )
-}
+    <SafeAreaView style={styles.container}>
+      <Text>HeartBeat</Text>
+    </SafeAreaView>
+  );
+};
 
-export default HeartBeat
+export default HeartBeat;
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'rgba(217, 217, 217,0)' }
-})
+  container: {flex: 1, backgroundColor: 'rgba(217, 217, 217,0)'},
+});

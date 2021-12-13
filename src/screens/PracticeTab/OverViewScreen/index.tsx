@@ -1,11 +1,11 @@
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import CardIndex from '../../../components/Frame/CardIndex';
 import { ScreenProps } from '../../../type/type';
 
 export default (props: ScreenProps) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
         <CardIndex
           title='Di chuyển'
@@ -29,7 +29,7 @@ export default (props: ScreenProps) => {
           measurementTime={'đo lúc 08:00 AM'}
           style={{ height: 300 }}></CardIndex>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 
 }

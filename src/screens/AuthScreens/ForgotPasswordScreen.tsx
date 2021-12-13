@@ -1,12 +1,12 @@
 import React from "react";
-import { ViewProps, View, Text } from "react-native";
+import { ViewProps, View, Text, SafeAreaView } from "react-native";
 const ForgotPasswordScreen = (props: ViewProps) => {
   return (
-    <View>
+    <SafeAreaView>
       <Text>
         màn quên mk này
       </Text>
-    </View>
+    </SafeAreaView>
   )
 }
 

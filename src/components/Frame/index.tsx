@@ -25,17 +25,17 @@ const styles = StyleSheet.create({
   container: {
     minHeight: 50,
     marginHorizontal: 5,
-    alignItems: 'center',
-    marginVertical: 3,
+    // alignItems: 'center',
+    marginVertical: 10,
     shadowColor: '#000000',
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowRadius: 5,
     shadowOffset: {
       width: 0,
-      height: 10,
+      height: 3,
     },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.3,
     elevation: 5
   }
 })

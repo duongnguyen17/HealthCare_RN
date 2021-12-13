@@ -1,10 +1,19 @@
 import React from 'react';
-import { ViewProps, View, StyleSheet } from 'react-native'
+import {ViewProps, View, StyleSheet} from 'react-native';
 
 const HairLine = (props: ViewProps) => {
   return (
-    <View style={[{ height: StyleSheet.hairlineWidth, backgroundColor: '#e6e6e6' }, props.style]} />
-  )
-}
+    <View
+      style={[
+        {
+          height: StyleSheet.hairlineWidth,
+          backgroundColor: '#e6e6e6',
+          alignSelf: 'center',
+        },
+        props.style,
+      ]}
+    />
+  );
+};
 
-export default HairLine
+export default HairLine;

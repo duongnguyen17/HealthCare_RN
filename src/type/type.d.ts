@@ -1,7 +1,7 @@
 import { NavigationProp, RouteProp } from "@react-navigation/core";
-import { Reducer } from "react";
-import { Animated, ViewProps } from "react-native";
-import { AnyAction } from "redux";
+import { NavigationContainerRef } from "@react-navigation/native";
+import React from "react";
+import { Animated, ButtonProps, GestureResponderEvent, PressableProps, TextInputProps, TextStyle, ViewProps, ViewStyle } from "react-native";
 
 export interface AuthReducerType {
     isLoggIned: boolean,
@@ -23,8 +23,34 @@ export interface RootStateType {
 }
 export interface ScreenProps extends ViewProps {
     navigation: NavigationProp<any, any>,
-    route?: RouteProp<any>
+    route?: RouteProp<any>,
 }
 export interface TabViewProps extends ScreenProps {
     scrollY: Animated.Value,
+}
+
+export interface HButtonProps extends PressableProps {
+    style?: ViewStyle,
+    textStyle?: TextStyle,
+    title?: string,
+    type?: 'normal' | 'white' | 'disabled' | 'transparent',
+    onPress?: null | ((event: GestureResponderEvent) => void),
+    disabled?: boolean,
+    loading?: boolean,
+}
+
+export interface HInputProps {
+    styleLable?: ViewStyle,
+    txtLable?: TextStyle,
+    styleTextInput?: TextInputProps,
+    viewContainer?: ViewStyle,
+    lable: string,
+    icon?: React.ReactNode,
+    onChangeText?: ((text: string) => void) | undefined,
+    keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'ascii-capable' | 'numbers-and-punctuation' | 'url' | 'number-pad' | 'name-phone-pad' | 'decimal-pad' | 'twitter' | 'web-search' | 'visible-password',
+    placeholder?: string,
+    isPassword?: boolean,
+}
+export interface NavigationServiceConfig {
+    navigator?: NavigationContainerRef<{}>
 }

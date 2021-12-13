@@ -1,17 +1,17 @@
-import React from 'react'
-import { StyleSheet, Text, View, ViewProps } from 'react-native'
+import React from 'react';
+import {SafeAreaView, StyleSheet, Text, View, ViewProps} from 'react-native';
 
 const Profile = (prop: ViewProps) => {
-    return (
-        <View style={styles.container}>
-            <Text>Tab thông tin cá nhân</Text>
-        </View>
-    )
-}
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text>Tab thông tin cá nhân</Text>
+    </SafeAreaView>
+  );
+};
 
-export default Profile
+export default Profile;
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    }
-})
+  container: {
+    flex: 1,
+  },
+});

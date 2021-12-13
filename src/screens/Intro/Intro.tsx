@@ -1,70 +1,77 @@
-import React, { useEffect, useState } from 'react';
-import { Image, View, Text, StyleSheet } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, View, Text, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { Button } from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import Swiper from 'react-native-swiper';
-import { SCREEN_SIZE } from '../../common';
+import {height} from '../../common';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const Intro = () => {
-  const [isNext, setIsNext] = useState<Boolean>(false)
-  const [isFirst, setIsFirst] = useState<Boolean>(false)
+  const [isNext, setIsNext] = useState<Boolean>(false);
+  const [isFirst, setIsFirst] = useState<Boolean>(false);
   useEffect(() => {
-    getTest()
+    getTest();
     const wait = setTimeout(() => {
-      setIsNext(true)
+      setIsNext(true);
     }, 1500);
 
     return () => {
-      clearTimeout(wait)
-    }
-  }, [])
+      clearTimeout(wait);
+    };
+  }, []);
   const getTest = async () => {
-    const isJoined: string | null = await AsyncStorage.getItem('isJoined')
+    const isJoined: string | null = await AsyncStorage.getItem('isJoined');
     // console.log(`isJoined`, isJoined)
     if (isJoined == '1') {
-      setIsFirst(false)
+      setIsFirst(false);
     } else {
-      setIsFirst(true)
+      setIsFirst(true);
     }
-  }
-  if (isNext && !isFirst) { return null }
-  else if (!isNext) {
+  };
+  if (isNext && !isFirst) {
+    return null;
+  } else if (!isNext) {
     return (
-      <LinearGradient colors={["#00aaff", "#66ccff", "#80d4ff"]} style={styles.container}>
+      <LinearGradient
+        colors={['#00aaff', '#66ccff', '#b3e6ff']}
+        style={styles.container}
+        start={{x: 0.5, y: 0.25}}
+        end={{x: 0, y: 1.0}}>
         {/* <Image source={{uri: ''}} /> */}
-        <View style={styles.logoContainer}><Text>Logo này</Text></View>
+        <View style={styles.logoContainer}>
+          <Text>Logo này</Text>
+        </View>
       </LinearGradient>
-    )
-  }
-  else {
+    );
+  } else {
     return (
       <View style={styles.container}>
         <Swiper style={{}} showsButtons={true} loop={false}>
-          <View style={[styles.swipeScreen, { backgroundColor: '#9DD6EB' }]}>
+          <View style={[styles.swipeScreen, {backgroundColor: '#9DD6EB'}]}>
             <Text>Màn giới thiệu 1</Text>
           </View>
-          <View style={[styles.swipeScreen, { backgroundColor: '#97CAE5' }]}>
+          <View style={[styles.swipeScreen, {backgroundColor: '#97CAE5'}]}>
             <Text>Màn giới thiệu 2</Text>
           </View>
-          <View style={[styles.swipeScreen, { backgroundColor: '#92BBD9' }]}>
+          <View style={[styles.swipeScreen, {backgroundColor: '#92BBD9'}]}>
             <Text>Màn giới thiệu 3</Text>
-            <Button onPress={
-              async () => {
-                setIsFirst(false)
-                await AsyncStorage.setItem('isJoined', '1')
-              }
-            }>Sử dụng không cần tài khoản</Button>
-            <Button onPress={
-              async () => {
-                setIsFirst(false)
-                await AsyncStorage.setItem('isJoined', '1')
-              }
-            }>Sử dụng tài khoản</Button>
+            <Button
+              onPress={async () => {
+                setIsFirst(false);
+                await AsyncStorage.setItem('isJoined', '1');
+              }}>
+              Sử dụng không cần tài khoản
+            </Button>
+            <Button
+              onPress={async () => {
+                setIsFirst(false);
+                await AsyncStorage.setItem('isJoined', '1');
+              }}>
+              Sử dụng tài khoản
+            </Button>
           </View>
         </Swiper>
       </View>
-
-    )
+    );
   }
 };
 export default Intro;
@@ -81,11 +88,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoContainer: {
-    marginTop: SCREEN_SIZE.height * 1 / 3,
+    marginTop: (height * 1) / 3,
   },
   swipeScreen: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
-})
+  },
+});
