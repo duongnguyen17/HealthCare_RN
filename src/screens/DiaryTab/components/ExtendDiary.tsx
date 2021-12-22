@@ -9,17 +9,21 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-import {COLORS, DataRadioList, FONT_SIZE, TYPE_SHOW} from '../../../common';
-import { Calendar } from '../../../components/CustomCalendar';
+import {COLORS, FONT_SIZE, TYPE_SHOW} from '../../../common';
+import {Calendar} from '../../../components/CustomCalendar';
 import RadioList from './RadioList';
 
-const ExtendDiary = ({type, visible}: ExtendDiaryProps): JSX.Element => {
+const ExtendDiary = ({
+  type,
+  visible,
+  eventType,
+  setEventType,
+}: ExtendDiaryProps): JSX.Element => {
   const [s_visible, setS_visible] = useState<boolean>();
   const [account, setAccount] = useState([
     {username: 'duongthptnt@gmail.com'},
     {username: 'duongthptnt@outlook.com'},
   ]);
-  const [typeShow, setTypeShow] = useState<DataRadioList>(TYPE_SHOW.all);
   useEffect(() => {
     if (s_visible == undefined) setS_visible(visible);
     else show();
@@ -81,13 +85,9 @@ const ExtendDiary = ({type, visible}: ExtendDiaryProps): JSX.Element => {
             <Text style={{fontSize: FONT_SIZE.TITLE}}>Nội dung hiển thị</Text>
             <RadioList
               style={{marginLeft: 10, marginTop: 5}}
-              data={[
-                {title: 'All', value: 1},
-                {title: 'Lịch khám', value: 2},
-                {title: 'Uống thuốc', value: 3},
-              ]}
-              selected={typeShow}
-              setSelected={setTypeShow}
+              data={Object.values(TYPE_SHOW)}
+              selected={eventType}
+              setSelected={setEventType}
             />
           </View>
         </View>
@@ -104,6 +104,8 @@ const styles = StyleSheet.create({
 interface ExtendDiaryProps {
   type: TypeExtend;
   visible: boolean;
+  eventType: TYPE_SHOW;
+  setEventType: React.Dispatch<React.SetStateAction<TYPE_SHOW>>;
 }
 export enum TypeExtend {
   option = 'Option',

@@ -1,12 +1,18 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
 import {hideLoading, showLoading} from '../../components/Loading';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootStateType} from '../../type/type';
 import {testAction} from '../../reduxSaga/slices/testSlice';
 import HIcon from '../../components/HIcon';
-import {AlertType, EventType, FONT_SIZE, SCREEN} from '../../common';
+import {
+  AlertType,
+  EventType,
+  FONT_SIZE,
+  SCREEN,
+  TYPE_SHOW,
+} from '../../common';
 import MedicineItem from '../../components/MedicineItem';
 import {ScreenProps} from '../../type/type';
 import HHeader from '../../components/HHeader';
@@ -14,244 +20,260 @@ import HDayTag from '../../components/HDayTag';
 import ExtendDiary, {TypeExtend} from './components/ExtendDiary';
 import {showAlert} from '../../components/HAlert';
 import {findSomeDay} from '../../utils/dateutils';
-
+const dataEx = [
+  {
+    date: new Date('2021-11-25T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-11-27T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-18T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-19T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-20T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '19:00',
+        amount: '2 - 4 viên',
+        more: 'Trước ăn',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-22T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-25T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-26T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-27T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-28T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+  {
+    date: new Date('2021-12-29T06:23:21.318Z'),
+    event: [
+      {
+        title: 'Panadon',
+        type: EventType.MEDICINE,
+        visited: {title: 'Đau dạ dày'},
+        time: '09:00',
+        amount: '2 - 4 viên',
+        more: 'Sau ăn',
+      },
+      {
+        title: 'Đi khám dạ dày',
+        type: EventType.VISITED,
+        locale: 'BV Bạch Mai',
+        more: 'mang theo BHXH',
+        time: '10:00',
+      },
+    ],
+  },
+];
 const Diary = (props: ScreenProps) => {
   // const count = useSelector((state: RootStateType) => state.testState.count)
   // const dispatch = useDispatch()
+
   const list = useRef<any>();
   const [extendVisible, setExtendVisible] = useState<boolean>(false);
   const [calendarVisible, setCalendarVisible] = useState<boolean>(false);
   const [typeExtend, setTypeExtend] = useState<TypeExtend>(TypeExtend.calendar);
-  const [data, setData] = useState<Array<Object>>([
-    {
-      date: new Date('2021-11-25T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-11-27T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-18T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-19T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-20T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '19:00',
-          amount: '2 - 4 viên',
-          more: 'Trước ăn',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-22T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-25T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-26T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-27T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-28T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-    {
-      date: new Date('2021-12-29T06:23:21.318Z'),
-      event: [
-        {
-          title: 'Panadon',
-          type: EventType.MEDICINE,
-          visited: {title: 'Đau dạ dày'},
-          time: '09:00',
-          amount: '2 - 4 viên',
-          more: 'Sau ăn',
-        },
-        {
-          title: 'Đi khám dạ dày',
-          type: EventType.VISITED,
-          locale: 'BV Bạch Mai',
-          more: 'mang theo BHXH',
-          time: '10:00',
-        },
-      ],
-    },
-  ]);
+  const [data, setData] = useState<Array<Object> >([]);
+  const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
+  useEffect(() => {
+    //filter data
+    if (eventType == TYPE_SHOW.ALL) {
+      setData(dataEx);
+    } else {
+      let dataTemp: Array<Object> = [];
+      dataEx.forEach(element => {
+        // @ts-ignore
+        let arr = element.event.filter(e => e.type == eventType);
+        dataTemp.push({date: element.date, event: arr});
+      });
+      setData(dataTemp);
+    }
+  }, [eventType]);
 
   const gotoSearchScreen = (): void => {
     props?.navigation?.navigate(SCREEN.SEARCH);
@@ -315,7 +337,12 @@ const Diary = (props: ScreenProps) => {
           </TouchableOpacity>
         </View>
       </HHeader>
-      <ExtendDiary type={typeExtend} visible={extendVisible} />
+      <ExtendDiary
+        type={typeExtend}
+        visible={extendVisible}
+        eventType={eventType}
+        setEventType={setEventType}
+      />
 
       {/* chỗ này yêu cầu phải có 1 renderItem nhưng mình dùng CellRendererComponent nên nó báo lỗi
       @ts-ignore */}

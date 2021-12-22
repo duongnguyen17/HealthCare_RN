@@ -68,17 +68,10 @@ export const STYLES = {
     elevation: 3,
   }
 }
-export const TYPE_SHOW = {
-  all: {
-    title: 'Tất cả',
-    value: 1,
-  },
-  visited: { title: 'Lịch khám', value: 2 },
-  medicine: { titlt: 'Uống thuốc', value: 3 },
-}
-export interface DataRadioList {
-  title: string;
-  value?: number;
+export enum TYPE_SHOW {
+  ALL = 'All',
+  MEDICINE = 'Medicine',
+  VISITED = 'Visited'
 }
 export enum SearchType {
   MEDICINE = 'Medicine',
@@ -88,6 +81,7 @@ export enum SearchType {
 }
 
 export enum EventType {
+
   VISITED = 'Visited',
   MEDICINE = 'Medicine',
 }

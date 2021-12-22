@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {COLORS, DataRadioList, FONT_SIZE} from '../../../common';
+import {COLORS, FONT_SIZE, TYPE_SHOW} from '../../../common';
 import HIcon from '../../../components/HIcon';
 
 const RadioList = ({style, data, selected, setSelected}: RadioListProps) => {
@@ -27,14 +27,14 @@ const RadioList = ({style, data, selected, setSelected}: RadioListProps) => {
           <HIcon
             font="MaterialCommunityIcons"
             name={
-              selected.value == value.value
+              selected == value
                 ? 'circle-slice-8'
                 : 'circle-outline'
             }
-            color={selected.value == value.value ? COLORS.BLUE : '#000000'}
+            color={selected== value? COLORS.BLUE : '#000000'}
           />
           <Text style={{marginLeft: 10, fontSize: FONT_SIZE.CONTENT}}>
-            {value.title}
+            {value}
           </Text>
         </TouchableOpacity>
       ))}
@@ -44,7 +44,7 @@ const RadioList = ({style, data, selected, setSelected}: RadioListProps) => {
 export default RadioList;
 interface RadioListProps {
   style?: StyleProp<ViewStyle>;
-  data: DataRadioList[];
-  selected: DataRadioList;
-  setSelected: React.Dispatch<React.SetStateAction<DataRadioList>>;
+  data: Array<TYPE_SHOW>;
+  selected: TYPE_SHOW;
+  setSelected: React.Dispatch<React.SetStateAction<TYPE_SHOW>>;
 }
