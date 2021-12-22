@@ -3,7 +3,7 @@ import { View, ViewProps, TouchableOpacity, StyleSheet } from 'react-native'
 import Indicator from '../ActivityIndicator';
 import LoadingManager from './LoadingManager';
 
-export const showLoading = (hideAfter?: number, cancelable = false) => {
+export const showLoading = (hideAfter: number, cancelable = false) => {
   const ref = LoadingManager.getDefault()
   if (!!ref) {
     ref.showLoading(cancelable)

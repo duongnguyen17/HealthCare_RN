@@ -3,13 +3,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {TouchableOpacity} from 'react-native';
+import {SCREEN, height, width} from '../common';
+
+//import screen
 import Practice from '../screens/PracticeTab';
 import Diary from '../screens/DiaryTab';
 import Profile from '../screens/ProfileTab';
-import {SCREEN, height, width} from '../common';
 import OverView from '../screens/PracticeTab/OverViewScreen';
-import {TouchableOpacity} from 'react-native';
-
+import MedicineScreen from '../screens/DiaryTab/MedicineScreen';
+import SearchScreen from '../screens/SearchScreen';
+import VisitedScreen from '../screens/DiaryTab/VisitedScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
@@ -76,6 +80,23 @@ const MainNavigator = () => {
             headerTitleStyle: {fontSize: 28},
             headerTitleAlign: 'center',
           })}
+        />
+        <Stack.Screen
+          component={MedicineScreen}
+          name={SCREEN.DIARY.MEDICINE}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          component={SearchScreen}
+          name={SCREEN.SEARCH}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          component={VisitedScreen}
+          name={SCREEN.DIARY.VISITED}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

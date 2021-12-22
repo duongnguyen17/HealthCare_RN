@@ -71,7 +71,7 @@ const OverView = ({scrollY, navigation}: TabViewProps) => {
             <TouchableOpacity
               style={{width: '100%', alignItems: 'center'}}
               onPress={() => {
-                navigation.navigate(SCREEN.PRACTICE.OVERVIEW);
+                navigation?.navigate(SCREEN.PRACTICE.OVERVIEW);
               }}>
               <Text style={{marginTop: 8}}>Xem thêm</Text>
             </TouchableOpacity>
@@ -91,7 +91,7 @@ const OverView = ({scrollY, navigation}: TabViewProps) => {
             <TouchableOpacity
               style={{width: '100%', alignItems: 'center'}}
               onPress={() => {
-                navigation.navigate(SCREEN.PRACTICE.OVERVIEW);
+                navigation?.navigate(SCREEN.PRACTICE.OVERVIEW);
               }}>
               <Text style={{marginTop: 8}}>Xem thêm</Text>
             </TouchableOpacity>
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  frame: {},
+  frame: {height:300},
   inLineFrame: {
     // backgroundColor: 'gray',
     marginHorizontal: 10,

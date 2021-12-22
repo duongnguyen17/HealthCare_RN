@@ -13,8 +13,9 @@ export const SCREEN = {
     PROFILE: 'Profile',
   },
   PRACTICE: { OVERVIEW: 'OverView', },
+  DIARY: { MEDICINE: 'Medicine', VISITED: 'Visited' },
   TAB_NAVIGATOR: 'TabNavigator',
-
+  SEARCH: 'Search',
   AUTH: {
     LOGIN: 'Login',
     REGISTER: 'Register',
@@ -39,13 +40,21 @@ export const COLORS = {
   BLUE: '#047AFF',
   WHITE: '#fff',
   COLOR_LIGHT_BLUE: '#3DBBED',
+  GRAY_DECOR: '#cccccc',
+  GRAY_TEXT_1: '#cccccc',
+  GRAY_TEXT_2: '#999999',
+
 }
 export const FONT_SIZE = {
-  TINY: 13,
-  CONTENT: 16,
+  TINY: 12,
+  CONTENT: 14,
   TITLE: 18,
   HEADER: 24,
   BIG_HEADER: 30,
+  HEADER_TAG: 16
+}
+export const ICON_SIZE = {
+  HEADER: 23,
 }
 export const STYLES = {
   shadow: {
@@ -58,4 +67,33 @@ export const STYLES = {
     shadowRadius: 2.22,
     elevation: 3,
   }
+}
+export const TYPE_SHOW = {
+  all: {
+    title: 'Tất cả',
+    value: 1,
+  },
+  visited: { title: 'Lịch khám', value: 2 },
+  medicine: { titlt: 'Uống thuốc', value: 3 },
+}
+export interface DataRadioList {
+  title: string;
+  value?: number;
+}
+export enum SearchType {
+  MEDICINE = 'Medicine',
+  DATE = 'Date',
+  VISITED = 'Visited',
+  LOCALE = 'Locale',
+}
+
+export enum EventType {
+  VISITED = 'Visited',
+  MEDICINE = 'Medicine',
+}
+
+export enum AlertType {
+  SUCCESS = 'success',
+  FAIL = 'fail',
+  WARN = 'warn',
 }

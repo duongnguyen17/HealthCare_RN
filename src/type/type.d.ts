@@ -22,7 +22,7 @@ export interface RootStateType {
     testState: TestStateType
 }
 export interface ScreenProps extends ViewProps {
-    navigation: NavigationProp<any, any>,
+    navigation?: NavigationProp<any, any>,
     route?: RouteProp<any>,
 }
 export interface TabViewProps extends ScreenProps {
@@ -54,3 +54,4 @@ export interface HInputProps {
 export interface NavigationServiceConfig {
     navigator?: NavigationContainerRef<{}>
 }
+

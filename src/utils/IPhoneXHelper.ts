@@ -1,6 +1,8 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
 
-export function isIphoneX() {
+
+/**check tai thỏ */
+export const isIphoneX = (): boolean => {
     const dimen = Dimensions.get('window');
     return (
         Platform.OS === 'ios' &&
@@ -21,15 +23,20 @@ export function ifIphoneX(iphoneXStyle: any, regularStyle: any) {
     return regularStyle;
 }
 
-// safe - whether you want for get safe area height or not
-export function getStatusBarHeight(safe: boolean) {
+/**
+ * get height of statusbar
+ * @param safe whether you want for get safe area height or not 
+ */
+export const getStatusBarHeight = (safe?: boolean) => {
     return Platform.select({
         ios: ifIphoneX(safe ? 44 : 30, 20),
         android: StatusBar.currentHeight,
         default: 0
     });
 }
-
-export function getBottomSpace() {
+/**
+ * get height of bottomspace
+ */
+export const getBottomSpace = (): number => {
     return isIphoneX() ? 34 : 0;
 }
