@@ -11,6 +11,12 @@ export const isEqualDay = (someDate1: Date, someDate2: Date): boolean => {
         someDate1.getMonth() == someDate2.getMonth() &&
         someDate1.getFullYear() == someDate2.getFullYear()
 }
+/**check is curr month-year */
+export const isCurrMonth = (someDate: Date): boolean => {
+    const today = new Date()
+    return someDate.getMonth() === today.getMonth() &&
+        someDate.getFullYear() == today.getFullYear()
+}
 /**Caculate day in week */
 export const calDayWeek = (someDate: Date): string => {
     const order = someDate.getUTCDay();

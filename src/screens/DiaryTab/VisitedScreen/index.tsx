@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Modal,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {AlertType, FONT_SIZE, SCREEN, SearchType, width} from '../../../common';
@@ -19,18 +20,35 @@ import MedicineItem from '../../../components/MedicineItem';
 import {ScreenProps} from '../../../type/type';
 import Tag from '../components/Tag';
 import {showAlert} from '../../../components/HAlert';
+import {useDispatch} from 'react-redux';
+import {visitedAction} from '../../../reduxSaga/slices/visitedSlice';
 const VisitedScreen = (props: ScreenProps) => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState<string>('');
-  const [state, setState] = useState<boolean>(true);
-  const [pre, setPre] = useState(null);
-  const [locale, setLocale] = useState('');
+  // const [state, setState] = useState<boolean>(true);
+  const [pre, setPre] = useState<number | null>(null);
+  const [location, setLocation] = useState('');
   const [date, setDate] = useState(new Date());
   const [medicines, setMedicines] = useState([]);
-  const [more, setMore] = useState<string>('');
+  const [descript, setDescript] = useState<string>('');
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   const onSubmit = () => {
-    console.log('submit');
+    if (title == '' || title == undefined) {
+      showAlert(AlertType.WARN, 'Không được để trống tên lần khám');
+    } else {
+      dispatch(
+        visitedAction.addVisited({
+          _id: Date.now(),
+          title,
+          pre,
+          location,
+          descript,
+          date,
+        }),
+      );
+      props.navigation?.goBack();
+    }
   };
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
@@ -76,7 +94,7 @@ const VisitedScreen = (props: ScreenProps) => {
               onChangeText={setTitle}
             />
           </Tag>
-          <Tag>
+          {/* <Tag>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text>Trạng thái</Text>
               <View
@@ -118,7 +136,7 @@ const VisitedScreen = (props: ScreenProps) => {
                 </TouchableOpacity>
               </View>
             </View>
-          </Tag>
+          </Tag> */}
           <Tag>
             <TouchableOpacity
               style={{flexDirection: 'row', justifyContent: 'space-between'}}
@@ -148,13 +166,13 @@ const VisitedScreen = (props: ScreenProps) => {
                 alignItems: 'center',
               }}>
               <TextInput
-                value={locale}
+                value={location}
                 multiline
-                onChangeText={setLocale}
+                onChangeText={setLocation}
                 placeholder="Địa điểm"
                 style={{flex: 1}}
               />
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{marginLeft: 5}}
                 onPress={() => {
                   gotoSearchScreen(SearchType.LOCALE);
@@ -164,7 +182,7 @@ const VisitedScreen = (props: ScreenProps) => {
                   name="arrow-forward-ios"
                   size={18}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </Tag>
           <Tag>
@@ -181,6 +199,7 @@ const VisitedScreen = (props: ScreenProps) => {
           </Tag>
           {datePickerVisible && (
             <DateTimePicker
+              // style={{backgroundColor: '#fff'}}
               value={date}
               mode={'date'}
               display="spinner"
@@ -207,7 +226,7 @@ const VisitedScreen = (props: ScreenProps) => {
               onPress={() => {
                 if (title == '' || title == undefined) {
                   // hiện cảnh báo: không được để trống title
-                  showAlert(AlertType.FAIL, 'Phải đặt tên lần khám');
+                  showAlert(AlertType.WARN, 'Phải đặt tên lần khám');
                 } else
                   props.navigation?.navigate(SCREEN.DIARY.MEDICINE, {
                     data: {title: title, date: date.toISOString().slice(0, 10)},
@@ -219,9 +238,9 @@ const VisitedScreen = (props: ScreenProps) => {
           </Tag>
           <Tag>
             <TextInput
-              value={more}
+              value={descript}
               multiline
-              onChangeText={setMore}
+              onChangeText={setDescript}
               placeholder="Ghi chú"
             />
           </Tag>

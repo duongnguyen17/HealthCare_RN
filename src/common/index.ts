@@ -43,7 +43,18 @@ export const COLORS = {
   GRAY_DECOR: '#cccccc',
   GRAY_TEXT_1: '#cccccc',
   GRAY_TEXT_2: '#999999',
-
+  EVENT_TAG: {
+    Medicine: {
+      backgroundColor: '#fff',
+      borderColor: '#005580',
+      textColor: '#005580'
+    },
+    Visited: {
+      backgroundColor: '#fff',
+      borderColor: '#009933',
+      textColor: '#009933'
+    },
+  },
 }
 export const FONT_SIZE = {
   TINY: 12,
@@ -90,4 +101,51 @@ export enum AlertType {
   SUCCESS = 'success',
   FAIL = 'fail',
   WARN = 'warn',
+}
+export interface Medicine {
+  _id: number,
+  visitId: number,
+  title: string,
+  isDone: boolean,
+  remind: Remind,
+  start: Date,
+  during: number
+}
+
+export interface Remind {
+  time: string,
+  descript?: string,
+  repeat?: boolean,
+  amount?: string,
+}
+export interface Visited {
+  _id: number,
+  title: string,
+  pre: number,//id of pre visited
+  location: string,
+  descript: string,
+  date: Date,
+}
+
+export interface HEvent {
+
+  date: Date,
+  event: Array<HEventMedicine | HEventVisited>
+}
+export interface HEventMedicine {
+  _id: number,
+  title: string,
+  type: EventType.MEDICINE,
+  visited: Visited,
+  time: string,
+  amount: string,
+  descript: string,
+}
+export interface HEventVisited {
+  _id: number,
+  title: string,
+  type: EventType.VISITED,
+  location: string,
+  descript: string,
+  date: Date,
 }

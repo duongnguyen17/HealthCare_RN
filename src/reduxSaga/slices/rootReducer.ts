@@ -1,7 +1,11 @@
 
-import { testReducer } from './testSlice'
+import { eventReducer } from './eventSlice'
+import { medicineReducer } from './medicineSlice'
+import { visitedReducer } from './visitedSlice'
 const rootReducer = {
-  testState: testReducer,
+  medicineState: medicineReducer,
+  visitedState: visitedReducer,
+  eventState: eventReducer
 }
 
 export default rootReducer

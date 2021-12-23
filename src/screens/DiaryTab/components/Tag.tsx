@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#cccccc',
   },
-  containerMargin: {marginHorizontal: 20, marginVertical: 10},
+  containerMargin: {marginHorizontal: 10, marginVertical: 10},
 });
 interface TagProps {
   children: React.ReactNode;

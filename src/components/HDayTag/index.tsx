@@ -7,14 +7,15 @@ import {
   View,
   ViewProps,
 } from 'react-native';
-import {COLORS, EventType} from '../../common';
+import {COLORS, EventType, HEvent} from '../../common';
 import {calDayWeek, isToday} from '../../utils/dateutils';
 import EventTag from './EventTag';
 
 const HDayTag = ({data}: HDayTagProps) => {
+  // console.log(`data-HDayTag`, data);
   const container = useRef<any>(null);
   const m_isToday: boolean = isToday(data.date);
-
+  // console.log(`m_isToday`, m_isToday);
   return (
     <View
       ref={container}
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   rigthSubContainer: {flex: 8},
 });
 interface HDayTagProps {
-  data: DataTagType;
+  data: HEvent;
 }
 
 export interface DataTagType {

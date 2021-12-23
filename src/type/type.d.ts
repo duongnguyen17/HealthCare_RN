@@ -2,6 +2,7 @@ import { NavigationProp, RouteProp } from "@react-navigation/core";
 import { NavigationContainerRef } from "@react-navigation/native";
 import React from "react";
 import { Animated, ButtonProps, GestureResponderEvent, PressableProps, TextInputProps, TextStyle, ViewProps, ViewStyle } from "react-native";
+import { HEvent, Medicine, Visited } from "../common";
 
 export interface AuthReducerType {
     isLoggIned: boolean,
@@ -15,11 +16,19 @@ export interface AppContextType {
 // export interface FrameProps extends ViewProps {
 
 // }
-export interface TestStateType {
-    count: number
+export interface MedicineStateType {
+    all: Array<Medicine>
+}
+export interface VisitedStateType {
+    all: Array<Visited>
+}
+export interface EventStateType {
+    all: Array<HEvent>
 }
 export interface RootStateType {
-    testState: TestStateType
+    medicineState: MedicineStateType,
+    visitedState: VisitedStateType,
+    eventState: EventStateType
 }
 export interface ScreenProps extends ViewProps {
     navigation?: NavigationProp<any, any>,
