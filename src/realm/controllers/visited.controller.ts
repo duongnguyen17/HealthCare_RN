@@ -8,6 +8,7 @@ export const getAllVisited = async () => {
     try {
         const realm = await Realm.open(configureRealm)
         let allVisited = realm.objects(SCHEMA.VISITED)
+        // console.log(`allVisited`, allVisited)
         return [...allVisited]
     } catch (error) {
         console.log("🚀 ~ file: visited.controller.ts ~ line 12 ~ getAllVisited ~ error", error)
@@ -19,7 +20,7 @@ export const getVisitedInMonth = async (date: Date) => {
     try {
         const realm = await Realm.open(configureRealm)
         let allVisited = realm.objects(SCHEMA.VISITED)
-        console.log(`allVisited`, allVisited)
+        // console.log(`allVisited`, allVisited)
         return allVisited
     } catch (error) {
         console.log("🚀 ~ file: visited.controller.ts ~ line 24 ~ getVisitedInMonth ~ error", error)
@@ -29,7 +30,7 @@ export const getVisitedInMonth = async (date: Date) => {
 /**add new visited */
 export const addVisited = async (newVisited: any) => {
     try {
-        console.log(`newVisited`, newVisited)
+        // console.log(`newVisited`, newVisited)
         const realm = await Realm.open(configureRealm)
         realm.write(() => {
             realm.create(SCHEMA.VISITED, newVisited)

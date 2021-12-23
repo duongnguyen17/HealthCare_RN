@@ -17,7 +17,7 @@ const visitedSlice = createSlice({
         },
         addVisitedSuccess: (state, { payload }) => {
             state.all = [...state.all, payload]
-            console.log(`state.all`, state.all)
+            // console.log(`state.all`, state.all)
         },
         deleteVisited: (state, { payload }) => {
 

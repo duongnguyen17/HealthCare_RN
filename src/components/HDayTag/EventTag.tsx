@@ -8,7 +8,6 @@ import {
   HEventVisited,
 } from '../../common';
 const EventTag = ({data}: TaskTagProps) => {
-  // console.log(`data-EventTag`, data);
   return (
     <TouchableOpacity
       style={{
