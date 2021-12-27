@@ -1,4 +1,3 @@
-import { ErrorInfo } from "react";
 import Realm from "realm";
 import { configureRealm } from "..";
 import { Visited } from "../../common";
@@ -8,7 +7,7 @@ export const getAllVisited = async () => {
     try {
         const realm = await Realm.open(configureRealm)
         let allVisited = realm.objects(SCHEMA.VISITED)
-        // console.log(`allVisited`, allVisited)
+        // console.log(`allVisited-controller`, allVisited)
         return [...allVisited]
     } catch (error) {
         console.log("🚀 ~ file: visited.controller.ts ~ line 12 ~ getAllVisited ~ error", error)

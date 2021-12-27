@@ -1,7 +1,8 @@
 import { put, takeLatest, call } from "redux-saga/effects";
-import { AlertType, EventType, HEvent, HEventVisited } from "../../common";
+import { AlertType, EventType, HEvent, HEventMedicine, HEventVisited, Medicine } from "../../common";
 import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
+import { getAllMedicine } from "../../realm/controllers/medicine.controller";
 import { getAllVisited } from "../../realm/controllers/visited.controller";
 import { isEqualDay } from "../../utils/dateutils";
 import { eventAction } from "../slices/eventSlice";
@@ -16,9 +17,11 @@ function* getAllEventSaga() {
     try {
         showLoading()
         let events: Array<HEvent> = []
+
+        //lấy tất cả visited để xếp vào list event
         //@ts-ignore
         let allVisited = yield call(getAllVisited)
-        let temp: boolean = false
+        // console.log(`allVisited-eventsaga`, allVisited)
         allVisited.forEach((element: any) => {
             // console.log(`element`, element, { ...element, type: EventType.VISITED })
 
@@ -30,27 +33,74 @@ function* getAllEventSaga() {
                 title: element.title,
                 type: EventType.VISITED,
             }
-            events.forEach((event) => {
-                if (isEqualDay(event.date, element.date)) {
-                    // event.event.push({ ...element, type: EventType.VISITED })
-                    event.event.push(eTemp)
-                    temp = true
-                }
-            })
-            if (!temp) {
-                // events.push({ date: element.date, event: [{ ...element, type: EventType.VISITED }] })
+
+            let index = events.findIndex((event) => isEqualDay(event.date, element.date))
+            if (index >= 0) {
+                events[index].event.push(eTemp)
+            }
+            else {
                 events.push({ date: element.date, event: [eTemp] })
             }
-            temp = false
         })
+        //lấy tất cả các thuốc uống để ren ra event
+        //@ts-ignore
+        let allMedicines = yield call(getAllMedicine)
+        console.log(`allMedicines-eventSaga`, allMedicines)
+        allMedicines.forEach((medicine: Medicine) => {
+            // console.log(`element`, element, { ...element, type: EventType.VISITED })
+            let eventMedicines: Array<HEventMedicine> = []
+            for (let i = 0; i < medicine.during; ++i) {
+                let currDate = new Date()
+                currDate.setDate(medicine.start.getDate() + i)
+                medicine.remind.forEach((remind) => {
+                    if (remind.repeat) {
+                        eventMedicines.push({
+                            _id: medicine._id,
+                            title: medicine.title,
+                            type: EventType.MEDICINE,
+                            visitedId: medicine.visitedId,
+                            time: remind.time,
+                            date: currDate,
+                            amount: remind.amount,
+                            descript: remind.descript
+                        })
+
+                    }
+                    else if (i == 0) {
+                        eventMedicines.push({
+                            _id: medicine._id,
+                            title: medicine.title,
+                            type: EventType.MEDICINE,
+                            visitedId: medicine.visitedId,
+                            time: remind.time,
+                            date: currDate,
+                            amount: remind.amount,
+                            descript: remind.descript
+                        })
+                    }
+                })
+            }
+            eventMedicines.forEach((eMedicine) => {
+                let index = events.findIndex((event) => isEqualDay(event.date, eMedicine.date))
+                if (index >= 0) {
+                    events[index].event.push(eMedicine)
+                } else {
+                    events.push({ date: eMedicine.date, event: [eMedicine] })
+                }
+            })
+        })
+
         // console.log(`events`, events[0].event)
         yield put(eventAction.getAllEventSuccess({ all: events }))
     } catch (error) {
-        console.log("🚀 ~ file: eventSaga.ts ~ line 22 ~ function*getAllEventSaga ~ error", error)
+        console.log("🚀 ~ file: eventSaga.ts ~ line 83 ~ function*getAllEventSaga ~ error", error)
         showAlert(AlertType.FAIL, 'Không thể lấy dữ liệu')
     } finally {
         hideLoading()
     }
+}
+const addEvent = (event: HEventMedicine | HEventVisited) => {
+
 }
 
 function* getEventInMonthSaga() {

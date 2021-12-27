@@ -7,6 +7,7 @@ export const isToday = (someDate: Date): boolean => {
 }
 /**check same day */
 export const isEqualDay = (someDate1: Date, someDate2: Date): boolean => {
+    // console.log(`someDate12 - isEqualDay - utils`, someDate1, someDate2)
     return someDate1.getDate() == someDate2.getDate() &&
         someDate1.getMonth() == someDate2.getMonth() &&
         someDate1.getFullYear() == someDate2.getFullYear()

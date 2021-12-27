@@ -104,10 +104,10 @@ export enum AlertType {
 }
 export interface Medicine {
   _id: number,
-  visitId: number,
+  visitedId: number,
   title: string,
-  isDone: boolean,
-  remind: Remind,
+  // isDone: boolean,
+  remind: Array<Remind>,
   start: Date,
   during: number
 }
@@ -125,6 +125,7 @@ export interface Visited {
   location: string,
   descript: string,
   date: Date,
+  medicines?: Array<Medicine>
 }
 
 export interface HEvent {
@@ -136,16 +137,17 @@ export interface HEventMedicine {
   _id: number,
   title: string,
   type: EventType.MEDICINE,
-  visited: Visited,
+  visitedId: number,
   time: string,
-  amount: string,
-  descript: string,
+  date: Date,
+  amount?: string,
+  descript?: string,
 }
 export interface HEventVisited {
   _id: number,
   title: string,
   type: EventType.VISITED,
-  location: string,
-  descript: string,
+  location?: string,
+  descript?: string,
   date: Date,
 }

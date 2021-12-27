@@ -15,6 +15,8 @@ import {ScreenProps} from '../../../type/type';
 import Tag from '../components/Tag';
 import HDropDownPicker from '../../../components/HDropDownPicker';
 import {showAlert} from '../../../components/HAlert';
+import {useDispatch} from 'react-redux';
+import {medicineAction} from '../../../reduxSaga/slices/medicineSlice';
 
 const TimeUnit = [
   {key: 'ngày', value: 1},
@@ -24,15 +26,71 @@ const TimeUnit = [
 
 const MedicineScreen = (props: ScreenProps) => {
   const now = new Date();
-  const [title, setTitle] = useState<string>('');
+  const dispatch = useDispatch();
+  const medicine = props.route?.params?.medicine;
+
+  const [title, setTitle] = useState<string>(medicine?.title);
   // const [state, setState] = useState<boolean>(true);
-  const [reminds, setReminds] = useState<Array<Remind | any>>([]);
+  const [reminds, setReminds] = useState<Array<Remind | any>>(
+    medicine?.remind ?? [],
+  );
   const [timeUnit, setTimeUnit] = useState<any>({key: 'ngày', value: 1});
-  const [day, setDay] = useState<string>('0');
+  const [count, setCount] = useState<string>(
+    medicine?.during.toString() ?? '0',
+  );
   const onSubmit = () => {
-    if (title == '' || title == undefined) {
+    let remindTimeArr = reminds.map(e => e.time);
+    let isDuplicate = remindTimeArr.some(
+      (e, i) => remindTimeArr.indexOf(e) != i,
+    );
+    if (isDuplicate) {
+      showAlert(AlertType.WARN, 'Thời gian nhắc nhở không được trùng nhau');
+    } else if (title == '' || title == undefined) {
       showAlert(AlertType.WARN, 'Không được để trống tên thuốc');
+    } else if (!!medicine?.visitedId) {
+      //nếu là update
+      dispatch(
+        medicineAction.updateMedicine({
+          _id: medicine._id,
+          title,
+          during: calDuring(count, timeUnit),
+          remind: reminds,
+          start: medicine?.start,
+          visitedId: medicine?.visitedId,
+        }),
+      );
+      props.navigation?.goBack();
+    } else {
+      //nếu là tạo mới
+      props.navigation?.goBack();
+      props.route?.params?.updateMedicine({
+        _id: medicine?._id ?? Date.now(),
+        title,
+        during: calDuring(count, timeUnit),
+        remind: reminds,
+        start: null,
+        visitedId: null,
+      });
     }
+  };
+
+  const calDuring = (c: string, u: any) => {
+    let unit: number = 0;
+    switch (u.value) {
+      case 1:
+        unit = 1;
+        break;
+      case 2:
+        unit = 7;
+        break;
+      case 3:
+        unit = 30;
+        break;
+      default:
+        console.log(`calDuring error - medicineScreen`);
+        break;
+    }
+    return parseInt(c) * unit;
   };
 
   const addRemind = () => {
@@ -43,9 +101,23 @@ const MedicineScreen = (props: ScreenProps) => {
         descript: '',
         repeat: true,
         amount: '',
+        isNew: true,
       },
     ]);
   };
+  const updateRemind = (remind: Remind, index: number) => {
+    reminds[index] = remind;
+    // reminds[index].amount = remind.amount;
+    // reminds[index].descript = remind.descript;
+    // reminds[index].repeat = remind.repeat;
+    // reminds[index].time = remind.time;
+  };
+  const deleteRemind = (index: number) => {
+    let temp = [...reminds];
+    temp.splice(index, 1);
+    setReminds(temp);
+  };
+  // console.log(`reminds`, reminds);
   return (
     <View style={styles.container}>
       <HeaderCommon
@@ -98,7 +170,15 @@ const MedicineScreen = (props: ScreenProps) => {
           <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
         </View>
         <FlatList
-          renderItem={({item}) => <RemindItem item={item} />}
+          renderItem={({item, index}) => (
+            <RemindItem
+              item={item}
+              index={index}
+              updateRemind={updateRemind}
+              deleteRemind={deleteRemind}
+              isNew={item.isNew}
+            />
+          )}
           data={reminds}
         />
         <TouchableOpacity
@@ -126,8 +206,8 @@ const MedicineScreen = (props: ScreenProps) => {
               marginLeft: 20,
             }}>
             <TextInput
-              value={day}
-              onChangeText={setDay}
+              value={count}
+              onChangeText={setCount}
               keyboardType="number-pad"
             />
           </View>

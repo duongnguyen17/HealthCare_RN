@@ -17,7 +17,7 @@ export interface AppContextType {
 
 // }
 export interface MedicineStateType {
-    all: Array<Medicine>
+    all: Array<Medicine>,
 }
 export interface VisitedStateType {
     all: Array<Visited>

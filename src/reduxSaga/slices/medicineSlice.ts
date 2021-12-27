@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { Medicine } from "../../common"
 import { MedicineStateType } from "../../type/type"
 
 const initialState: MedicineStateType = {
@@ -31,17 +32,30 @@ const medicineSlice = createSlice({
         updateMedicine: (state, { payload }) => {
         },
         updateMedicineSuccess: (state, { payload }) => {
-            let medicine = payload.visited
-            let allTemp = [...state.all]
+            let medicine: Medicine = payload.medicine
+            let allTemp: Array<Medicine> = [...state.all]
             let index = allTemp.findIndex((e) => e._id == medicine._id)
             allTemp[index].title = medicine.title
-            allTemp[index].isDone = medicine.isDone
             allTemp[index].remind = medicine.remind
             allTemp[index].during = medicine.during
             state.all = allTemp
-        }
+        },
+        getAllMedicineOfVisited: (state, { payload }) => {
+
+        },
+        getAllMedicineOfVisitedSuccess: (state, { payload }) => {
+
+        },
+        updateAllMedicineOfVisited: (state, { payload }) => {
+
+        },
+        // updateAllMedicineOfVisitedSuccess: (state, { payload }) => {
+
+        // }
+
     }
 })
+
 
 export const medicineAction = medicineSlice.actions
 export const medicineReducer = medicineSlice.reducer

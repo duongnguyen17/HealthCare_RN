@@ -1,21 +1,40 @@
 import React, {useState} from 'react';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {COLORS} from '../../common';
+import {COLORS, Remind} from '../../common';
 import HIcon from '../HIcon';
-const RemindItem = ({item}: RemindItemProps) => {
+const RemindItem = ({
+  item,
+  index,
+  updateRemind,
+  deleteRemind,
+  isNew,
+}: RemindItemProps) => {
   const now = new Date().toISOString();
-  const [amount, setAmount] = useState(item.amount);
-  const [descript, setDescript] = useState(item.descript);
-  const [isEdit, setIsEdit] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
+  const [amount, setAmount] = useState(item.amount ?? '');
+  const [descript, setDescript] = useState(item.descript ?? '');
+  const [isEdit, setIsEdit] = useState(isNew ?? false);
   const [time, setTime] = useState<Date>(
-    new Date(now.slice(0, 11) + item.time + now.slice(16, 24)),
+    item?.time
+      ? new Date(now.slice(0, 11) + item.time + now.slice(16, 24))
+      : new Date(),
   );
-  const [repeat, setRepeat] = useState<boolean>(true);
+  const [repeat, setRepeat] = useState<boolean>(item?.repeat ?? true);
   const [isShowTimePicker, setIsShowTimePicker] = useState<boolean>(true);
-  const onChange = () => {
-
+  const onSubmit = () => {
+    updateRemind(
+      {
+        amount,
+        descript,
+        time: time.toISOString().slice(11, 16),
+        repeat,
+      },
+      index,
+    );
+  };
+  const onChange = (event: any, selectedDate: any) => {
+    const currTime = selectedDate;
+    setTime(currTime);
   };
   return (
     <TouchableOpacity
@@ -47,7 +66,6 @@ const RemindItem = ({item}: RemindItemProps) => {
               value={time}
               mode="time"
               is24Hour={true}
-              minuteInterval={10}
               display="default"
               onChange={onChange}
             />
@@ -76,6 +94,7 @@ const RemindItem = ({item}: RemindItemProps) => {
                 onPress={() => {
                   if (isEdit) {
                     setIsEdit(false);
+                    deleteRemind(index);
                   }
                 }}>
                 <HIcon
@@ -90,13 +109,10 @@ const RemindItem = ({item}: RemindItemProps) => {
                 onPress={() => {
                   if (isEdit) {
                     setIsEdit(false);
+                    onSubmit();
                   }
                 }}>
-                <HIcon
-                  font="MaterialIcons"
-                  name={isEdited ? 'done' : 'cancel'}
-                  color={COLORS.BLUE}
-                />
+                <HIcon font="MaterialIcons" name="done" color={COLORS.BLUE} />
               </TouchableOpacity>
             </View>
           </View>
@@ -110,6 +126,8 @@ const RemindItem = ({item}: RemindItemProps) => {
           }}>
           <Text>Liều lượng</Text>
           <TextInput
+            editable={isEdit}
+            autoFocus
             style={{
               borderBottomWidth: 1,
               width: '75%',
@@ -128,6 +146,7 @@ const RemindItem = ({item}: RemindItemProps) => {
           }}>
           <Text>Ghi chú</Text>
           <TextInput
+            editable={isEdit}
             multiline
             style={{
               borderBottomWidth: 1,
@@ -146,6 +165,9 @@ const RemindItem = ({item}: RemindItemProps) => {
 
 export default RemindItem;
 interface RemindItemProps {
-  item: any;
-  isEdit?: boolean;
+  item: Remind;
+  index: number;
+  updateRemind: Function;
+  deleteRemind: Function;
+  isNew?: boolean;
 }

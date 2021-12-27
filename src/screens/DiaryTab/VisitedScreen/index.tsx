@@ -13,7 +13,16 @@ import {
   Modal,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {AlertType, FONT_SIZE, SCREEN, SearchType, width} from '../../../common';
+import {
+  AlertType,
+  COLORS,
+  FONT_SIZE,
+  Medicine,
+  SCREEN,
+  SearchType,
+  Visited,
+  width,
+} from '../../../common';
 import HHeaderCommon from '../../../components/HHeader/HHeaderCommon';
 import HIcon from '../../../components/HIcon';
 import MedicineItem from '../../../components/MedicineItem';
@@ -22,32 +31,67 @@ import Tag from '../components/Tag';
 import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
 import {visitedAction} from '../../../reduxSaga/slices/visitedSlice';
+import {medicineAction} from '../../../reduxSaga/slices/medicineSlice';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState<string>('');
+  const visited: Visited = props.route?.params?.visited;
+  const [title, setTitle] = useState<string>(visited?.title ?? '');
   // const [state, setState] = useState<boolean>(true);
-  const [pre, setPre] = useState<number | null>(null);
-  const [location, setLocation] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [medicines, setMedicines] = useState([]);
-  const [descript, setDescript] = useState<string>('');
+  const [pre, setPre] = useState<number | null>(visited?.pre);
+  const [location, setLocation] = useState(visited?.location ?? '');
+  const [date, setDate] = useState(visited?.date ?? new Date());
+  const [medicines, setMedicines] = useState<Array<Medicine>>(
+    visited?.medicines ?? [],
+  );
+  const [descript, setDescript] = useState<string>(visited?.descript ?? '');
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   const onSubmit = () => {
     if (title == '' || title == undefined) {
       showAlert(AlertType.WARN, 'Không được để trống tên lần khám');
     } else {
-      dispatch(
-        visitedAction.addVisited({
-          _id: Date.now(),
-          title,
-          pre,
-          location,
-          descript,
-          date,
-        }),
-      );
+      let visitedId = visited?._id ?? Date.now();
+      let tempVisited = {
+        _id: visitedId,
+        title,
+        pre,
+        location,
+        descript,
+        date,
+      };
+      if (!visited) {
+        dispatch(visitedAction.addVisited(tempVisited));
+      } else {
+        dispatch(visitedAction.updateVisited(tempVisited));
+      }
+      let medicinesTemp = [...medicines];
+      medicinesTemp.forEach(e => {
+        if (e.visitedId != visitedId) {
+          e.visitedId = visitedId;
+          e.start = date;
+        }
+      });
+      dispatch(medicineAction.updateAllMedicineOfVisited(medicinesTemp));
       props.navigation?.goBack();
+    }
+  };
+  const updateMedicine = (medicine: Medicine) => {
+    console.log(`medicine-visited`, medicine);
+    let have = false;
+    medicines.forEach((element: Medicine) => {
+      if (element._id == medicine._id) {
+        element.during = medicine.during;
+        element.remind = medicine.remind;
+        element.start = medicine.start;
+        element.title = medicine.title;
+        element.visitedId = medicine.visitedId;
+        have = true;
+      }
+    });
+    if (have) {
+      setMedicines([...medicines]);
+    } else {
+      setMedicines([...medicines, medicine]);
     }
   };
   const onChange = (event: any, selectedDate: any) => {
@@ -57,6 +101,18 @@ const VisitedScreen = (props: ScreenProps) => {
   const gotoSearchScreen = (type: SearchType) => {
     props?.navigation?.navigate(SCREEN.SEARCH, {type: type});
   };
+  const gotoMedicineScreen = (medicine: Medicine | null = null) => {
+    if (title == '' || title == undefined) {
+      // hiện cảnh báo: không được để trống title
+      showAlert(AlertType.WARN, 'Phải đặt tên lần khám');
+    } else
+      props.navigation?.navigate(SCREEN.DIARY.MEDICINE, {
+        data: {title: title, date: date.toISOString().slice(0, 10)},
+        medicine,
+        updateMedicine,
+      });
+  };
+  // console.log(`medicines-visitedScreen`, medicines);
   return (
     <KeyboardAvoidingView
       style={{flex: 1}}
@@ -212,25 +268,27 @@ const VisitedScreen = (props: ScreenProps) => {
               <Text style={{marginBottom: 5}}>Thuốc</Text>
             </View>
             <FlatList
-              renderItem={({item}) => <MedicineItem item={item} />}
+              renderItem={({item}) => (
+                <MedicineItem
+                  medicine={item}
+                  gotoMedicine={() => {
+                    gotoMedicineScreen(item);
+                  }}
+                />
+              )}
               data={medicines}
             />
             <TouchableOpacity
               style={{
                 alignSelf: 'center',
-                borderTopWidth: 1,
-                borderColor: '#cccccc',
+                borderWidth: 1,
+                borderColor: COLORS.BLUE,
+                borderRadius: 5,
                 alignItems: 'center',
                 paddingVertical: 5,
               }}
               onPress={() => {
-                if (title == '' || title == undefined) {
-                  // hiện cảnh báo: không được để trống title
-                  showAlert(AlertType.WARN, 'Phải đặt tên lần khám');
-                } else
-                  props.navigation?.navigate(SCREEN.DIARY.MEDICINE, {
-                    data: {title: title, date: date.toISOString().slice(0, 10)},
-                  });
+                gotoMedicineScreen();
               }}>
               <Text style={{paddingHorizontal: 20}}>Thêm thuốc</Text>
             </TouchableOpacity>

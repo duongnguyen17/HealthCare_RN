@@ -1,5 +1,5 @@
-import { MedicineSchema } from "./models/medicine.model";
-import { UserSchema } from "./models/user.model";
+import { MedicineSchema, RemindSchema } from "./models/medicine.model";
+// import { UserSchema } from "./models/user.model";
 import { VisitedSchema } from "./models/visited.model";
 
 export const configureRealm = {
@@ -7,7 +7,8 @@ export const configureRealm = {
     schema: [
         // UserSchema,
         VisitedSchema,
-        MedicineSchema
+        MedicineSchema,
+        RemindSchema,
     ],
-    schemaVersion: 0,
+    schemaVersion: 3,
 };
