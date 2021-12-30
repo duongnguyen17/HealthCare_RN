@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Medicine } from "../../common"
-import { MedicineStateType } from "../../type/type"
+import { MedicinesStateType } from "../../type/type"
 
-const initialState: MedicineStateType = {
+const initialState: MedicinesStateType = {
     all: []
 }
 
-const medicineSlice = createSlice({
-    name: 'medicine',
+const medicinesSlice = createSlice({
+    name: 'medicines',
     initialState,
     reducers: {
         getAllMedicine: () => { },
@@ -57,5 +57,5 @@ const medicineSlice = createSlice({
 })
 
 
-export const medicineAction = medicineSlice.actions
-export const medicineReducer = medicineSlice.reducer
+export const medicinesAction = medicinesSlice.actions
+export const medicinesReducer = medicinesSlice.reducer

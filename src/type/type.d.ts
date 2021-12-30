@@ -16,19 +16,19 @@ export interface AppContextType {
 // export interface FrameProps extends ViewProps {
 
 // }
-export interface MedicineStateType {
+export interface MedicinesStateType {
     all: Array<Medicine>,
 }
-export interface VisitedStateType {
+export interface VisitedsStateType {
     all: Array<Visited>
 }
-export interface EventStateType {
+export interface EventsStateType {
     all: Array<HEvent>
 }
 export interface RootStateType {
-    medicineState: MedicineStateType,
-    visitedState: VisitedStateType,
-    eventState: EventStateType
+    medicineState: MedicinesStateType,
+    visitedState: VisitedsStateType,
+    eventState: EventsStateType
 }
 export interface ScreenProps extends ViewProps {
     navigation?: NavigationProp<any, any>,

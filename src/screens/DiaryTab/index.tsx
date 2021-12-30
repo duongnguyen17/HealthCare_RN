@@ -17,7 +17,7 @@ import HDayTag from '../../components/HDayTag';
 import ExtendDiary, {TypeExtend} from './components/ExtendDiary';
 import {showAlert} from '../../components/HAlert';
 import {findSomeDay} from '../../utils/dateutils';
-import {eventAction} from '../../reduxSaga/slices/eventSlice';
+import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
 import {useIsFocused} from '@react-navigation/native';
 
 const Diary = (props: ScreenProps) => {
@@ -32,7 +32,7 @@ const Diary = (props: ScreenProps) => {
   const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
 
   useEffect(() => {
-    isFocused && dispatch(eventAction.getAllEvent());
+    isFocused && dispatch(eventsAction.getAllEvent());
   }, [isFocused]);
 
   useEffect(() => {

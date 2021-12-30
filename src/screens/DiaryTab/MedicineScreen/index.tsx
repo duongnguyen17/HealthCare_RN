@@ -16,7 +16,7 @@ import Tag from '../components/Tag';
 import HDropDownPicker from '../../../components/HDropDownPicker';
 import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
-import {medicineAction} from '../../../reduxSaga/slices/medicineSlice';
+import {medicineAction} from '../../../reduxSaga/slices/medicinesSlice';
 
 const TimeUnit = [
   {key: 'ngày', value: 1},

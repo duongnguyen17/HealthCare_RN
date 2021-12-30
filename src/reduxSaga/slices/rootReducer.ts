@@ -1,11 +1,11 @@
 
-import { eventReducer } from './eventSlice'
-import { medicineReducer } from './medicineSlice'
-import { visitedReducer } from './visitedSlice'
+import { eventsReducer } from './eventsSlice'
+import { medicinesReducer } from './medicinesSlice'
+import { visitedsReducer } from './visitedsSlice'
 const rootReducer = {
-  medicineState: medicineReducer,
-  visitedState: visitedReducer,
-  eventState: eventReducer
+  medicineState: medicinesReducer,
+  visitedState: visitedsReducer,
+  eventState: eventsReducer
 }
 
 export default rootReducer

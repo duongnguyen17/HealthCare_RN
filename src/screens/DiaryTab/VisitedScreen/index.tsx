@@ -30,8 +30,8 @@ import {ScreenProps} from '../../../type/type';
 import Tag from '../components/Tag';
 import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
-import {visitedAction} from '../../../reduxSaga/slices/visitedSlice';
-import {medicineAction} from '../../../reduxSaga/slices/medicineSlice';
+import {visitedAction} from '../../../reduxSaga/slices/visitedsSlice';
+import {medicineAction} from '../../../reduxSaga/slices/medicinesSlice';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const visited: Visited = props.route?.params?.visited;

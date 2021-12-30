@@ -5,12 +5,12 @@ import { hideLoading, showLoading } from "../../components/Loading";
 import { getAllMedicine } from "../../realm/controllers/medicine.controller";
 import { getAllVisited } from "../../realm/controllers/visited.controller";
 import { isEqualDay } from "../../utils/dateutils";
-import { eventAction } from "../slices/eventSlice";
+import { eventsAction } from "../slices/eventsSlice";
 
 
 export default [
-    takeLatest(eventAction.getAllEvent.type, getAllEventSaga),
-    takeLatest(eventAction.getEventInMonth.type, getEventInMonthSaga),
+    takeLatest(eventsAction.getAllEvent.type, getAllEventSaga),
+    takeLatest(eventsAction.getEventInMonth.type, getEventInMonthSaga),
 ]
 
 function* getAllEventSaga() {
@@ -91,7 +91,7 @@ function* getAllEventSaga() {
         })
 
         // console.log(`events`, events[0].event)
-        yield put(eventAction.getAllEventSuccess({ all: events }))
+        yield put(eventsAction.getAllEventSuccess({ all: events }))
     } catch (error) {
         console.log("🚀 ~ file: eventSaga.ts ~ line 83 ~ function*getAllEventSaga ~ error", error)
         showAlert(AlertType.FAIL, 'Không thể lấy dữ liệu')

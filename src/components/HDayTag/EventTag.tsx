@@ -22,7 +22,8 @@ const EventTag = ({data}: TaskTagProps) => {
         backgroundColor: COLORS.EVENT_TAG[data?.type].backgroundColor,
         borderWidth: 1,
         padding: 7,
-      }}>
+      }}
+      activeOpacity={0.6}>
       <View style={{flex: 5}}>
         <Text
           style={{
@@ -33,11 +34,11 @@ const EventTag = ({data}: TaskTagProps) => {
           }}>
           {data?.title}
         </Text>
-        {data.type == EventType.MEDICINE ? (
+        {/* {data.type == EventType.MEDICINE ? (
           <Text style={{fontSize: FONT_SIZE.TINY, color: COLORS.GRAY_TEXT_2}}>
             {data?.visited?.title}
           </Text>
-        ) : null}
+        ) : null} */}
         <Text
           style={{
             fontSize: FONT_SIZE.CONTENT,

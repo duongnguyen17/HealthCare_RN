@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { VisitedStateType } from "../../type/type"
+import { VisitedsStateType } from "../../type/type"
 
-const initialState: VisitedStateType = {
+const initialState: VisitedsStateType = {
     all: []
 }
 
-const visitedSlice = createSlice({
-    name: 'visited',
+const visitedsSlice = createSlice({
+    name: 'visiteds',
     initialState,
     reducers: {
         getAllVisited: () => { },
@@ -45,5 +45,5 @@ const visitedSlice = createSlice({
 })
 
 
-export const visitedAction = visitedSlice.actions
-export const visitedReducer = visitedSlice.reducer
+export const visitedsAction = visitedsSlice.actions
+export const visitedsReducer = visitedsSlice.reducer

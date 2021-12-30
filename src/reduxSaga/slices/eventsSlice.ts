@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { HEvent } from "../../common"
-import { EventStateType } from "../../type/type"
+import { EventsStateType } from "../../type/type"
 
 
-const initialState: EventStateType = {
+const initialState: EventsStateType = {
     all: []
 }
 
-const eventSlice = createSlice({
+const eventsSlice = createSlice({
     name: 'event',
     initialState,
     reducers: {
@@ -26,5 +26,5 @@ const eventSlice = createSlice({
     }
 })
 
-export const eventAction = eventSlice.actions
-export const eventReducer = eventSlice.reducer
+export const eventsAction = eventsSlice.actions
+export const eventsReducer = eventsSlice.reducer
