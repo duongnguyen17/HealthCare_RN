@@ -45,7 +45,7 @@ function* getAllEventSaga() {
         //lấy tất cả các thuốc uống để ren ra event
         //@ts-ignore
         let allMedicines = yield call(getAllMedicine)
-        console.log(`allMedicines-eventSaga`, allMedicines)
+        // console.log(`allMedicines-eventSaga`, allMedicines)
         allMedicines.forEach((medicine: Medicine) => {
             // console.log(`element`, element, { ...element, type: EventType.VISITED })
             let eventMedicines: Array<HEventMedicine> = []

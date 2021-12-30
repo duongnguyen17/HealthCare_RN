@@ -1,11 +1,10 @@
-import Realm from "realm";
-import { configureRealm } from "..";
+import RealmManager from '../'
 import { Visited } from "../../common";
 import { SCHEMA } from "../common";
 
 export const getAllVisited = async () => {
     try {
-        const realm = await Realm.open(configureRealm)
+        const realm = await RealmManager.getRealm()
         let allVisited = realm.objects(SCHEMA.VISITED)
         // console.log(`allVisited-controller`, allVisited)
         return [...allVisited]
@@ -17,7 +16,7 @@ export const getAllVisited = async () => {
 /**get visited in a month */
 export const getVisitedInMonth = async (date: Date) => {
     try {
-        const realm = await Realm.open(configureRealm)
+        const realm = await RealmManager.getRealm()
         let allVisited = realm.objects(SCHEMA.VISITED)
         // console.log(`allVisited`, allVisited)
         return allVisited
@@ -30,7 +29,7 @@ export const getVisitedInMonth = async (date: Date) => {
 export const addVisited = async (newVisited: any) => {
     try {
         // console.log(`newVisited`, newVisited)
-        const realm = await Realm.open(configureRealm)
+        const realm = await RealmManager.getRealm()
         realm.write(() => {
             realm.create(SCHEMA.VISITED, newVisited)
         })
@@ -44,7 +43,7 @@ export const addVisited = async (newVisited: any) => {
 
 export const deleteVisited = async (id: number) => {
     try {
-        const realm = await Realm.open(configureRealm)
+        const realm = await RealmManager.getRealm()
         realm.write(() => {
             let visited = realm.objectForPrimaryKey(SCHEMA.VISITED, id)
             let medicines = realm.objects(SCHEMA.MEDICINE).filtered(`visitedId==${id}`)
@@ -61,7 +60,7 @@ export const deleteVisited = async (id: number) => {
 /**update visited */
 export const updateVisited = async (visited: any) => {
     try {
-        const realm = await Realm.open(configureRealm)
+        const realm = await RealmManager.getRealm()
         realm.write(() => {
             let editVisited = realm.objectForPrimaryKey<Visited>(SCHEMA.VISITED, visited._id)
             // @ts-ignore
