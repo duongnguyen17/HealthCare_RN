@@ -4,8 +4,7 @@ import { LayoutAnimation, Platform, UIManager } from 'react-native';
  * @param value giá trị
  * @param delay dừng trong khoảng thời gian, mặc định là 500ms
  */
-export function useDebounceValue<T>(value: T, delay: number = 500): [T, React.Dispatch<React.SetStateAction<T>>] {
-
+export function useDebounceValue<T>(value: T, delay: number = 700): T {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
     let handler: NodeJS.Timeout;
     useEffect(
@@ -14,13 +13,13 @@ export function useDebounceValue<T>(value: T, delay: number = 500): [T, React.Di
                 setDebouncedValue(value);
             }, delay);
             return () => {
-                handler && clearTimeout(handler);
+                !!handler && clearTimeout(handler);
             };
         },
         [value]
     );
 
-    return [debouncedValue, setDebouncedValue];
+    return debouncedValue;
 }
 
 /** trả về 1 state, setState, 1 hàm thay đổi LayoutAnimation */

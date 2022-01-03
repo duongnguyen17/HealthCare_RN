@@ -78,3 +78,17 @@ export const updateVisited = async (visited: any) => {
 
     }
 }
+
+
+/**Tìm kiếm sự kiện khám theo từ khoá */
+export const searchVisited = async (keyword: String) => {
+    try {
+        const realm = await RealmManager.getRealm()
+        const visiteds = realm.objects(SCHEMA.VISITED)
+        let searchResult = visiteds.filtered('title CONTAINS $0 || location CONTAINS $0 || descript CONTAINS $0', keyword)
+        return searchResult
+    } catch (error) {
+        console.log("🚀 ~ file: visited.controller.ts ~ line 88 ~ searchVisited ~ error",error)
+
+    }
+}

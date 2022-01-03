@@ -8,7 +8,14 @@ import {
   FlatList,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {AlertType, COLORS, FONT_SIZE, Remind, SCREEN} from '../../../common';
+import {
+  AlertType,
+  COLORS,
+  FONT_SIZE,
+  Remind,
+  SCREEN,
+  TimeUnit,
+} from '../../../common';
 import HeaderCommon from '../../../components/HHeader/HHeaderCommon';
 import RemindItem from '../../../components/RemindItem';
 import {ScreenProps} from '../../../type/type';
@@ -16,12 +23,12 @@ import Tag from '../components/Tag';
 import HDropDownPicker from '../../../components/HDropDownPicker';
 import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
-import {medicineAction} from '../../../reduxSaga/slices/medicinesSlice';
+import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
 
-const TimeUnit = [
-  {key: 'ngày', value: 1},
-  {key: 'tuần', value: 2},
-  {key: 'tháng', value: 3},
+const DropKey = [
+  {key: 'ngày', value: TimeUnit.DAY},
+  {key: 'tuần', value: TimeUnit.WEEK},
+  {key: 'tháng', value: TimeUnit.MONTH},
 ];
 
 const MedicineScreen = (props: ScreenProps) => {
@@ -34,7 +41,7 @@ const MedicineScreen = (props: ScreenProps) => {
   const [reminds, setReminds] = useState<Array<Remind | any>>(
     medicine?.remind ?? [],
   );
-  const [timeUnit, setTimeUnit] = useState<any>({key: 'ngày', value: 1});
+  const [timeUnit, setTimeUnit] = useState<TimeUnit>(TimeUnit.DAY);
   const [count, setCount] = useState<string>(
     medicine?.during.toString() ?? '0',
   );
@@ -50,7 +57,7 @@ const MedicineScreen = (props: ScreenProps) => {
     } else if (!!medicine?.visitedId) {
       //nếu là update
       dispatch(
-        medicineAction.updateMedicine({
+        medicinesAction.updateMedicine({
           _id: medicine._id,
           title,
           during: calDuring(count, timeUnit),
@@ -74,16 +81,16 @@ const MedicineScreen = (props: ScreenProps) => {
     }
   };
 
-  const calDuring = (c: string, u: any) => {
+  const calDuring = (c: string, u: TimeUnit) => {
     let unit: number = 0;
-    switch (u.value) {
-      case 1:
+    switch (u) {
+      case TimeUnit.DAY:
         unit = 1;
         break;
-      case 2:
+      case TimeUnit.WEEK:
         unit = 7;
         break;
-      case 3:
+      case TimeUnit.MONTH:
         unit = 30;
         break;
       default:
@@ -142,7 +149,6 @@ const MedicineScreen = (props: ScreenProps) => {
             onPress={onSubmit}
             style={{
               backgroundColor: '#00aaff',
-              height: '100%',
               borderRadius: 20,
             }}>
             <Text
@@ -214,7 +220,8 @@ const MedicineScreen = (props: ScreenProps) => {
 
           <View style={{marginLeft: 8}}>
             <HDropDownPicker
-              data={TimeUnit}
+              scrollable={false}
+              data={DropKey}
               selected={timeUnit}
               setSelected={setTimeUnit}
             />
@@ -225,7 +232,6 @@ const MedicineScreen = (props: ScreenProps) => {
   );
 };
 export default MedicineScreen;
-interface MedicineScreenProps {}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

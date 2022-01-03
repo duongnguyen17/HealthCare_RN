@@ -8,6 +8,7 @@ import {
   COLORS,
   EventType,
   FONT_SIZE,
+  HEvent,
   SCREEN,
   TYPE_SHOW,
 } from '../../common';
@@ -21,14 +22,16 @@ import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
 import {useIsFocused} from '@react-navigation/native';
 
 const Diary = (props: ScreenProps) => {
-  const allEvent = useSelector((state: RootStateType) => state.eventState.all);
+  const allEvent: Array<HEvent> = useSelector(
+    (state: RootStateType) => state.eventState.all,
+  );
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const list = useRef<any>();
   const [extendVisible, setExtendVisible] = useState<boolean>(false);
   const [calendarVisible, setCalendarVisible] = useState<boolean>(false);
   const [typeExtend, setTypeExtend] = useState<TypeExtend>(TypeExtend.calendar);
-  const [data, setData] = useState<Array<Object>>([]);
+  const [data, setData] = useState<Array<HEvent>>([]);
   const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
 
   useEffect(() => {
@@ -40,7 +43,7 @@ const Diary = (props: ScreenProps) => {
     if (eventType == TYPE_SHOW.ALL) {
       setData(allEvent);
     } else {
-      let dataTemp: Array<Object> = [];
+      let dataTemp: Array<HEvent> = [];
       allEvent.forEach(element => {
         // @ts-ignore
         let arr = element.event.filter(e => e.type == eventType);

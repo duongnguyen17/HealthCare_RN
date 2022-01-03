@@ -86,9 +86,10 @@ export enum TYPE_SHOW {
 }
 export enum SearchType {
   MEDICINE = 'Medicine',
-  DATE = 'Date',
+  // DATE = 'Date',
   VISITED = 'Visited',
-  LOCALE = 'Locale',
+  // LOCATION = 'Location',
+  ALL = 'All',
 }
 
 export enum EventType {
@@ -101,6 +102,12 @@ export enum AlertType {
   SUCCESS = 'success',
   FAIL = 'fail',
   WARN = 'warn',
+}
+
+export enum TimeUnit {
+  DAY = "day",
+  WEEK = "week",
+  MONTH = "month",
 }
 export interface Medicine {
   _id: number,
@@ -151,3 +158,4 @@ export interface HEventVisited {
   descript?: string,
   date: Date,
 }
+

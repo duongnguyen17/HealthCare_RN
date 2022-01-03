@@ -1,18 +1,45 @@
-import React from 'react';
-import {View, TextInput, TouchableOpacity} from 'react-native';
-import {COLORS, SearchType, width} from '../../common';
+import React, {useState, useEffect} from 'react';
+import {View, TextInput, TouchableOpacity, Text, FlatList} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {COLORS, FONT_SIZE, HEvent, SearchType, width} from '../../common';
+import HDayTag from '../../components/HDayTag';
+import HDropDownPicker from '../../components/HDropDownPicker';
 import HeaderCommon from '../../components/HHeader/HHeaderCommon';
 import HIcon from '../../components/HIcon';
 import {useDebounceValue} from '../../customHooks';
-import {ScreenProps} from '../../type/type';
-import {getStatusBarHeight} from '../../utils/IPhoneXHelper';
+import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
+import {RootStateType, ScreenProps} from '../../type/type';
+const DropKey = [
+  {key: 'all', value: SearchType.ALL},
+  // {key: 'dat', value: SearchType.DATE},
+  // {key: 'loc', value: SearchType.LOCATION},
+  {key: 'med', value: SearchType.MEDICINE},
+  {key: 'vis', value: SearchType.VISITED},
+];
+const SearchScreen = (props: ScreenProps) => {
+  const searchResult = useSelector(
+    (state: RootStateType) => state.eventState.searchResult,
+  );
+  const dispatch = useDispatch();
+  const [textInput, setTextInput] = useState('');
+  const keyword = useDebounceValue<string>(textInput);
+  const [searchType, setSearchType] = useState(
+    props.route?.params?.searchType != undefined
+      ? props.route?.params?.searchType
+      : SearchType.ALL,
+  );
+  useEffect(() => {
+    search(keyword, searchType);
+  }, [keyword, searchType]);
+  const renderItem = ({item}: any) => <HDayTag data={item} />;
 
-const SearchScreen = ({searchType, navigation}: SearchScreenProps) => {
-  const [textInput, setTextInput] = useDebounceValue<string>('');
+  const search = (keyword: String, type: SearchType) => {
+    dispatch(eventsAction.searchEvent({keyword, searchType: type}));
+  };
   return (
     <View style={{flex: 1}}>
       <HeaderCommon
-        navigation={navigation}
+        navigation={props.navigation}
         renderTitle={() => (
           <View
             style={{
@@ -29,7 +56,7 @@ const SearchScreen = ({searchType, navigation}: SearchScreenProps) => {
               value={textInput}
               onChangeText={setTextInput}
               placeholder={'Nhập từ khoá tìm kiếm'}
-              style={{width: (width * 12) / 20}}
+              style={{width: (width * 11) / 20}}
             />
             <View
               style={{
@@ -57,11 +84,31 @@ const SearchScreen = ({searchType, navigation}: SearchScreenProps) => {
             </View>
           </View>
         )}
+        renderRight={() => (
+          <HDropDownPicker
+            scrollable={false}
+            data={DropKey}
+            selected={searchType}
+            setSelected={setSearchType}
+          />
+        )}
       />
+      <View style={{flex: 1, zIndex: 1}}>
+        {searchResult.length == 0 || textInput == '' ? (
+          <Text
+            style={{
+              color: COLORS.GRAY_TEXT_1,
+              fontSize: FONT_SIZE.TITLE,
+              alignSelf: 'center',
+              marginTop: 50,
+            }}>
+            Không tìm thấy kết quả phù hợp
+          </Text>
+        ) : (
+          <FlatList data={searchResult} renderItem={renderItem} />
+        )}
+      </View>
     </View>
   );
 };
 export default SearchScreen;
-interface SearchScreenProps extends ScreenProps {
-  searchType?: SearchType;
-}

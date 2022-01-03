@@ -98,3 +98,15 @@ export const updateMedicines = async (medicines: Array<Medicine>) => {
         console.log("🚀 ~ file: medicine.controller.ts ~ line 99 ~ updateMedicine ~ error", error.message)
     }
 }
+
+/**Tìm kiếm thuốc theo từ khoá */
+export const searchMedicine = async (keyword: String) => {
+    try {
+        const realm = await RealmManager.getRealm()
+        const medicines = realm.objects(SCHEMA.MEDICINE)
+        let searchResult = medicines.filtered('title CONTAINS $0', keyword)
+        return searchResult
+    } catch (error) {
+        console.log("🚀 ~ file: medicine.controller.ts ~ line 110 ~ searchMedicine ~ error", error)
+    }
+}

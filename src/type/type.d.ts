@@ -23,7 +23,8 @@ export interface VisitedsStateType {
     all: Array<Visited>
 }
 export interface EventsStateType {
-    all: Array<HEvent>
+    all: Array<HEvent>,
+    searchResult: Array<HEvent>,
 }
 export interface RootStateType {
     medicineState: MedicinesStateType,

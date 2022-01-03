@@ -7,6 +7,7 @@ import {
   HEventMedicine,
   HEventVisited,
 } from '../../common';
+import {showLoading} from '../Loading';
 const EventTag = ({data}: TaskTagProps) => {
   return (
     <TouchableOpacity
@@ -22,8 +23,12 @@ const EventTag = ({data}: TaskTagProps) => {
         backgroundColor: COLORS.EVENT_TAG[data?.type].backgroundColor,
         borderWidth: 1,
         padding: 7,
+        zIndex: 1,
       }}
-      activeOpacity={0.6}>
+      activeOpacity={0.6}
+      onPress={() => {
+       
+      }}>
       <View style={{flex: 5}}>
         <Text
           style={{

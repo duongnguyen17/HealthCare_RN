@@ -30,8 +30,8 @@ import {ScreenProps} from '../../../type/type';
 import Tag from '../components/Tag';
 import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
-import {visitedAction} from '../../../reduxSaga/slices/visitedsSlice';
-import {medicineAction} from '../../../reduxSaga/slices/medicinesSlice';
+import {visitedsAction} from '../../../reduxSaga/slices/visitedsSlice';
+import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const visited: Visited = props.route?.params?.visited;
@@ -60,9 +60,9 @@ const VisitedScreen = (props: ScreenProps) => {
         date,
       };
       if (!visited) {
-        dispatch(visitedAction.addVisited(tempVisited));
+        dispatch(visitedsAction.addVisited(tempVisited));
       } else {
-        dispatch(visitedAction.updateVisited(tempVisited));
+        dispatch(visitedsAction.updateVisited(tempVisited));
       }
       let medicinesTemp = [...medicines];
       medicinesTemp.forEach(e => {
@@ -71,7 +71,7 @@ const VisitedScreen = (props: ScreenProps) => {
           e.start = date;
         }
       });
-      dispatch(medicineAction.updateAllMedicineOfVisited(medicinesTemp));
+      dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
       props.navigation?.goBack();
     }
   };
@@ -126,7 +126,6 @@ const VisitedScreen = (props: ScreenProps) => {
                 onPress={onSubmit}
                 style={{
                   backgroundColor: '#00aaff',
-                  height: '100%',
                   borderRadius: 20,
                 }}>
                 <Text

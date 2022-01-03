@@ -11,6 +11,7 @@ const HHeader = ({hasLinear = true, children}: HHeaderProps) => {
       style={{
         width: '100%',
         height: statusBarHeight + 40,
+        zIndex: 999,
         // borderBottomWidth: StyleSheet.hairlineWidth,
       }}>
       {hasLinear && (
@@ -46,6 +47,9 @@ const HHeader = ({hasLinear = true, children}: HHeaderProps) => {
 };
 export default HHeader;
 interface HHeaderProps {
+  /**
+   * hiện backgroundColor là LinearGradient
+   */
   hasLinear?: boolean;
   children?: React.ReactNode;
 }

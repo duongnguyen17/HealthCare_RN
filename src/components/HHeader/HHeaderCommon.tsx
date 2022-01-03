@@ -23,10 +23,10 @@ const HeaderCommon = ({
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           flex: 1,
         }}>
-        <View style={{position: 'absolute', left: 0}}>
+        <View>
           {!renderLeft ? (
             <TouchableOpacity onPress={m_onPressLeftIcon}>
               <HIcon
@@ -48,10 +48,7 @@ const HeaderCommon = ({
             renderTitle()
           )}
         </View>
-
-        <View style={{position: 'absolute', right: 0}}>
-          {!renderRight ? null : renderRight()}
-        </View>
+        <View >{!renderRight ? <View /> : renderRight()}</View>
       </View>
     </HHeader>
   );
