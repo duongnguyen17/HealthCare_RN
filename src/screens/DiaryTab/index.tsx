@@ -20,6 +20,7 @@ import {showAlert} from '../../components/HAlert';
 import {findSomeDay} from '../../utils/dateutils';
 import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
 import {useIsFocused} from '@react-navigation/native';
+import TriangleAnimated from '../../components/TriangleAnimated';
 
 const Diary = (props: ScreenProps) => {
   const allEvent: Array<HEvent> = useSelector(
@@ -98,14 +99,16 @@ const Diary = (props: ScreenProps) => {
           style={{flexDirection: 'row', alignItems: 'center'}}
           onPress={() => {
             showHideExtend(TypeExtend.calendar);
+            setCalendarVisible(!calendarVisible);
           }}>
           <Text style={{fontSize: FONT_SIZE.CONTENT}}>Tháng 12</Text>
-          <HIcon
+          {/* <HIcon
             font="Octicons"
             name={calendarVisible ? 'triangle-down' : 'triangle-up'}
             style={{marginLeft: 10}}
             size={16}
-          />
+          /> */}
+          <TriangleAnimated state={calendarVisible} />
         </TouchableOpacity>
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity onPress={gotoSearchScreen}>

@@ -32,7 +32,7 @@ const ExtendDiary = ({
   const show = () => {
     LayoutAnimation.configureNext(
       LayoutAnimation.create(
-        100,
+        300,
         LayoutAnimation.Types.easeInEaseOut,
         LayoutAnimation.Properties.scaleXY,
       ),
