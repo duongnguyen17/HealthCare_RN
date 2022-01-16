@@ -85,6 +85,7 @@ const Diary = (props: ScreenProps) => {
     }
   };
   // console.log(`data`, data);
+  console.log(`allEvent`, allEvent)
   return (
     <View style={styles.container}>
       <HHeader>

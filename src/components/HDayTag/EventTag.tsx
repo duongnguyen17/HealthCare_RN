@@ -66,7 +66,7 @@ const EventTag = ({data}: TaskTagProps) => {
         {/* @ts-ignore */}
         <Text style={{color: COLORS.EVENT_TAG[data?.type].textColor}}>
           {data.type == EventType.MEDICINE
-            ? data.time
+            ? getHoursMinutes(data?.time)
             : getHoursMinutes(data?.date)}
         </Text>
       </View>

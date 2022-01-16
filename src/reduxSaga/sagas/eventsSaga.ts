@@ -4,7 +4,7 @@ import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
 import { getAllMedicine, searchMedicine } from "../../realm/controllers/medicine.controller";
 import { getAllVisited, searchVisited } from "../../realm/controllers/visited.controller";
-import { isEqualDay } from "../../utils/dateutils";
+import { isEqualDay, setHoursMinutes } from "../../utils/dateutils";
 import { eventsAction } from "../slices/eventsSlice";
 
 
@@ -47,7 +47,7 @@ function* getAllEventSaga() {
         //lấy tất cả các thuốc uống để ren ra event
         //@ts-ignore
         let allMedicines = yield call(getAllMedicine)
-        console.log(`allMedicines-eventSaga`, [...allMedicines])
+        // console.log(`allMedicines-eventSaga`, [...allMedicines[0].remind])
         allMedicines.forEach((medicine: Medicine) => {
             // console.log(`element`, element, { ...element, type: EventType.VISITED })
             let eventMedicines: Array<HEventMedicine> = []
@@ -62,7 +62,7 @@ function* getAllEventSaga() {
                             title: medicine.title,
                             type: EventType.MEDICINE,
                             visitedId: medicine.visitedId,
-                            time: remind.time,
+                            time: setHoursMinutes(currDate, remind.time),
                             date: currDate,
                             amount: remind.amount,
                             descript: remind.descript
@@ -75,7 +75,7 @@ function* getAllEventSaga() {
                             title: medicine.title,
                             type: EventType.MEDICINE,
                             visitedId: medicine.visitedId,
-                            time: remind.time,
+                            time: setHoursMinutes(currDate, remind.time),
                             date: currDate,
                             amount: remind.amount,
                             descript: remind.descript
@@ -92,10 +92,10 @@ function* getAllEventSaga() {
                 }
             })
         })
-
-        console.log(`events`, events)
+        // console.log(`events`, events)
         yield put(eventsAction.getAllEventSuccess({ all: events }))
-    } catch (error) {
+    } catch (error: any) {
+        console.log("🚀 ~ file: eventsSaga.ts ~ line 99 ~ function*getAllEventSaga ~ error", error.message)
         showAlert(AlertType.FAIL, 'Không thể lấy dữ liệu')
     } finally {
         hideLoading()
@@ -166,7 +166,7 @@ const _searchMedicine = async (keyword: String) => {
                             title: medicine.title,
                             type: EventType.MEDICINE,
                             visitedId: medicine.visitedId,
-                            time: remind.time,
+                            time: setHoursMinutes(currDate, remind.time),
                             date: currDate,
                             amount: remind.amount,
                             descript: remind.descript
@@ -179,7 +179,7 @@ const _searchMedicine = async (keyword: String) => {
                             title: medicine.title,
                             type: EventType.MEDICINE,
                             visitedId: medicine.visitedId,
-                            time: remind.time,
+                            time: setHoursMinutes(currDate, remind.time),
                             date: currDate,
                             amount: remind.amount,
                             descript: remind.descript
@@ -283,7 +283,7 @@ const _searchAll = async (keyword: String) => {
                             title: medicine.title,
                             type: EventType.MEDICINE,
                             visitedId: medicine.visitedId,
-                            time: remind.time,
+                            time: setHoursMinutes(currDate, remind.time),
                             date: currDate,
                             amount: remind.amount,
                             descript: remind.descript
@@ -296,7 +296,7 @@ const _searchAll = async (keyword: String) => {
                             title: medicine.title,
                             type: EventType.MEDICINE,
                             visitedId: medicine.visitedId,
-                            time: remind.time,
+                            time: setHoursMinutes(currDate, remind.time),
                             date: currDate,
                             amount: remind.amount,
                             descript: remind.descript

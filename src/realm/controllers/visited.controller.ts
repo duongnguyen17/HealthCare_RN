@@ -7,7 +7,7 @@ export const getAllVisited = async () => {
         const realm = await RealmManager.getRealm()
         let allVisited = realm.objects(SCHEMA.VISITED)
         // console.log(`allVisited-controller`, allVisited)
-        return [...allVisited]
+        return allVisited
     } catch (error) {
         console.log("🚀 ~ file: visited.controller.ts ~ line 12 ~ getAllVisited ~ error", error)
     }

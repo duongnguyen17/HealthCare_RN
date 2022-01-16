@@ -16,7 +16,7 @@ const eventsSlice = createSlice({
 
         },
         getAllEventSuccess: (state, { payload }) => {
-            state.all = payload.all.sort((a: HEvent, b: HEvent) => (a.date.getTime() - b.date.getTime()))
+            state.all = payload.all.sort((a: HEvent, b: HEvent) => (new Date(a.date).getTime() - new Date(b.date).getTime()))
         },
         getEventInMonth: (action) => {
 
@@ -28,7 +28,7 @@ const eventsSlice = createSlice({
 
         },
         searchEventSuccess: (state, { payload }) => {
-               // console.log(`payload.searchResult`, payload.searchResult)
+            // console.log(`payload.searchResult`, payload.searchResult)
             state.searchResult = payload.searchResult.sort((a: HEvent, b: HEvent) => (a.date.getTime() - b.date.getTime()))
         }
     }

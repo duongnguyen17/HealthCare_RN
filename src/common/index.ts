@@ -144,7 +144,7 @@ export interface HEventMedicine {
   title: string,
   type: EventType.MEDICINE,
   visitedId: number,
-  time: string,
+  time: Date,
   date: Date,
   amount?: string,
   descript?: string,
