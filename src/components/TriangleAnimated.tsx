@@ -1,5 +1,5 @@
 import React, {useRef, useEffect} from 'react';
-import {Animated, Easing, TouchableOpacity} from 'react-native';
+import {Animated} from 'react-native';
 import HIcon from './HIcon';
 
 const TriangleAnimated = ({state}: any) => {
@@ -7,14 +7,12 @@ const TriangleAnimated = ({state}: any) => {
 
   useEffect(() => {
     if (state) {
-      console.log('true');
       Animated.timing(spinValue, {
         toValue: 1,
         duration: 100,
         useNativeDriver: true,
       }).start();
     } else {
-      console.log('false');
       Animated.timing(spinValue, {
         toValue: 0,
         duration: 100,

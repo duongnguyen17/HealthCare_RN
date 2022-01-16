@@ -7,6 +7,7 @@ import {
   HEventMedicine,
   HEventVisited,
 } from '../../common';
+import { getHoursMinutes } from '../../utils/dateutils';
 import {showLoading} from '../Loading';
 const EventTag = ({data}: TaskTagProps) => {
   return (
@@ -66,7 +67,7 @@ const EventTag = ({data}: TaskTagProps) => {
         <Text style={{color: COLORS.EVENT_TAG[data?.type].textColor}}>
           {data.type == EventType.MEDICINE
             ? data.time
-            : data.date.toISOString().slice(11, 16)}
+            : getHoursMinutes(data?.date)}
         </Text>
       </View>
     </TouchableOpacity>

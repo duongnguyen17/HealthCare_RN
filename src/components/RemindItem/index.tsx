@@ -3,6 +3,7 @@ import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {COLORS, Remind} from '../../common';
 import HIcon from '../HIcon';
+import {getHoursMinutes, setHoursMinutes} from '../../utils/dateutils';
 const RemindItem = ({
   item,
   index,
@@ -10,15 +11,12 @@ const RemindItem = ({
   deleteRemind,
   isNew,
 }: RemindItemProps) => {
-  const now = new Date().toISOString();
+  let now = new Date();
+  now = setHoursMinutes(now, item?.time);
   const [amount, setAmount] = useState(item.amount ?? '');
   const [descript, setDescript] = useState(item.descript ?? '');
   const [isEdit, setIsEdit] = useState(isNew ?? false);
-  const [time, setTime] = useState<Date>(
-    item?.time
-      ? new Date(now.slice(0, 11) + item.time + now.slice(16, 24))
-      : new Date(),
-  );
+  const [time, setTime] = useState<Date>(item?.time ? now : new Date());
   const [repeat, setRepeat] = useState<boolean>(item?.repeat ?? true);
   const [isShowTimePicker, setIsShowTimePicker] = useState<boolean>(true);
   const onSubmit = () => {
@@ -26,7 +24,7 @@ const RemindItem = ({
       {
         amount,
         descript,
-        time: time.toISOString().slice(11, 16),
+        time: getHoursMinutes(time),
         repeat,
       },
       index,
@@ -38,6 +36,7 @@ const RemindItem = ({
   };
   return (
     <TouchableOpacity
+      accessible={false}
       activeOpacity={0.8}
       onLongPress={() => {
         setIsEdit(true);

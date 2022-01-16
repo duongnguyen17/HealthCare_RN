@@ -10,7 +10,6 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  Modal,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
@@ -39,7 +38,7 @@ const VisitedScreen = (props: ScreenProps) => {
   // const [state, setState] = useState<boolean>(true);
   const [pre, setPre] = useState<number | null>(visited?.pre);
   const [location, setLocation] = useState(visited?.location ?? '');
-  const [date, setDate] = useState(visited?.date ?? new Date());
+  const [date, setDate] = useState(visited?.date ?? Date.now());
   const [medicines, setMedicines] = useState<Array<Medicine>>(
     visited?.medicines ?? [],
   );
@@ -64,19 +63,22 @@ const VisitedScreen = (props: ScreenProps) => {
       } else {
         dispatch(visitedsAction.updateVisited(tempVisited));
       }
-      let medicinesTemp = [...medicines];
-      medicinesTemp.forEach(e => {
-        if (e.visitedId != visitedId) {
-          e.visitedId = visitedId;
-          e.start = date;
-        }
-      });
-      dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
+      if (medicines.length != 0) {
+        let medicinesTemp = [...medicines];
+        medicinesTemp.forEach(e => {
+          if (e.visitedId != visitedId) {
+            e.visitedId = visitedId;
+            e.start = date;
+          }
+        });
+        dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
+      }
+
       props.navigation?.goBack();
     }
   };
   const updateMedicine = (medicine: Medicine) => {
-    console.log(`medicine-visited`, medicine);
+    // console.log(`medicine-visited`, medicine);
     let have = false;
     medicines.forEach((element: Medicine) => {
       if (element._id == medicine._id) {
@@ -107,7 +109,7 @@ const VisitedScreen = (props: ScreenProps) => {
       showAlert(AlertType.WARN, 'Phải đặt tên lần khám');
     } else
       props.navigation?.navigate(SCREEN.DIARY.MEDICINE, {
-        data: {title: title, date: date.toISOString().slice(0, 10)},
+        data: {title: title, date: date},
         medicine,
         updateMedicine,
       });
@@ -248,13 +250,14 @@ const VisitedScreen = (props: ScreenProps) => {
               style={{flexDirection: 'row'}}>
               <Text>Ngày khám</Text>
               <Text style={{marginLeft: 50}}>
-                {date.toISOString().slice(0, 10)}
+                {new Date(date).toString().slice(0, 10)}
               </Text>
             </TouchableOpacity>
           </Tag>
           {datePickerVisible && (
             <DateTimePicker
               // style={{backgroundColor: '#fff'}}
+              //@ts-ignore
               value={date}
               mode={'date'}
               display="spinner"

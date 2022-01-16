@@ -9,7 +9,7 @@ export const VisitedSchema = {
         pre: `int?`,//id of pre visited
         location: 'string?',
         descript: 'string?',
-        date: 'date',
+        date: 'double',
     },
     primaryKey: '_id'
 }

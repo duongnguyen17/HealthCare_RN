@@ -2,7 +2,7 @@ import { Loading } from ".";
 
 
 class LoadingManager {
-  defaultLoading: Loading | null = null;
+  private defaultLoading: Loading | null = null;
 
   register(_ref: Loading) {
     if (!this.defaultLoading) {

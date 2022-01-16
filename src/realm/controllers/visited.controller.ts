@@ -28,13 +28,13 @@ export const getVisitedInMonth = async (date: Date) => {
 /**add new visited */
 export const addVisited = async (newVisited: any) => {
     try {
-        // console.log(`newVisited`, newVisited)
+        console.log(`addVisited`, newVisited)
         const realm = await RealmManager.getRealm()
         realm.write(() => {
             realm.create(SCHEMA.VISITED, newVisited)
         })
-    } catch (error) {
-        console.log("🚀 ~ file: visited.controller.ts ~ line 36 ~ addVisited ~ error", error)
+    } catch (error: any) {
+        console.log("🚀 ~ file: visited.controller.ts ~ line 36 ~ addVisited ~ error", error.mesage)
 
     }
 }
@@ -88,7 +88,7 @@ export const searchVisited = async (keyword: String) => {
         let searchResult = visiteds.filtered('title CONTAINS $0 || location CONTAINS $0 || descript CONTAINS $0', keyword)
         return searchResult
     } catch (error) {
-        console.log("🚀 ~ file: visited.controller.ts ~ line 88 ~ searchVisited ~ error",error)
+        console.log("🚀 ~ file: visited.controller.ts ~ line 88 ~ searchVisited ~ error", error)
 
     }
 }

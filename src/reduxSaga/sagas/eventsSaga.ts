@@ -47,14 +47,14 @@ function* getAllEventSaga() {
         //lấy tất cả các thuốc uống để ren ra event
         //@ts-ignore
         let allMedicines = yield call(getAllMedicine)
-        // console.log(`allMedicines-eventSaga`, allMedicines)
+        console.log(`allMedicines-eventSaga`, [...allMedicines])
         allMedicines.forEach((medicine: Medicine) => {
             // console.log(`element`, element, { ...element, type: EventType.VISITED })
             let eventMedicines: Array<HEventMedicine> = []
             for (let i = 0; i < medicine.during; ++i) {
                 let currDate = new Date(medicine.start)
-                currDate.setDate(medicine.start.getDate() + i)
-                console.log(`currDate`, currDate)
+                currDate.setDate(currDate.getDate() + i)
+                // console.log(`currDate`, currDate)
                 medicine.remind.forEach((remind) => {
                     if (remind.repeat) {
                         eventMedicines.push({
@@ -158,7 +158,7 @@ const _searchMedicine = async (keyword: String) => {
             let eventMedicines: Array<HEventMedicine> = []
             for (let i = 0; i < medicine.during; ++i) {
                 let currDate = new Date(medicine.start)
-                currDate.setDate(medicine.start.getDate() + i)
+                currDate.setDate(currDate.getDate() + i)
                 medicine.remind.forEach((remind) => {
                     if (remind.repeat) {
                         eventMedicines.push({
@@ -274,8 +274,8 @@ const _searchAll = async (keyword: String) => {
             // console.log(`element`, element, { ...element, type: EventType.VISITED })
             let eventMedicines: Array<HEventMedicine> = []
             for (let i = 0; i < medicine.during; ++i) {
-                let currDate = new Date()
-                currDate.setDate(medicine.start.getDate() + i)
+                let currDate = new Date(medicine.start)
+                currDate.setDate(currDate.getDate() + i)
                 medicine.remind.forEach((remind) => {
                     if (remind.repeat) {
                         eventMedicines.push({

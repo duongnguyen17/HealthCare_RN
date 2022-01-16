@@ -4,11 +4,11 @@ export const MedicineSchema = {
     name: SCHEMA.MEDICINE,
     properties: {
         _id: 'int',
-        visitedId: 'int',
+        visitedId: 'double',
         title: 'string',
         // isDone: 'bool',
         remind: 'Remind[]',
-        start: 'date',
+        start: 'double',
         during: 'double'
     },
     primaryKey: '_id'

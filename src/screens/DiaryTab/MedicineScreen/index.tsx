@@ -6,6 +6,9 @@ import {
   Text,
   TextInput,
   FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
@@ -24,6 +27,7 @@ import HDropDownPicker from '../../../components/HDropDownPicker';
 import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
 import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
+import moment from 'moment';
 
 const DropKey = [
   {key: 'ngày', value: TimeUnit.DAY},
@@ -33,6 +37,7 @@ const DropKey = [
 
 const MedicineScreen = (props: ScreenProps) => {
   const now = new Date();
+  const data = props.route?.params?.data;
   const dispatch = useDispatch();
   const medicine = props.route?.params?.medicine;
 
@@ -104,7 +109,7 @@ const MedicineScreen = (props: ScreenProps) => {
     setReminds([
       ...reminds,
       {
-        time: now.toISOString().slice(11, 16),
+        time: '' + now.getHours() + ':' + now.getMinutes(),
         descript: '',
         repeat: true,
         amount: '',
@@ -126,109 +131,111 @@ const MedicineScreen = (props: ScreenProps) => {
   };
   // console.log(`reminds`, reminds);
   return (
-    <View style={styles.container}>
-      <HeaderCommon
-        onPressLeftIcon={() => {
-          props.navigation?.goBack();
-        }}
-        renderTitle={() => (
-          <TouchableOpacity
-            onPress={() => {
-              props.navigation?.navigate(SCREEN.DIARY.VISITED, {});
-            }}>
-            <Text style={{fontSize: FONT_SIZE.TITLE}}>
-              {props.route?.params?.data.title}
-            </Text>
-            <Text style={{color: '#cccccc', fontSize: FONT_SIZE.TINY}}>
-              {props.route?.params?.data.date}
-            </Text>
-          </TouchableOpacity>
-        )}
-        renderRight={() => (
-          <TouchableOpacity
-            onPress={onSubmit}
-            style={{
-              backgroundColor: '#00aaff',
-              borderRadius: 20,
-            }}>
-            <Text
-              style={{
-                marginHorizontal: 10,
-                marginVertical: 5,
-                fontSize: FONT_SIZE.CONTENT,
-                color: '#fff',
-              }}>
-              Lưu
-            </Text>
-          </TouchableOpacity>
-        )}
-      />
-      <Tag>
-        <TextInput
-          value={title}
-          placeholder="Thêm tên thuốc"
-          autoFocus={true}
-          onChangeText={setTitle}
-        />
-      </Tag>
-      <Tag>
-        <View style={{}}>
-          <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
-        </View>
-        <FlatList
-          renderItem={({item, index}) => (
-            <RemindItem
-              item={item}
-              index={index}
-              updateRemind={updateRemind}
-              deleteRemind={deleteRemind}
-              isNew={item.isNew}
-            />
-          )}
-          data={reminds}
-        />
-        <TouchableOpacity
-          style={{
-            alignSelf: 'center',
-            borderWidth: 1,
-            borderColor: COLORS.BLUE,
-            borderRadius: 5,
-            alignItems: 'center',
-            paddingVertical: 5,
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+      <View style={styles.container}>
+        <HeaderCommon
+          onPressLeftIcon={() => {
+            props.navigation?.goBack();
           }}
-          onPress={addRemind}>
-          <Text style={{paddingHorizontal: 20}}>Thêm nhắc nhở</Text>
-        </TouchableOpacity>
-      </Tag>
-      {/* </View> */}
-      <Tag>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Uống trong</Text>
-          <View
+          renderTitle={() => (
+            <TouchableOpacity
+              style={{alignItems: 'center'}}
+              onPress={() => {
+                props.navigation?.navigate(SCREEN.DIARY.VISITED, {});
+              }}>
+              <Text style={{fontSize: FONT_SIZE.TITLE}}>{data.title}</Text>
+              <Text style={{color: '#cccccc', fontSize: FONT_SIZE.TINY}}>
+                {new Date(data.date).toString().slice(4, 15)}
+              </Text>
+            </TouchableOpacity>
+          )}
+          renderRight={() => (
+            <TouchableOpacity
+              onPress={onSubmit}
+              style={{
+                backgroundColor: '#00aaff',
+                borderRadius: 20,
+              }}>
+              <Text
+                style={{
+                  marginHorizontal: 10,
+                  marginVertical: 5,
+                  fontSize: FONT_SIZE.CONTENT,
+                  color: '#fff',
+                }}>
+                Lưu
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+        <Tag>
+          <TextInput
+            value={title}
+            placeholder="Thêm tên thuốc"
+            autoFocus={true}
+            onChangeText={setTitle}
+          />
+        </Tag>
+        <Tag>
+          <View style={{}}>
+            <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
+          </View>
+          <FlatList
+            renderItem={({item, index}) => (
+              <RemindItem
+                item={item}
+                index={index}
+                updateRemind={updateRemind}
+                deleteRemind={deleteRemind}
+                isNew={item.isNew}
+              />
+            )}
+            data={reminds}
+          />
+          <TouchableOpacity
             style={{
-              borderBottomWidth: 1,
-              width: 60,
+              alignSelf: 'center',
+              borderWidth: 1,
+              borderColor: COLORS.BLUE,
+              borderRadius: 5,
               alignItems: 'center',
-              marginLeft: 20,
-            }}>
-            <TextInput
-              value={count}
-              onChangeText={setCount}
-              keyboardType="number-pad"
-            />
-          </View>
+              paddingVertical: 5,
+            }}
+            onPress={addRemind}>
+            <Text style={{paddingHorizontal: 20}}>Thêm nhắc nhở</Text>
+          </TouchableOpacity>
+        </Tag>
+        {/* </View> */}
+        <Tag>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Uống trong</Text>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                width: 60,
+                alignItems: 'center',
+                marginLeft: 20,
+              }}>
+              <TextInput
+                style={{width: '100%'}}
+                value={count}
+                onChangeText={setCount}
+                keyboardType="number-pad"
+              />
+            </View>
 
-          <View style={{marginLeft: 8}}>
-            <HDropDownPicker
-              scrollable={false}
-              data={DropKey}
-              selected={timeUnit}
-              setSelected={setTimeUnit}
-            />
+            <View style={{marginLeft: 8}}>
+              <HDropDownPicker
+                scrollable={false}
+                data={DropKey}
+                selected={timeUnit}
+                setSelected={setTimeUnit}
+              />
+            </View>
           </View>
-        </View>
-      </Tag>
-    </View>
+        </Tag>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 export default MedicineScreen;

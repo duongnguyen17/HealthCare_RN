@@ -36,7 +36,7 @@ const HDayTag = ({data}: HDayTagProps) => {
                 backgroundColor: m_isToday ? COLORS.COLOR_LIGHT_BLUE : '',
               }}>
               <Text style={{color: m_isToday ? '#fff' : '#000'}}>
-                {data?.date.getDate()}
+                {new Date(data?.date).getDate()}
               </Text>
             </View>
           </TouchableOpacity>

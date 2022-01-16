@@ -115,7 +115,7 @@ export interface Medicine {
   title: string,
   // isDone: boolean,
   remind: Array<Remind>,
-  start: Date,
+  start: number,
   during: number
 }
 
@@ -131,12 +131,11 @@ export interface Visited {
   pre: number,//id of pre visited
   location: string,
   descript: string,
-  date: Date,
+  date: number,
   medicines?: Array<Medicine>
 }
 
 export interface HEvent {
-
   date: Date,
   event: Array<HEventMedicine | HEventVisited>
 }
