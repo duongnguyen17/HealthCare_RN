@@ -1,20 +1,21 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 
-const Tag = ({children}: TagProps) => (
-  <View style={styles.containerTag}>
-    <View style={styles.containerMargin}>{children}</View>
+const Tag = ({children, styles}: TagProps) => (
+  <View
+    style={[
+      {
+        borderBottomWidth: 1,
+        borderColor: '#cccccc',
+      },
+      styles,
+    ]}>
+    <View style={{marginHorizontal: 10, marginVertical: 15}}>{children}</View>
   </View>
 );
 
 export default Tag;
-const styles = StyleSheet.create({
-  containerTag: {
-    borderBottomWidth: 1,
-    borderColor: '#cccccc',
-  },
-  containerMargin: {marginHorizontal: 10, marginVertical: 10},
-});
-interface TagProps {
+export interface TagProps {
   children: React.ReactNode;
+  styles?: StyleProp<ViewStyle>;
 }

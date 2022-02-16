@@ -17,10 +17,9 @@ import {
   COLORS,
   FONT_SIZE,
   Medicine,
-  SCREEN,
   SearchType,
+  STRINGS,
   Visited,
-  width,
 } from '../../../common';
 import HHeaderCommon from '../../../components/HHeader/HHeaderCommon';
 import HIcon from '../../../components/HIcon';
@@ -31,6 +30,7 @@ import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
 import {visitedsAction} from '../../../reduxSaga/slices/visitedsSlice';
 import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
+import TagWithIcon from '../components/TagWithIcon';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const visited: Visited = props.route?.params?.visited;
@@ -101,14 +101,14 @@ const VisitedScreen = (props: ScreenProps) => {
     setDate(currentDate);
   };
   const gotoSearchScreen = (type: SearchType) => {
-    props?.navigation?.navigate(SCREEN.SEARCH, {type: type});
+    props?.navigation?.navigate(STRINGS.SCREEN.SEARCH, {type: type});
   };
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
       // hiện cảnh báo: không được để trống title
       showAlert(AlertType.WARN, 'Phải đặt tên lần khám');
     } else
-      props.navigation?.navigate(SCREEN.DIARY.MEDICINE, {
+      props.navigation?.navigate(STRINGS.SCREEN.DIARY.MEDICINE, {
         data: {title: title, date: date},
         medicine,
         updateMedicine,
@@ -127,7 +127,7 @@ const VisitedScreen = (props: ScreenProps) => {
               <TouchableOpacity
                 onPress={onSubmit}
                 style={{
-                  backgroundColor: '#00aaff',
+                  backgroundColor: COLORS.BLUE,
                   borderRadius: 20,
                 }}>
                 <Text
@@ -135,7 +135,7 @@ const VisitedScreen = (props: ScreenProps) => {
                     marginHorizontal: 10,
                     marginVertical: 5,
                     fontSize: FONT_SIZE.CONTENT,
-                    color: '#fff',
+                    color: COLORS.WHITE,
                   }}>
                   Lưu
                 </Text>
@@ -144,8 +144,9 @@ const VisitedScreen = (props: ScreenProps) => {
           />
           <Tag>
             <TextInput
+              style={{fontSize: 30}}
               value={title}
-              placeholder="Thêm tiêu đề"
+              placeholder="Tên lần khám ..."
               autoFocus
               multiline
               onChangeText={setTitle}
@@ -194,7 +195,7 @@ const VisitedScreen = (props: ScreenProps) => {
               </View>
             </View>
           </Tag> */}
-          <Tag>
+          <TagWithIcon iconName="event-note" iconFont="MaterialIcons">
             <TouchableOpacity
               style={{flexDirection: 'row', justifyContent: 'space-between'}}
               onPress={() => {
@@ -208,14 +209,16 @@ const VisitedScreen = (props: ScreenProps) => {
                   alignItems: 'center',
                 }}>
                 <Text>
-                  {pre ?? <Text style={{color: '#cccccc'}}>Không có</Text>}
+                  {pre ?? (
+                    <Text style={{color: COLORS.GRAY_DECOR}}>Không có</Text>
+                  )}
                 </Text>
               </View>
 
               <HIcon font="MaterialIcons" name="arrow-forward-ios" size={18} />
             </TouchableOpacity>
-          </Tag>
-          <Tag>
+          </TagWithIcon>
+          <TagWithIcon iconName="map-marker" iconFont="FontAwesome">
             <View
               style={{
                 flexDirection: 'row',
@@ -241,8 +244,8 @@ const VisitedScreen = (props: ScreenProps) => {
                 />
               </TouchableOpacity> */}
             </View>
-          </Tag>
-          <Tag>
+          </TagWithIcon>
+          <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
             <TouchableOpacity
               onPress={() => {
                 setDatePickerVisible(!datePickerVisible);
@@ -253,7 +256,7 @@ const VisitedScreen = (props: ScreenProps) => {
                 {new Date(date).toString().slice(0, 10)}
               </Text>
             </TouchableOpacity>
-          </Tag>
+          </TagWithIcon>
           {datePickerVisible && (
             <DateTimePicker
               // style={{backgroundColor: '#fff'}}
@@ -264,11 +267,11 @@ const VisitedScreen = (props: ScreenProps) => {
               onChange={onChange}
             />
           )}
-          <Tag>
+          <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
             {/* <View style={{borderWidth: 1, borderColor: 'black'}}> */}
-            <View style={{borderBottomWidth: 1, borderColor: '#cccccc'}}>
+            {/* <View style={{borderBottomWidth: 1, borderColor: '#cccccc'}}>
               <Text style={{marginBottom: 5}}>Thuốc</Text>
-            </View>
+            </View> */}
             <FlatList
               renderItem={({item}) => (
                 <MedicineItem
@@ -295,15 +298,15 @@ const VisitedScreen = (props: ScreenProps) => {
               <Text style={{paddingHorizontal: 20}}>Thêm thuốc</Text>
             </TouchableOpacity>
             {/* </View> */}
-          </Tag>
-          <Tag>
+          </TagWithIcon>
+          <TagWithIcon iconName="notes" iconFont="MaterialIcons">
             <TextInput
               value={descript}
               multiline
               onChangeText={setDescript}
               placeholder="Ghi chú"
             />
-          </Tag>
+          </TagWithIcon>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

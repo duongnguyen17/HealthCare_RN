@@ -33,7 +33,7 @@ export const calDayWeek = (someDate: Date | number): string => {
 
 /**find index of some day in an array, 
  * @param someDate ngày cần tìm
- * @param arr mảng này chưa các object có dạng: {date:Date,.......}
+ * @param arr mảng này chứa các object có dạng: {date:Date,.......}
 */
 export const findSomeDay = (someDate: Date, arr: Array<Object>): number => {
     // @ts-ignore

@@ -9,11 +9,12 @@ import {
   Text,
   FlatList,
 } from 'react-native';
-import {COLORS, FONT_SIZE, TYPE_SHOW} from '../../../common';
+import {COLORS, FONT_SIZE, HEvent, TYPE_SHOW} from '../../../common';
 import {Calendar} from '../../../components/CustomCalendar';
 import RadioList from './RadioList';
 
 const ExtendDiary = ({
+  data,
   type,
   visible,
   eventType,
@@ -57,7 +58,7 @@ const ExtendDiary = ({
         s_visible ? styles.extendShow : styles.extendHide,
       ]}>
       {type == TypeExtend.calendar ? (
-        <Calendar style={{width: '100%', height: '100%'}} enableSwipeMonths />
+        <Calendar markingType='multi-dot' style={{width: '100%', height: '100%'}} enableSwipeMonths markedDates={{}}/>
       ) : (
         <View
           style={{
@@ -98,10 +99,11 @@ const ExtendDiary = ({
 export default ExtendDiary;
 
 const styles = StyleSheet.create({
-  extendShow: {width: '100%', height: '45%'},
+  extendShow: {width: '100%', height: 335},
   extendHide: {width: '100%', height: 0},
 });
 interface ExtendDiaryProps {
+  data:Array<HEvent>,
   type: TypeExtend;
   visible: boolean;
   eventType: TYPE_SHOW;

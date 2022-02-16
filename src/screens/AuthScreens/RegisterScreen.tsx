@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TextInput} from 'react-native-paper';
-import {SCREEN} from '../../common';
+import {STRINGS} from '../../common';
 import {getStatusBarHeight} from '../../utils/IPhoneXHelper';
 import HButton from '../../components/HButton';
 import {ScreenProps} from '../../type/type';
@@ -14,7 +14,7 @@ const RegisterScreen = ({navigation}: ScreenProps) => {
   const [isError, setIsError] = useState(false);
   const confirmForgotPassword = () => {
     // if (validatePhone(userPhone))
-    navigation.navigate(SCREEN.AUTH.VERIFY_OTP, {
+    navigation.navigate(STRINGS.SCREEN.AUTH.VERIFY_OTP, {
       phonenumber: phonenumber,
     });
   };
@@ -48,7 +48,7 @@ const RegisterScreen = ({navigation}: ScreenProps) => {
               mode={'outlined'}
               keyboardType="number-pad"
               style={styles.textInput}
-              theme={{colors: {primary: isError ? '#F9593A' : '#3DBBED'}}}
+              theme={{colors: {primary: isError ? COLORS.ORANGE : COLORS.LIGHT_BLUE}}}
               onSubmitEditing={confirmForgotPassword}
               autoFocus={true}
             />
@@ -56,7 +56,7 @@ const RegisterScreen = ({navigation}: ScreenProps) => {
           <View style={styles.error}>
             {isError && (
               <Text
-                style={{fontSize: 16, fontFamily: 'Lato', color: '#F9593A'}}>
+                style={{fontSize: 16, fontFamily: 'Lato', color: COLORS.ORANGE}}>
                 Nhập số điện thoại hợp lệ
               </Text>
             )}
@@ -69,7 +69,7 @@ const RegisterScreen = ({navigation}: ScreenProps) => {
               onPress={() => {
                 // navigation.navigate(SCREENS.ACCOUNT.TERMS_OF_SERVICE)
               }}
-              style={{color: COLORS.COLOR_LIGHT_BLUE}}>
+              style={{color: COLORS.LIGHT_BLUE}}>
               Điều khoản và dịch vụ
             </Text>{' '}
             của Fschool

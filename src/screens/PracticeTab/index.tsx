@@ -13,27 +13,26 @@ import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import LinearGradient from 'react-native-linear-gradient';
 import OverView from './OverView';
 import Moving from './Moving';
-import {height,width, TITLE} from '../../common';
+import {DIMENS, STRINGS} from '../../common';
 import Frame from '../../components/Frame';
 import HeartBeat from './HeartBeat';
 import {NavigationProp, RouteProp} from '@react-navigation/core';
 import {ScreenProps} from '../../type/type';
 
-
 const Practice = ({navigation}: ScreenProps) => {
   const scrollY = useRef(new Animated.Value(0)).current;
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    {key: 'overView', title: TITLE.OVER_VIEW},
-    {key: 'moving', title: TITLE.MOVING},
-    {key: 'heartBeat', title: TITLE.HEART_BEAT},
+    {key: 'overView', title: STRINGS.TITLE.OVER_VIEW},
+    {key: 'moving', title: STRINGS.TITLE.MOVING},
+    {key: 'heartBeat', title: STRINGS.TITLE.HEART_BEAT},
   ]);
 
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
         style={{
-          height: height,
+          height: DIMENS.SCREEN_HEIGHT,
           position: 'absolute',
           top: 0,
           bottom: 0,
@@ -65,7 +64,7 @@ const Practice = ({navigation}: ScreenProps) => {
       </Animated.View>
       <Animated.View
         style={{
-          height:height,
+          height: DIMENS.SCREEN_HEIGHT,
           transform: [
             {
               translateY: scrollY.interpolate({
@@ -101,7 +100,7 @@ const Practice = ({navigation}: ScreenProps) => {
             }
           }}
           onIndexChange={setIndex}
-          initialLayout={{width: width}}
+          initialLayout={{width: DIMENS.SCREEN_WIDTH}}
         />
         {/* </View> */}
       </Animated.View>

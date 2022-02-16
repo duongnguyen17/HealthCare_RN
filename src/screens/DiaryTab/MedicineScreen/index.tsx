@@ -16,7 +16,7 @@ import {
   COLORS,
   FONT_SIZE,
   Remind,
-  SCREEN,
+  STRINGS,
   TimeUnit,
 } from '../../../common';
 import HeaderCommon from '../../../components/HHeader/HHeaderCommon';
@@ -28,6 +28,7 @@ import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
 import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
 import moment from 'moment';
+import TagWithIcon from '../components/TagWithIcon';
 
 const DropKey = [
   {key: 'ngày', value: TimeUnit.DAY},
@@ -131,7 +132,10 @@ const MedicineScreen = (props: ScreenProps) => {
   };
   // console.log(`reminds`, reminds);
   return (
-    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}>
       <View style={styles.container}>
         <HeaderCommon
           onPressLeftIcon={() => {
@@ -141,7 +145,7 @@ const MedicineScreen = (props: ScreenProps) => {
             <TouchableOpacity
               style={{alignItems: 'center'}}
               onPress={() => {
-                props.navigation?.navigate(SCREEN.DIARY.VISITED, {});
+                props.navigation?.navigate(STRINGS.SCREEN.DIARY.VISITED, {});
               }}>
               <Text style={{fontSize: FONT_SIZE.TITLE}}>{data.title}</Text>
               <Text style={{color: '#cccccc', fontSize: FONT_SIZE.TINY}}>
@@ -170,16 +174,18 @@ const MedicineScreen = (props: ScreenProps) => {
         />
         <Tag>
           <TextInput
+            style={{fontSize: 30}}
             value={title}
-            placeholder="Thêm tên thuốc"
-            autoFocus={true}
+            placeholder="Thêm tên thuốc ..."
+            autoFocus
+            multiline
             onChangeText={setTitle}
           />
         </Tag>
-        <Tag>
-          <View style={{}}>
+        <TagWithIcon iconName="reminder" iconFont="MaterialCommunityIcons">
+          {/* <View style={{}}>
             <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
-          </View>
+          </View> */}
           <FlatList
             renderItem={({item, index}) => (
               <RemindItem
@@ -204,19 +210,20 @@ const MedicineScreen = (props: ScreenProps) => {
             onPress={addRemind}>
             <Text style={{paddingHorizontal: 20}}>Thêm nhắc nhở</Text>
           </TouchableOpacity>
-        </Tag>
+        </TagWithIcon>
         {/* </View> */}
-        <Tag>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Uống trong</Text>
+        <TagWithIcon>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            {/* <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Uống trong</Text> */}
             <View
               style={{
-                borderBottomWidth: 1,
-                width: 60,
+                // borderBottomWidth: 1,
+                width: 80,
                 alignItems: 'center',
-                marginLeft: 20,
+                // marginLeft: 20,
               }}>
               <TextInput
+                placeholder="Uống trong"
                 style={{width: '100%'}}
                 value={count}
                 onChangeText={setCount}
@@ -233,7 +240,7 @@ const MedicineScreen = (props: ScreenProps) => {
               />
             </View>
           </View>
-        </Tag>
+        </TagWithIcon>
       </View>
     </TouchableWithoutFeedback>
   );

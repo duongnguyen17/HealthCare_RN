@@ -3,7 +3,7 @@ import {Image, View, Text, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {Button} from 'react-native-paper';
 import Swiper from 'react-native-swiper';
-import {height} from '../../common';
+import {DIMENS} from '../../common';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const Intro = () => {
   const [isNext, setIsNext] = useState<Boolean>(false);
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logoContainer: {
-    marginTop: (height * 1) / 3,
+    marginTop: (DIMENS.SCREEN_HEIGHT * 1) / 3,
   },
   swipeScreen: {
     flex: 1,

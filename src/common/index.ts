@@ -1,28 +1,31 @@
 import { Dimensions } from "react-native";
-export const { height, width } = Dimensions.get('window')
-export const TITLE = {
-  OVER_VIEW: 'Tổng quan',
-  MOVING: 'Di chuyển',
-  HEART_BEAT: 'Nhịp tim',
-}
+const { height, width } = Dimensions.get('window')
 
-export const SCREEN = {
-  MAIN_TABS: {
-    PRACTICE: 'Practice',
-    DIARY: 'Diary',
-    PROFILE: 'Profile',
+export const STRINGS = {
+  SEARCH: "Tìm kiếm",
+  TITLE: {
+    OVER_VIEW: 'Tổng quan',
+    MOVING: 'Di chuyển',
+    HEART_BEAT: 'Nhịp tim',
   },
-  PRACTICE: { OVERVIEW: 'OverView', },
-  DIARY: { MEDICINE: 'Medicine', VISITED: 'Visited' },
-  TAB_NAVIGATOR: 'TabNavigator',
-  SEARCH: 'Search',
-  AUTH: {
-    LOGIN: 'Login',
-    REGISTER: 'Register',
-    FORGOT_PASSWORD: 'ForgotPasswordScreen',
-    VERIFY_OTP: 'VerifyOTP',
-    REGISTER_FINISH: 'RegisterFinish'
-  },
+  SCREEN: {
+    MAIN_TABS: {
+      PRACTICE: 'Practice',
+      DIARY: 'Diary',
+      PROFILE: 'Profile',
+    },
+    PRACTICE: { OVERVIEW: 'OverView', },
+    DIARY: { MEDICINE: 'Medicine', VISITED: 'Visited' },
+    TAB_NAVIGATOR: 'TabNavigator',
+    SEARCH: 'Search',
+    AUTH: {
+      LOGIN: 'Login',
+      REGISTER: 'Register',
+      FORGOT_PASSWORD: 'ForgotPasswordScreen',
+      VERIFY_OTP: 'VerifyOTP',
+      REGISTER_FINISH: 'RegisterFinish'
+    },
+  }
 }
 
 export const COLORS = {
@@ -35,11 +38,12 @@ export const COLORS = {
   TEXT_COLOR_BLUE: '#128CF9',
   ICON_COLOR: '#ABABAB',
   ERROR_COLOR: '#FB0404',
-  ORANGE: '#ffa938',
+  LIGHT_ORANGE: '#ffa938',
+  ORANGE: '#F9593A',
   GREEN: '#0bb895',
   BLUE: '#047AFF',
   WHITE: '#fff',
-  COLOR_LIGHT_BLUE: '#3DBBED',
+  LIGHT_BLUE: '#3DBBED',
   GRAY_DECOR: '#cccccc',
   GRAY_TEXT_1: '#cccccc',
   GRAY_TEXT_2: '#999999',
@@ -60,9 +64,13 @@ export const FONT_SIZE = {
   TINY: 12,
   CONTENT: 14,
   TITLE: 18,
-  HEADER: 24,
-  BIG_HEADER: 30,
+  HEADER: 22,
+  BIG_HEADER: 28,
   HEADER_TAG: 16
+}
+
+export const TEXT_STYLES = {
+  HEADER: { fontSize: FONT_SIZE.HEADER, fontWeight: '500' },
 }
 export const ICON_SIZE = {
   HEADER: 23,
@@ -158,3 +166,13 @@ export interface HEventVisited {
   date: Date,
 }
 
+export const CALENDAR_STYLES = {
+  VISITED: { key: 'Visited', color: COLORS.EVENT_TAG.Visited.borderColor, selectedDotColor: 'blue' },
+  MEDICINE: { key: 'Medicine', color: COLORS.EVENT_TAG.Medicine.borderColor, selectedDotColor: 'blue' },
+}
+
+export const DIMENS = {
+  MARGIN_HORIZONTAL: 8,
+  SCREEN_WIDTH: width,
+  SCREEN_HEIGHT: height
+}

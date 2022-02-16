@@ -64,7 +64,7 @@ const HIcon = ({font, name, style, color = 'black', size = 24}: HIconProps) => {
 };
 
 export default HIcon;
-interface HIconProps {
+export interface HIconProps {
   font:
     | 'MaterialIcons'
     | 'Ionicons'

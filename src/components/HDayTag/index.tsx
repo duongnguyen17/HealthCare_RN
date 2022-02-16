@@ -33,7 +33,7 @@ const HDayTag = ({data}: HDayTagProps) => {
               style={{
                 borderRadius: 30,
                 padding: 5,
-                backgroundColor: m_isToday ? COLORS.COLOR_LIGHT_BLUE : '',
+                backgroundColor: m_isToday ? COLORS.LIGHT_BLUE : '',
               }}>
               <Text style={{color: m_isToday ? '#fff' : '#000'}}>
                 {new Date(data?.date).getDate()}
@@ -54,7 +54,7 @@ const HDayTag = ({data}: HDayTagProps) => {
               style={{
                 width: 7,
                 height: 7,
-                backgroundColor: COLORS.COLOR_LIGHT_BLUE,
+                backgroundColor: COLORS.LIGHT_BLUE,
                 borderRadius: 10,
               }}
             />
@@ -62,7 +62,7 @@ const HDayTag = ({data}: HDayTagProps) => {
               style={{
                 width: '100%',
                 height: 1,
-                backgroundColor: COLORS.COLOR_LIGHT_BLUE,
+                backgroundColor: COLORS.LIGHT_BLUE,
               }}
             />
           </View>

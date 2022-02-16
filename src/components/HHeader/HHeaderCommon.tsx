@@ -2,7 +2,7 @@ import React from 'react';
 import HHeader from '.';
 import {Text, View, TouchableOpacity} from 'react-native';
 import HIcon from '../HIcon';
-import {FONT_SIZE, ICON_SIZE, SCREEN} from '../../common';
+import {FONT_SIZE, ICON_SIZE} from '../../common';
 import {NavigationProp} from '@react-navigation/native';
 const HeaderCommon = ({
   renderLeft,

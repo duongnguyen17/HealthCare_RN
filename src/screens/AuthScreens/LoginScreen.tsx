@@ -12,7 +12,7 @@ import {TextInput} from 'react-native-paper';
 import {ScreenProps} from '../../type/type';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {COLORS, FONT_SIZE, SCREEN} from '../../common';
+import {COLORS, FONT_SIZE, STRINGS} from '../../common';
 import HButton from '../../components/HButton';
 import Frame from '../../components/Frame';
 
@@ -62,7 +62,7 @@ const LoginScreen = ({navigation}: ScreenProps) => {
             />
             <Text
               style={styles.forgetPass}
-              onPress={() => navigation.navigate(SCREEN.AUTH.FORGOT_PASSWORD)}>
+              onPress={() => navigation.navigate(STRINGS.SCREEN.AUTH.FORGOT_PASSWORD)}>
               Quên mật khẩu?
             </Text>
             <HButton
@@ -109,7 +109,7 @@ const LoginScreen = ({navigation}: ScreenProps) => {
               Bạn chưa có tài khoản?{' '}
               <Text
                 style={styles.signUpText}
-                onPress={() => navigation.navigate(SCREEN.AUTH.REGISTER)}>
+                onPress={() => navigation.navigate(STRINGS.SCREEN.AUTH.REGISTER)}>
                 Đăng ký
               </Text>
             </Text>

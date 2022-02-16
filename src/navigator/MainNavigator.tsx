@@ -4,7 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {TouchableOpacity} from 'react-native';
-import {SCREEN, height, width} from '../common';
+import {COLORS, STRINGS} from '../common';
 
 //import screen
 import Practice from '../screens/PracticeTab';
@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName={SCREEN.MAIN_TABS.PRACTICE}
+      initialRouteName={STRINGS.SCREEN.MAIN_TABS.PRACTICE}
       screenOptions={({route}) => ({
         headerShown: false,
 
@@ -40,31 +40,34 @@ const TabNavigator = () => {
             />
           );
         },
-        tabBarActiveTintColor: '#33ccff',
-        tabBarInactiveTintColor: '#cccccc',
+        tabBarActiveTintColor: COLORS.LIGHT_BLUE,
+        tabBarInactiveTintColor: COLORS.GRAY_DECOR,
         // tabBarStyle: { height: 55 },
         tabBarLabelStyle: {fontSize: 13},
       })}>
-      <Tab.Screen component={Practice} name={SCREEN.MAIN_TABS.PRACTICE} />
-      <Tab.Screen component={Diary} name={SCREEN.MAIN_TABS.DIARY} />
-      <Tab.Screen component={Profile} name={SCREEN.MAIN_TABS.PROFILE} />
+      <Tab.Screen
+        component={Practice}
+        name={STRINGS.SCREEN.MAIN_TABS.PRACTICE}
+      />
+      <Tab.Screen component={Diary} name={STRINGS.SCREEN.MAIN_TABS.DIARY} />
+      <Tab.Screen component={Profile} name={STRINGS.SCREEN.MAIN_TABS.PROFILE} />
     </Tab.Navigator>
   );
 };
 const MainNavigator = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={SCREEN.TAB_NAVIGATOR}>
+      <Stack.Navigator initialRouteName={STRINGS.SCREEN.TAB_NAVIGATOR}>
         <Stack.Screen
           component={TabNavigator}
-          name={SCREEN.TAB_NAVIGATOR}
+          name={STRINGS.SCREEN.TAB_NAVIGATOR}
           options={{headerShown: false}}
         />
         <Stack.Screen
           component={OverView}
-          name={SCREEN.PRACTICE.OVERVIEW}
+          name={STRINGS.SCREEN.PRACTICE.OVERVIEW}
           options={({navigation}) => ({
-            title: 'Tổng quan',
+            title: STRINGS.TITLE.OVER_VIEW,
             headerLeft: () => (
               <TouchableOpacity
                 onPress={() => {
@@ -73,7 +76,7 @@ const MainNavigator = () => {
                 <MaterialIcons
                   name="arrow-back-ios"
                   size={23}
-                  color={'#cccccc'}
+                  color={COLORS.GRAY_DECOR}
                 />
               </TouchableOpacity>
             ),
@@ -83,19 +86,19 @@ const MainNavigator = () => {
         />
         <Stack.Screen
           component={MedicineScreen}
-          name={SCREEN.DIARY.MEDICINE}
+          name={STRINGS.SCREEN.DIARY.MEDICINE}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
           component={SearchScreen}
-          name={SCREEN.SEARCH}
+          name={STRINGS.SCREEN.SEARCH}
           options={{headerShown: false}}
         />
         <Stack.Screen
           component={VisitedScreen}
-          name={SCREEN.DIARY.VISITED}
+          name={STRINGS.SCREEN.DIARY.VISITED}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
