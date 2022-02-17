@@ -1,22 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  FlatList,
-  TextStyle,
-} from 'react-native';
+import {View, TextInput, TouchableOpacity, Text, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  COLORS,
-  DIMENS,
-  FONT_SIZE,
-  HEvent,
-  SearchType,
-  STRINGS,
-  TEXT_STYLES,
-} from '../../common';
+import {COLORS, DIMENS, FONT_SIZE, SearchType} from '../../common';
 import HDayTag from '../../components/HDayTag';
 import HDropDownPicker from '../../components/HDropDownPicker';
 import HeaderCommon from '../../components/HHeader/HHeaderCommon';
@@ -57,7 +42,54 @@ const SearchScreen = (props: ScreenProps) => {
         hasLinear
         navigation={props.navigation}
         renderTitle={() => (
-          <Text style={TEXT_STYLES.HEADER as TextStyle}>{STRINGS.SEARCH}</Text>
+          <View
+            style={{
+              borderRadius: 20,
+              borderWidth: 1,
+              paddingHorizontal: 15,
+              alignItems: 'center',
+              flexDirection: 'row',
+              height: (4 * DIMENS.HEADER_HEIGHT) / 5,
+              backgroundColor: COLORS.WHITE,
+              borderColor: COLORS.GRAY_DECOR,
+            }}>
+            <TextInput
+              autoFocus
+              value={textInput}
+              onChangeText={setTextInput}
+              placeholder={'Nhập từ khoá tìm kiếm'}
+              style={{width: (DIMENS.SCREEN_WIDTH * 11) / 20}}
+            />
+            <View
+              style={{
+                borderRadius: 10,
+                marginLeft: 10,
+                width: 20,
+                height: 20,
+              }}>
+              {textInput != '' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setTextInput('');
+                  }}
+                  style={{
+                    borderRadius: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: 20,
+                    height: 20,
+                    backgroundColor: COLORS.GRAY_DECOR,
+                  }}>
+                  <HIcon
+                    font="Octicons"
+                    name="x"
+                    size={16}
+                    color={COLORS.WHITE}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
         )}
         renderRight={() => (
           <HDropDownPicker
@@ -74,55 +106,6 @@ const SearchScreen = (props: ScreenProps) => {
           zIndex: 1,
           marginHorizontal: DIMENS.MARGIN_HORIZONTAL,
         }}>
-        <View
-          style={{
-            marginTop: 8,
-            borderRadius: 20,
-            borderWidth: 1,
-            paddingHorizontal: 15,
-            alignItems: 'center',
-            flexDirection: 'row',
-            height: 40,
-            backgroundColor: COLORS.WHITE,
-            borderColor: COLORS.GRAY_DECOR,
-          }}>
-          <TextInput
-            autoFocus
-            value={textInput}
-            onChangeText={setTextInput}
-            placeholder={'Nhập từ khoá tìm kiếm'}
-            style={{width: (DIMENS.SCREEN_WIDTH * 11) / 20}}
-          />
-          <View
-            style={{
-              borderRadius: 10,
-              marginLeft: 10,
-              width: 20,
-              height: 20,
-            }}>
-            {textInput != '' && (
-              <TouchableOpacity
-                onPress={() => {
-                  setTextInput('');
-                }}
-                style={{
-                  borderRadius: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: 20,
-                  height: 20,
-                  backgroundColor: COLORS.GRAY_DECOR,
-                }}>
-                <HIcon
-                  font="Octicons"
-                  name="x"
-                  size={16}
-                  color={COLORS.WHITE}
-                />
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
         {searchResult.length == 0 || textInput == '' ? (
           <Text
             style={{

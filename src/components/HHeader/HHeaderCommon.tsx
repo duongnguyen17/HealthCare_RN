@@ -28,7 +28,12 @@ const HeaderCommon = ({
         }}>
         <View>
           {!renderLeft ? (
-            <TouchableOpacity onPress={m_onPressLeftIcon}>
+            <TouchableOpacity
+              onPress={m_onPressLeftIcon}
+              style={{
+                paddingHorizontal: 4,
+                paddingVertical: 8,
+              }}>
               <HIcon
                 font="MaterialIcons"
                 name="arrow-back-ios"
@@ -48,7 +53,7 @@ const HeaderCommon = ({
             renderTitle()
           )}
         </View>
-        <View >{!renderRight ? <View /> : renderRight()}</View>
+        <View>{!renderRight ? <View /> : renderRight()}</View>
       </View>
     </HHeader>
   );

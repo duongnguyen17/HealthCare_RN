@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 import {hideAlert} from './index';
-import {AlertType, width} from '../../common';
+import {AlertType, COLORS, DIMENS} from '../../common';
 
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 
@@ -27,32 +27,12 @@ const MyStatusBar = ({backgroundColor, ...props}: MyStatusBarProps) => {
 };
 
 export default function AlertView({
-  type,
   message = '',
+  color,
+  icon,
   cancelable = false,
 }: AlertViewProps) {
-  const [color, setColor] = useState<ColorValue>('#fff');
-  const [icon, setIcon] = useState<ImageSourcePropType>();
   let line = Math.floor(message.length / 44) + 1;
-
-  useEffect(() => {
-    switch (type) {
-      case AlertType.SUCCESS:
-        setIcon(require('./assets/short_right.png'));
-        setColor('#0FD186');
-        break;
-      case AlertType.WARN:
-        setIcon(require('./assets/short_right1.png'));
-        setColor('#FFAA38');
-        break;
-      case AlertType.FAIL:
-        setIcon(require('./assets/short_down.png'));
-        setColor('#FF4D4D');
-        break;
-      default:
-        break;
-    }
-  }, [type]);
   return (
     <View style={{flex: 1, position: 'absolute', zIndex: 999}}>
       {/* @ts-ignore */}
@@ -60,7 +40,7 @@ export default function AlertView({
       {cancelable ? (
         <TouchableOpacity
           style={{
-            width: width,
+            width: DIMENS.SCREEN_WIDTH,
             backgroundColor: color,
             height: 24 + 24 * line,
           }}
@@ -78,7 +58,7 @@ export default function AlertView({
       ) : (
         <View
           style={{
-            width: width,
+            width: DIMENS.SCREEN_WIDTH,
             backgroundColor: color,
             height: 12 + 24 * line,
           }}>
@@ -109,11 +89,11 @@ const styles = StyleSheet.create({
   },
   message: {
     marginLeft: 8,
-    width: width - 64,
+    width: DIMENS.SCREEN_WIDTH - 64,
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
-    color: '#FFFFFF',
+    color: COLORS.WHITE,
   },
   statusBar: {
     height: STATUSBAR_HEIGHT,
@@ -125,5 +105,7 @@ interface MyStatusBarProps {
 interface AlertViewProps {
   type: AlertType;
   message?: string;
+  icon: ImageSourcePropType | null;
+  color: ColorValue;
   cancelable: boolean;
 }

@@ -1,6 +1,7 @@
 import { Dimensions } from "react-native";
+import { getStatusBarHeight } from "../utils/IPhoneXHelper";
 const { height, width } = Dimensions.get('window')
-
+const statusBarHeight = getStatusBarHeight(true);
 export const STRINGS = {
   SEARCH: "Tìm kiếm",
   TITLE: {
@@ -41,6 +42,7 @@ export const COLORS = {
   LIGHT_ORANGE: '#ffa938',
   ORANGE: '#F9593A',
   GREEN: '#0bb895',
+  LIGHT_GREEN:'#0FD186',
   BLUE: '#047AFF',
   WHITE: '#fff',
   LIGHT_BLUE: '#3DBBED',
@@ -174,5 +176,8 @@ export const CALENDAR_STYLES = {
 export const DIMENS = {
   MARGIN_HORIZONTAL: 8,
   SCREEN_WIDTH: width,
-  SCREEN_HEIGHT: height
+  SCREEN_HEIGHT: height,
+  STATUS_BAR_HEIGHT: statusBarHeight,
+  HEADER_STATUS_BAR_HEIGHT: statusBarHeight + 50,
+  HEADER_HEIGHT: 50
 }

@@ -3,21 +3,21 @@ import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {getStatusBarHeight} from '../../utils/IPhoneXHelper';
 import LinearGradient from 'react-native-linear-gradient';
 import HIcon from '../HIcon';
-import {COLORS, FONT_SIZE} from '../../common';
+import {COLORS, FONT_SIZE,DIMENS} from '../../common';
 const HHeader = ({hasLinear = true, children}: HHeaderProps) => {
   const statusBarHeight = getStatusBarHeight(true);
   return (
     <View
       style={{
         width: '100%',
-        minHeight: statusBarHeight + 40,
+        minHeight: DIMENS.HEADER_STATUS_BAR_HEIGHT,
         zIndex: 999,
         // borderBottomWidth: StyleSheet.hairlineWidth,
       }}>
       {hasLinear && (
         <LinearGradient
           style={{
-            height: statusBarHeight + 40,
+            height: DIMENS.HEADER_STATUS_BAR_HEIGHT,
             position: 'absolute',
             top: 0,
             bottom: 0,
@@ -35,7 +35,7 @@ const HHeader = ({hasLinear = true, children}: HHeaderProps) => {
           flexDirection: 'row',
           marginHorizontal: 10,
           marginTop: statusBarHeight,
-          height: 40,
+          height: DIMENS.HEADER_HEIGHT,
           alignItems: 'center',
           justifyContent: 'space-between',
           //   backgroundColor: 'gray',

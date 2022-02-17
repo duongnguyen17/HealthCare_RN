@@ -7,10 +7,8 @@ import {
   TextInput,
   FlatList,
   Keyboard,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   AlertType,
   COLORS,
@@ -27,7 +25,6 @@ import HDropDownPicker from '../../../components/HDropDownPicker';
 import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
 import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
-import moment from 'moment';
 import TagWithIcon from '../components/TagWithIcon';
 
 const DropKey = [
@@ -148,8 +145,8 @@ const MedicineScreen = (props: ScreenProps) => {
                 props.navigation?.navigate(STRINGS.SCREEN.DIARY.VISITED, {});
               }}>
               <Text style={{fontSize: FONT_SIZE.TITLE}}>{data.title}</Text>
-              <Text style={{color: '#cccccc', fontSize: FONT_SIZE.TINY}}>
-                {new Date(data.date).toString().slice(4, 15)}
+              <Text style={{color: COLORS.WHITE, fontSize: FONT_SIZE.TINY}}>
+                {/* {new Date(data.date).toString().slice(4, 15)} */}
               </Text>
             </TouchableOpacity>
           )}
@@ -157,7 +154,7 @@ const MedicineScreen = (props: ScreenProps) => {
             <TouchableOpacity
               onPress={onSubmit}
               style={{
-                backgroundColor: '#00aaff',
+                backgroundColor: COLORS.BLUE,
                 borderRadius: 20,
               }}>
               <Text
@@ -165,7 +162,7 @@ const MedicineScreen = (props: ScreenProps) => {
                   marginHorizontal: 10,
                   marginVertical: 5,
                   fontSize: FONT_SIZE.CONTENT,
-                  color: '#fff',
+                  color: COLORS.WHITE,
                 }}>
                 Lưu
               </Text>
