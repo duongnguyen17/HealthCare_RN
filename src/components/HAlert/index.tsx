@@ -1,13 +1,13 @@
 import React, {useState, useEffect, Component} from 'react';
 import {ColorValue, ImageSourcePropType, ViewProps} from 'react-native';
-import {AlertType, COLORS} from '../../common';
+import {AlertType, COLORS, TIMING} from '../../common';
 import AlertManager from './AlertManager';
 
 import AlertView from './AlertView';
 export const showAlert = (
   type: AlertType,
   message: string,
-  hideAfter: number = 1200,
+  hideAfter: number = TIMING.HEADER_ALERT_ALIVE_DEFAULT,
   cancelable = false,
 ) => {
   const ref = AlertManager.getDefault();
@@ -16,7 +16,7 @@ export const showAlert = (
   }
   if (hideAfter && hideAfter > 0) {
     setTimeout(() => {
-      hideAlert();
+      slideOutAlert();
     }, hideAfter);
   }
 };
@@ -28,8 +28,15 @@ export const hideAlert = () => {
   }
 };
 
+export const slideOutAlert = () => {
+  const ref = AlertManager.getDefault();
+  if (!!ref) {
+    ref.slideOut();
+  }
+};
+
 export class HAlert extends Component<AlertProps, AlertState> {
-  _id: string = 'Alert';
+  _id: String = 'Alert';
   cancelable: boolean = false;
   color: ColorValue = COLORS.LIGHT_GREEN;
   icon: ImageSourcePropType | null = null;
@@ -37,7 +44,7 @@ export class HAlert extends Component<AlertProps, AlertState> {
   message: string = '';
   constructor(props: AlertProps) {
     super(props);
-    this.state = {isShow: false};
+    this.state = {isShow: false, slide: true};
   }
   componentDidMount() {
     this._id = this.props._id ?? 'Loading';
@@ -50,8 +57,7 @@ export class HAlert extends Component<AlertProps, AlertState> {
     this.cancelable = cancelable;
     this.type = type;
     this.message = message;
-
-    this.setState({isShow: true});
+    this.setState({isShow: true, slide: true});
     switch (type) {
       case AlertType.SUCCESS:
         this.icon = require('./assets/short_right.png');
@@ -69,13 +75,19 @@ export class HAlert extends Component<AlertProps, AlertState> {
         break;
     }
   }
+
   hideAlert() {
     this.setState({isShow: false});
   }
+  slideOut() {
+    this.setState({slide: false});
+  }
+
   render(): React.ReactNode {
     const isShow = this.state.isShow;
     return isShow ? (
       <AlertView
+        slide={this.state.slide}
         color={this.color}
         icon={this.icon}
         type={this.type}
@@ -87,11 +99,12 @@ export class HAlert extends Component<AlertProps, AlertState> {
 }
 
 interface AlertProps extends ViewProps {
-  _id?: string;
-  cancelable?: boolean;
+  _id?: String;
+  cancelable?: Boolean;
   type?: AlertType;
-  message?: string;
+  message?: String;
 }
 interface AlertState {
-  isShow?: boolean;
+  isShow?: Boolean;
+  slide: Boolean;
 }

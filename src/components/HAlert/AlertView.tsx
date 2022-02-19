@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -9,11 +9,11 @@ import {
   SafeAreaView,
   ColorValue,
   ImageSourcePropType,
+  Animated,
 } from 'react-native';
 
-import {hideAlert} from './index';
-import {AlertType, COLORS, DIMENS} from '../../common';
-import style from '../CustomCalendar/calendar/header/style';
+import {hideAlert, slideOutAlert} from './index';
+import {AlertType, COLORS, DIMENS, TIMING} from '../../common';
 
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 
@@ -31,9 +31,33 @@ export default function AlertView({
   message = '',
   color,
   icon,
+  slide,
   cancelable = false,
 }: AlertViewProps) {
-  let line = Math.floor(message.length / 44) + 1;
+  let height = 48 + 24 * Math.floor(message.length / 44);
+  const translateY = useRef(
+    new Animated.Value(-height - DIMENS.STATUS_BAR_HEIGHT),
+  ).current;
+  useEffect(() => {
+    slide ? m_show() : m_hide();
+  }, [slide]);
+
+  const m_show = () => {
+    Animated.timing(translateY, {
+      duration: TIMING.HEADER_ALERT_SLIDE,
+      toValue: 0,
+      useNativeDriver: true,
+    }).start();
+  };
+  const m_hide = () => {
+    Animated.timing(translateY, {
+      duration: TIMING.HEADER_ALERT_SLIDE,
+      toValue: -height - DIMENS.STATUS_BAR_HEIGHT,
+      useNativeDriver: true,
+    }).start(() => {
+      hideAlert();
+    });
+  };
   return (
     <View
       style={{
@@ -44,44 +68,44 @@ export default function AlertView({
       }}>
       {/* @ts-ignore */}
       {/* <MyStatusBar backgroundColor={color} barStyle="light-content" /> */}
-      {cancelable ? (
-        <TouchableOpacity
-          style={[
-            styles.container,
-            {
-              backgroundColor: color,
-              height: 24 + 24 * line,
-            },
-          ]}
-          onPress={() => {
-            hideAlert();
-          }}>
-          <View style={styles.contentcontainer}>
-            {/* @ts-ignore */}
-            <Image style={styles.icon} source={icon}></Image>
-            <Text numberOfLines={3} style={styles.message}>
-              {message}
-            </Text>
+      <Animated.View style={{transform: [{translateY}]}}>
+        {cancelable ? (
+          <TouchableOpacity
+            style={[
+              styles.container,
+              {
+                backgroundColor: color,
+              },
+            ]}
+            onPress={() => {
+              hideAlert();
+            }}>
+            <View style={styles.contentcontainer}>
+              {/* @ts-ignore */}
+              <Image style={styles.icon} source={icon}></Image>
+              <Text numberOfLines={3} style={styles.message}>
+                {message}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <View
+            style={[
+              styles.container,
+              {
+                backgroundColor: color,
+              },
+            ]}>
+            <View style={styles.contentcontainer}>
+              {/* @ts-ignore */}
+              <Image style={styles.icon} source={icon}></Image>
+              <Text numberOfLines={3} style={styles.message}>
+                {message}
+              </Text>
+            </View>
           </View>
-        </TouchableOpacity>
-      ) : (
-        <View
-          style={[
-            styles.container,
-            {
-              backgroundColor: color,
-              height: 12 + 24 * line,
-            },
-          ]}>
-          <View style={styles.contentcontainer}>
-            {/* @ts-ignore */}
-            <Image style={styles.icon} source={icon}></Image>
-            <Text numberOfLines={3} style={styles.message}>
-              {message}
-            </Text>
-          </View>
-        </View>
-      )}
+        )}
+      </Animated.View>
     </View>
   );
 }
@@ -94,9 +118,8 @@ const styles = StyleSheet.create({
   },
   contentcontainer: {
     flexDirection: 'row',
-    marginRight: 16,
-    marginLeft: 16,
-    marginVertical: 6,
+    marginHorizontal: 4,
+    marginVertical: 8,
   },
   icon: {
     height: 24,
@@ -118,6 +141,7 @@ interface MyStatusBarProps {
   backgroundColor: ColorValue;
 }
 interface AlertViewProps {
+  slide: Boolean;
   type: AlertType;
   message?: string;
   icon: ImageSourcePropType | null;

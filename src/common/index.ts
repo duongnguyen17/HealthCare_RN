@@ -40,9 +40,10 @@ export const COLORS = {
   ICON_COLOR: '#ABABAB',
   ERROR_COLOR: '#FB0404',
   LIGHT_ORANGE: '#ffa938',
+  BLACK: '#000000',
   ORANGE: '#F9593A',
   GREEN: '#0bb895',
-  LIGHT_GREEN:'#0FD186',
+  LIGHT_GREEN: '#0FD186',
   BLUE: '#047AFF',
   WHITE: '#fff',
   LIGHT_BLUE: '#3DBBED',
@@ -79,7 +80,7 @@ export const ICON_SIZE = {
 }
 export const STYLES = {
   shadow: {
-    shadowColor: "#000",
+    shadowColor: COLORS.BLACK,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -180,4 +181,9 @@ export const DIMENS = {
   STATUS_BAR_HEIGHT: statusBarHeight,
   HEADER_STATUS_BAR_HEIGHT: statusBarHeight + 50,
   HEADER_HEIGHT: 50
+}
+
+export const TIMING = {
+  HEADER_ALERT_SLIDE: 100,
+  HEADER_ALERT_ALIVE_DEFAULT: 1100,
 }
