@@ -3,10 +3,10 @@ import {View, Text, StyleSheet} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {TextInput} from 'react-native-paper';
 import {STRINGS} from '../../common';
-import {getStatusBarHeight} from '../../utils/IPhoneXHelper';
 import HButton from '../../components/HButton';
 import {ScreenProps} from '../../type/type';
 import {COLORS, FONT_SIZE} from '../../common';
+import { navigateTo } from '../../navigator/NavigationServices';
 
 const RegisterScreen = ({navigation}: ScreenProps) => {
   const [phonenumber, setPhonenumber] = useState<string>('');
@@ -14,7 +14,7 @@ const RegisterScreen = ({navigation}: ScreenProps) => {
   const [isError, setIsError] = useState(false);
   const confirmForgotPassword = () => {
     // if (validatePhone(userPhone))
-    navigation.navigate(STRINGS.SCREEN.AUTH.VERIFY_OTP, {
+    navigateTo(STRINGS.ROUTE.AUTH.VERIFY_OTP, {
       phonenumber: phonenumber,
     });
   };
@@ -67,7 +67,7 @@ const RegisterScreen = ({navigation}: ScreenProps) => {
             Tôi đồng ý với{' '}
             <Text
               onPress={() => {
-                // navigation.navigate(SCREENS.ACCOUNT.TERMS_OF_SERVICE)
+                // navigate(SCREENS.ACCOUNT.TERMS_OF_SERVICE)
               }}
               style={{color: COLORS.LIGHT_BLUE}}>
               Điều khoản và dịch vụ

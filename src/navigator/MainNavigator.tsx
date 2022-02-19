@@ -1,5 +1,8 @@
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, {useEffect, useRef} from 'react';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -14,12 +17,13 @@ import OverView from '../screens/PracticeTab/OverViewScreen';
 import MedicineScreen from '../screens/DiaryTab/MedicineScreen';
 import SearchScreen from '../screens/SearchScreen';
 import VisitedScreen from '../screens/DiaryTab/VisitedScreen';
+import {setNavigator} from './NavigationServices';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName={STRINGS.SCREEN.MAIN_TABS.PRACTICE}
+      initialRouteName={STRINGS.ROUTE.MAIN_TABS.PRACTICE}
       screenOptions={({route}) => ({
         headerShown: false,
 
@@ -47,25 +51,32 @@ const TabNavigator = () => {
       })}>
       <Tab.Screen
         component={Practice}
-        name={STRINGS.SCREEN.MAIN_TABS.PRACTICE}
+        name={STRINGS.ROUTE.MAIN_TABS.PRACTICE}
       />
-      <Tab.Screen component={Diary} name={STRINGS.SCREEN.MAIN_TABS.DIARY} />
-      <Tab.Screen component={Profile} name={STRINGS.SCREEN.MAIN_TABS.PROFILE} />
+      <Tab.Screen component={Diary} name={STRINGS.ROUTE.MAIN_TABS.DIARY} />
+      <Tab.Screen component={Profile} name={STRINGS.ROUTE.MAIN_TABS.PROFILE} />
     </Tab.Navigator>
   );
 };
 const MainNavigator = () => {
+  const navigation =
+    useRef<NavigationContainerRef<ReactNavigation.RootParamList>>();
+
+  useEffect(() => {
+    setNavigator(navigation);
+  }, []);
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={STRINGS.SCREEN.TAB_NAVIGATOR}>
+    ///@ts-ignore cònlig giữa react-navigation-ts và React-ts
+    <NavigationContainer ref={navigation}>
+      <Stack.Navigator initialRouteName={STRINGS.ROUTE.TAB_NAVIGATOR}>
         <Stack.Screen
           component={TabNavigator}
-          name={STRINGS.SCREEN.TAB_NAVIGATOR}
+          name={STRINGS.ROUTE.TAB_NAVIGATOR}
           options={{headerShown: false}}
         />
         <Stack.Screen
           component={OverView}
-          name={STRINGS.SCREEN.PRACTICE.OVERVIEW}
+          name={STRINGS.ROUTE.PRACTICE.OVERVIEW}
           options={({navigation}) => ({
             title: STRINGS.TITLE.OVER_VIEW,
             headerLeft: () => (
@@ -86,19 +97,19 @@ const MainNavigator = () => {
         />
         <Stack.Screen
           component={MedicineScreen}
-          name={STRINGS.SCREEN.DIARY.MEDICINE}
+          name={STRINGS.ROUTE.DIARY.MEDICINE}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
           component={SearchScreen}
-          name={STRINGS.SCREEN.SEARCH}
+          name={STRINGS.ROUTE.SEARCH}
           options={{headerShown: false}}
         />
         <Stack.Screen
           component={VisitedScreen}
-          name={STRINGS.SCREEN.DIARY.VISITED}
+          name={STRINGS.ROUTE.DIARY.VISITED}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -3,8 +3,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import HButton from '../../components/HButton';
 import {ScreenProps} from '../../type/type';
-import {FONT_SIZE, height, width, COLORS, SCREEN} from '../../common';
-import {routeParam} from '../../navigator/NavigationServices';
+import {FONT_SIZE, COLORS, STRINGS, DIMENS} from '../../common';
+import {navigateTo, routeParam} from '../../navigator/NavigationServices';
 import {
   CodeField,
   useBlurOnFulfill,
@@ -37,7 +37,7 @@ const VerifyOTPScreen = ({navigation, route}: ScreenProps) => {
   }, [counter]);
 
   const confirmCode = () => {
-    navigation.navigate(SCREEN.AUTH.REGISTER_FINISH);
+    navigateTo(STRINGS.ROUTE.AUTH.REGISTER_FINISH);
   };
   const resendSMS = () => {};
   return (
@@ -136,11 +136,11 @@ const styles = StyleSheet.create({
   },
   codeFieldRoot: {
     marginTop: 30,
-    width: width - 80,
+    width: DIMENS.SCREEN_WIDTH - 80,
   },
   cellRoot: {
-    width: (width - 120) / 6,
-    height: (width - 120) / 6,
+    width: (DIMENS.SCREEN_WIDTH - 120) / 6,
+    height: (DIMENS.SCREEN_WIDTH - 120) / 6,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: COLORS.BORDER_BOTTOM_COLOR,

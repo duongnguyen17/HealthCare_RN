@@ -31,9 +31,10 @@ import {useDispatch} from 'react-redux';
 import {visitedsAction} from '../../../reduxSaga/slices/visitedsSlice';
 import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
 import TagWithIcon from '../components/TagWithIcon';
+import {goBack, navigateTo, routeParam} from '../../../navigator/NavigationServices';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
-  const visited: Visited = props.route?.params?.visited;
+  const visited: Visited = routeParam(props.route, 'visited');
   const [title, setTitle] = useState<string>(visited?.title ?? '');
   // const [state, setState] = useState<boolean>(true);
   const [pre, setPre] = useState<number | null>(visited?.pre);
@@ -73,8 +74,7 @@ const VisitedScreen = (props: ScreenProps) => {
         });
         dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
       }
-
-      props.navigation?.goBack();
+      goBack();
     }
   };
   const updateMedicine = (medicine: Medicine) => {
@@ -101,14 +101,14 @@ const VisitedScreen = (props: ScreenProps) => {
     setDate(currentDate);
   };
   const gotoSearchScreen = (type: SearchType) => {
-    props?.navigation?.navigate(STRINGS.SCREEN.SEARCH, {type: type});
+    navigateTo(STRINGS.ROUTE.SEARCH, {type: type});
   };
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
       // hiện cảnh báo: không được để trống title
       showAlert(AlertType.WARN, 'Phải đặt tên lần khám');
     } else
-      props.navigation?.navigate(STRINGS.SCREEN.DIARY.MEDICINE, {
+      navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
         data: {title: title, date: date},
         medicine,
         updateMedicine,

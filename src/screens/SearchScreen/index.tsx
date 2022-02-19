@@ -7,6 +7,7 @@ import HDropDownPicker from '../../components/HDropDownPicker';
 import HeaderCommon from '../../components/HHeader/HHeaderCommon';
 import HIcon from '../../components/HIcon';
 import {useDebounceValue} from '../../customHooks';
+import {routeParam} from '../../navigator/NavigationServices';
 import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
 import {RootStateType, ScreenProps} from '../../type/type';
 const DropKey = [
@@ -24,8 +25,8 @@ const SearchScreen = (props: ScreenProps) => {
   const [textInput, setTextInput] = useState('');
   const keyword = useDebounceValue<string>(textInput);
   const [searchType, setSearchType] = useState(
-    props.route?.params?.searchType != undefined
-      ? props.route?.params?.searchType
+    routeParam(props.route, 'searchType') != undefined
+      ? routeParam(props.route, 'searchType')
       : SearchType.ALL,
   );
   useEffect(() => {

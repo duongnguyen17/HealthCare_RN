@@ -21,8 +21,9 @@ import {findSomeDay} from '../../utils/dateutils';
 import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
 import {useIsFocused} from '@react-navigation/native';
 import TriangleAnimated from '../../components/TriangleAnimated';
+import {navigateTo} from '../../navigator/NavigationServices';
 
-const Diary = (props: ScreenProps) => {
+const Diary = () => {
   const allEvent: Array<HEvent> = useSelector(
     (state: RootStateType) => state.eventState.all,
   );
@@ -55,7 +56,7 @@ const Diary = (props: ScreenProps) => {
   }, [eventType, allEvent]);
 
   const gotoSearchScreen = (): void => {
-    props?.navigation?.navigate(STRINGS.SCREEN.SEARCH);
+    navigateTo(STRINGS.ROUTE.SEARCH);
   };
   const renderItem = ({item}: any) => <HDayTag data={item} />;
 
@@ -85,8 +86,6 @@ const Diary = (props: ScreenProps) => {
       list.current.scrollToIndex({animated: true, index: iCurrDay});
     }
   };
-  // console.log(`data`, data);
-  // console.log(`allEvent`, allEvent)
   return (
     <View style={styles.container}>
       <HHeader>
@@ -130,7 +129,7 @@ const Diary = (props: ScreenProps) => {
             onPress={() => {
               scrollToSomeDay(new Date());
             }}>
-            <HIcon font="FontAwesome5" name="calendar-day" />
+            <HIcon font="Foundation" name="target-two" />
           </TouchableOpacity>
         </View>
       </HHeader>
@@ -141,7 +140,7 @@ const Diary = (props: ScreenProps) => {
         eventType={eventType}
         setEventType={setEventType}
       />
-      <View>
+      <View style={{flex: 1}}>
         {data.length == 0 ? (
           <Text
             style={{
@@ -156,6 +155,7 @@ const Diary = (props: ScreenProps) => {
           /* chỗ này yêu cầu phải có 1 renderItem nhưng mình dùng CellRendererComponent nên nó báo lỗi
            @ts-ignore */
           <FlatList
+            style={{flex: 1}}
             ref={list}
             showsVerticalScrollIndicator={false}
             CellRendererComponent={renderItem}
@@ -169,7 +169,7 @@ const Diary = (props: ScreenProps) => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          props.navigation?.navigate(STRINGS.SCREEN.DIARY.VISITED);
+          navigateTo(STRINGS.ROUTE.DIARY.VISITED);
         }}
         style={{
           position: 'absolute',

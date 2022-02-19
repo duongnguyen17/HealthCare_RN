@@ -15,6 +15,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {COLORS, FONT_SIZE, STRINGS} from '../../common';
 import HButton from '../../components/HButton';
 import Frame from '../../components/Frame';
+import { navigateTo } from '../../navigator/NavigationServices';
 
 const LoginScreen = ({navigation}: ScreenProps) => {
   const [phonenumber, setPhonenumber] = useState<string>('');
@@ -62,7 +63,7 @@ const LoginScreen = ({navigation}: ScreenProps) => {
             />
             <Text
               style={styles.forgetPass}
-              onPress={() => navigation.navigate(STRINGS.SCREEN.AUTH.FORGOT_PASSWORD)}>
+              onPress={() => navigateTo(STRINGS.SCREEN.AUTH.FORGOT_PASSWORD)}>
               Quên mật khẩu?
             </Text>
             <HButton
@@ -109,7 +110,7 @@ const LoginScreen = ({navigation}: ScreenProps) => {
               Bạn chưa có tài khoản?{' '}
               <Text
                 style={styles.signUpText}
-                onPress={() => navigation.navigate(STRINGS.SCREEN.AUTH.REGISTER)}>
+                onPress={() => navigateTo(STRINGS.ROUTE.AUTH.REGISTER)}>
                 Đăng ký
               </Text>
             </Text>
@@ -173,7 +174,7 @@ const LoginScreen = ({navigation}: ScreenProps) => {
     //       <Text
     //         style={{color: 'blue'}}
     //         onPress={() => {
-    //           navigation.navigate(SCREEN.AUTH.REGISTER);
+    //           navigate(SCREEN.AUTH.REGISTER);
     //         }}>
     //         Signup
     //       </Text>

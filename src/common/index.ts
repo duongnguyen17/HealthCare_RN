@@ -9,7 +9,7 @@ export const STRINGS = {
     MOVING: 'Di chuyển',
     HEART_BEAT: 'Nhịp tim',
   },
-  SCREEN: {
+  ROUTE: {
     MAIN_TABS: {
       PRACTICE: 'Practice',
       DIARY: 'Diary',

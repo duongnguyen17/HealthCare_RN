@@ -1,35 +1,38 @@
 import { CommonActions, NavigationContainerRef, StackActions } from '@react-navigation/native'
-import { RefObject } from 'react'
+import React, { RefObject } from 'react'
 import { NavigationServiceConfig } from '../type/type'
 
 const config: NavigationServiceConfig = {}
 
-export function setNavigator(nav: RefObject<NavigationContainerRef<{}>>) {
+export const setNavigator = (nav: React.MutableRefObject<NavigationContainerRef<ReactNavigation.RootParamList> | undefined>) => {
     if (nav.current) {
         config.navigator = nav.current
     }
 }
 
-export function navigate(routeName: string, params?: object) {
+export const navigateTo = (routeName: string, params?: object) => {
     if (config.navigator && routeName) {
         let action = CommonActions.navigate({ name: routeName, params })
         config.navigator.dispatch(action)
     }
 }
 
-export function replace(routeName: string, params?: object) {
+export const replace = (routeName: string, params?: object) => {
     if (config.navigator && routeName) {
         config.navigator.dispatch(StackActions.replace(routeName, params))
     }
 }
 
-export function push(routeName: string, params?: object) {
+export const push = (routeName: string, params?: object) => {
     if (config.navigator && routeName) {
         config.navigator.dispatch(StackActions.push(routeName, params))
     }
 }
 
-export function goBack() {
+/**
+ * go back to pre screen
+*/
+export const goBack = () => {
     if (config.navigator) {
         let action = CommonActions.goBack()
         config.navigator.dispatch(action)

@@ -26,6 +26,11 @@ import {showAlert} from '../../../components/HAlert';
 import {useDispatch} from 'react-redux';
 import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
 import TagWithIcon from '../components/TagWithIcon';
+import {
+  goBack,
+  navigateTo,
+  routeParam,
+} from '../../../navigator/NavigationServices';
 
 const DropKey = [
   {key: 'ngày', value: TimeUnit.DAY},
@@ -35,9 +40,9 @@ const DropKey = [
 
 const MedicineScreen = (props: ScreenProps) => {
   const now = new Date();
-  const data = props.route?.params?.data;
+  const data = routeParam(props.route, 'data');
   const dispatch = useDispatch();
-  const medicine = props.route?.params?.medicine;
+  const medicine = routeParam(props.route, 'medicine');
 
   const [title, setTitle] = useState<string>(medicine?.title);
   // const [state, setState] = useState<boolean>(true);
@@ -48,6 +53,7 @@ const MedicineScreen = (props: ScreenProps) => {
   const [count, setCount] = useState<string>(
     medicine?.during.toString() ?? '0',
   );
+  const updateMedicine = routeParam(props.route, 'updateMedicine');
   const onSubmit = () => {
     let remindTimeArr = reminds.map(e => e.time);
     let isDuplicate = remindTimeArr.some(
@@ -69,11 +75,11 @@ const MedicineScreen = (props: ScreenProps) => {
           visitedId: medicine?.visitedId,
         }),
       );
-      props.navigation?.goBack();
+      goBack();
     } else {
       //nếu là tạo mới
-      props.navigation?.goBack();
-      props.route?.params?.updateMedicine({
+      goBack();
+      updateMedicine({
         _id: medicine?._id ?? Date.now(),
         title,
         during: calDuring(count, timeUnit),
@@ -136,13 +142,13 @@ const MedicineScreen = (props: ScreenProps) => {
       <View style={styles.container}>
         <HeaderCommon
           onPressLeftIcon={() => {
-            props.navigation?.goBack();
+            goBack();
           }}
           renderTitle={() => (
             <TouchableOpacity
               style={{alignItems: 'center'}}
               onPress={() => {
-                props.navigation?.navigate(STRINGS.SCREEN.DIARY.VISITED, {});
+                navigateTo(STRINGS.ROUTE.DIARY.VISITED, {});
               }}>
               <Text style={{fontSize: FONT_SIZE.TITLE}}>{data.title}</Text>
               <Text style={{color: COLORS.WHITE, fontSize: FONT_SIZE.TINY}}>
