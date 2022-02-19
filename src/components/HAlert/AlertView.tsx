@@ -13,6 +13,7 @@ import {
 
 import {hideAlert} from './index';
 import {AlertType, COLORS, DIMENS} from '../../common';
+import style from '../CustomCalendar/calendar/header/style';
 
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 
@@ -34,16 +35,24 @@ export default function AlertView({
 }: AlertViewProps) {
   let line = Math.floor(message.length / 44) + 1;
   return (
-    <View style={{flex: 1, position: 'absolute', zIndex: 999}}>
+    <View
+      style={{
+        width: DIMENS.SCREEN_WIDTH - 20,
+        left: 10,
+        position: 'absolute',
+        zIndex: 999,
+      }}>
       {/* @ts-ignore */}
-      <MyStatusBar backgroundColor={color} barStyle="light-content" />
+      {/* <MyStatusBar backgroundColor={color} barStyle="light-content" /> */}
       {cancelable ? (
         <TouchableOpacity
-          style={{
-            width: DIMENS.SCREEN_WIDTH,
-            backgroundColor: color,
-            height: 24 + 24 * line,
-          }}
+          style={[
+            styles.container,
+            {
+              backgroundColor: color,
+              height: 24 + 24 * line,
+            },
+          ]}
           onPress={() => {
             hideAlert();
           }}>
@@ -57,11 +66,13 @@ export default function AlertView({
         </TouchableOpacity>
       ) : (
         <View
-          style={{
-            width: DIMENS.SCREEN_WIDTH,
-            backgroundColor: color,
-            height: 12 + 24 * line,
-          }}>
+          style={[
+            styles.container,
+            {
+              backgroundColor: color,
+              height: 12 + 24 * line,
+            },
+          ]}>
           <View style={styles.contentcontainer}>
             {/* @ts-ignore */}
             <Image style={styles.icon} source={icon}></Image>
@@ -76,7 +87,11 @@ export default function AlertView({
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    borderRadius: 8,
+    width: '100%',
+    marginTop: DIMENS.STATUS_BAR_HEIGHT,
+  },
   contentcontainer: {
     flexDirection: 'row',
     marginRight: 16,
