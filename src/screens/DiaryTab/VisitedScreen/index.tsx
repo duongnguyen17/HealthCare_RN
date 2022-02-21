@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -24,14 +24,14 @@ import {
 import HHeaderCommon from '../../../components/HHeader/HHeaderCommon';
 import HIcon from '../../../components/HIcon';
 import MedicineItem from '../../../components/MedicineItem';
-import {ScreenProps} from '../../../type/type';
+import { ScreenProps } from '../../../type/type';
 import Tag from '../components/Tag';
-import {showAlert} from '../../../components/HAlert';
-import {useDispatch} from 'react-redux';
-import {visitedsAction} from '../../../reduxSaga/slices/visitedsSlice';
-import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
+import { showAlert } from '../../../components/HAlert';
+import { useDispatch } from 'react-redux';
+import { visitedsAction } from '../../../reduxSaga/slices/visitedsSlice';
+import { medicinesAction } from '../../../reduxSaga/slices/medicinesSlice';
 import TagWithIcon from '../components/TagWithIcon';
-import {goBack, navigateTo, routeParam} from '../../../navigator/NavigationServices';
+import { goBack, navigateTo, routeParam } from '../../../navigator/NavigationServices';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const visited: Visited = routeParam(props.route, 'visited');
@@ -48,7 +48,7 @@ const VisitedScreen = (props: ScreenProps) => {
 
   const onSubmit = () => {
     if (title == '' || title == undefined) {
-      showAlert(AlertType.WARN, 'Không được để trống tên lần khám');
+      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.DO_NOT_);
     } else {
       let visitedId = visited?._id ?? Date.now();
       let tempVisited = {
@@ -101,15 +101,15 @@ const VisitedScreen = (props: ScreenProps) => {
     setDate(currentDate);
   };
   const gotoSearchScreen = (type: SearchType) => {
-    navigateTo(STRINGS.ROUTE.SEARCH, {type: type});
+    navigateTo(STRINGS.ROUTE.SEARCH, { type: type });
   };
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
       // hiện cảnh báo: không được để trống title
-      showAlert(AlertType.WARN, 'Phải đặt tên lần khám');
+      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.DO_NOT_);
     } else
       navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
-        data: {title: title, date: date},
+        data: { title: title, date: date },
         medicine,
         updateMedicine,
       });
@@ -117,7 +117,7 @@ const VisitedScreen = (props: ScreenProps) => {
   // console.log(`medicines-visitedScreen`, medicines);
   return (
     <KeyboardAvoidingView
-      style={{flex: 1}}
+      style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
@@ -144,9 +144,9 @@ const VisitedScreen = (props: ScreenProps) => {
           />
           <Tag>
             <TextInput
-              style={{fontSize: 30}}
+              style={{ fontSize: 30 }}
               value={title}
-              placeholder="Tên lần khám ..."
+              placeholder={STRINGS.VISITED_SCREEN.VISITED_NAME}
               autoFocus
               multiline
               onChangeText={setTitle}
@@ -197,7 +197,7 @@ const VisitedScreen = (props: ScreenProps) => {
           </Tag> */}
           <TagWithIcon iconName="event-note" iconFont="MaterialIcons">
             <TouchableOpacity
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
               onPress={() => {
                 gotoSearchScreen(SearchType.VISITED);
               }}>
@@ -210,7 +210,7 @@ const VisitedScreen = (props: ScreenProps) => {
                 }}>
                 <Text>
                   {pre ?? (
-                    <Text style={{color: COLORS.GRAY_DECOR}}>Không có</Text>
+                    <Text style={{ color: COLORS.GRAY_DECOR }}>{STRINGS.VISITED_SCREEN.DO_NOT_HAVE}</Text>
                   )}
                 </Text>
               </View>
@@ -229,8 +229,8 @@ const VisitedScreen = (props: ScreenProps) => {
                 value={location}
                 multiline
                 onChangeText={setLocation}
-                placeholder="Địa điểm"
-                style={{flex: 1}}
+                placeholder={STRINGS.VISITED_SCREEN.LOCATION}
+                style={{ flex: 1 }}
               />
               {/* <TouchableOpacity
                 style={{marginLeft: 5}}
@@ -250,9 +250,9 @@ const VisitedScreen = (props: ScreenProps) => {
               onPress={() => {
                 setDatePickerVisible(!datePickerVisible);
               }}
-              style={{flexDirection: 'row'}}>
-              <Text>Ngày khám</Text>
-              <Text style={{marginLeft: 50}}>
+              style={{ flexDirection: 'row' }}>
+              <Text>{STRINGS.VISITED_SCREEN.EX_DAY}</Text>
+              <Text style={{ marginLeft: 50 }}>
                 {new Date(date).toString().slice(0, 10)}
               </Text>
             </TouchableOpacity>
@@ -273,7 +273,7 @@ const VisitedScreen = (props: ScreenProps) => {
               <Text style={{marginBottom: 5}}>Thuốc</Text>
             </View> */}
             <FlatList
-              renderItem={({item}) => (
+              renderItem={({ item }) => (
                 <MedicineItem
                   medicine={item}
                   gotoMedicine={() => {
@@ -295,7 +295,7 @@ const VisitedScreen = (props: ScreenProps) => {
               onPress={() => {
                 gotoMedicineScreen();
               }}>
-              <Text style={{paddingHorizontal: 20}}>Thêm thuốc</Text>
+              <Text style={{ paddingHorizontal: 20 }}>{STRINGS.VISITED_SCREEN.ADD_MEDICINE}</Text>
             </TouchableOpacity>
             {/* </View> */}
           </TagWithIcon>
@@ -304,7 +304,7 @@ const VisitedScreen = (props: ScreenProps) => {
               value={descript}
               multiline
               onChangeText={setDescript}
-              placeholder="Ghi chú"
+              placeholder={STRINGS.VISITED_SCREEN.NOTE}
             />
           </TagWithIcon>
         </View>

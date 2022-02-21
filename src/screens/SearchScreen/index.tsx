@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, TextInput, TouchableOpacity, Text, FlatList} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {COLORS, DIMENS, FONT_SIZE, SearchType} from '../../common';
+import {COLORS, DIMENS, FONT_SIZE, SearchType, STRINGS} from '../../common';
 import HDayTag from '../../components/HDayTag';
 import HDropDownPicker from '../../components/HDropDownPicker';
 import HeaderCommon from '../../components/HHeader/HHeaderCommon';
@@ -58,7 +58,7 @@ const SearchScreen = (props: ScreenProps) => {
               autoFocus
               value={textInput}
               onChangeText={setTextInput}
-              placeholder={'Nhập từ khoá tìm kiếm'}
+              placeholder={STRINGS.SEARCH_SCREEN.INPUT_SEARCH_KEY_WORD}
               style={{width: (DIMENS.SCREEN_WIDTH * 11) / 20}}
             />
             <View
@@ -115,7 +115,7 @@ const SearchScreen = (props: ScreenProps) => {
               alignSelf: 'center',
               marginTop: 50,
             }}>
-            Không tìm thấy kết quả phù hợp
+            {STRINGS.SEARCH_SCREEN.NO_RESULT}
           </Text>
         ) : (
           <FlatList data={searchResult} renderItem={renderItem} />

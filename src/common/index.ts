@@ -3,7 +3,36 @@ import { getStatusBarHeight } from "../utils/IPhoneXHelper";
 const { height, width } = Dimensions.get('window')
 const statusBarHeight = getStatusBarHeight(true);
 export const STRINGS = {
-  SEARCH: "Tìm kiếm",
+  SEARCH_SCREEN: {
+    TITLE: "Tìm kiếm",
+    NO_RESULT: "Không tìm thấy kết quả phù hợp",
+    INPUT_SEARCH_KEY_WORD: 'Nhập từ khoá tìm kiếm',
+  },
+  DIARY_TAB: {
+    TODAY_HAS_NO_EVENT: 'Hôm nay không có sự kiện nào',
+    THIS_MONTH_HAS_NO_EVENT: "Tháng này không có sự kiện nào",
+    ACCOUNT_HAS_AUTH: "Tài khoản đã liên kết",
+    CONTENT_DISPLAY: "Nội dung hiển thị",
+  },
+  MEDICINE_SCREEN: {
+    DAY: 'ngày',
+    WEEK: 'tuần',
+    MONTH: 'tháng',
+    TIME_REMIND_DO_NOT_DUPLICATE: 'Thời gian nhắc nhở không được trùng nhau',
+    DO_NOT_: 'Không được để trống tên thuốc',
+    MEDICINE_NAME: "Tên thuốc ...",
+    ADD_REMIND: "Thêm nhắc nhở",
+    LAST: "Uống trong",
+  },
+  VISITED_SCREEN: {
+    DO_NOT_: 'Không được để trống tên lần khám',
+    VISITED_NAME: "Tên lần khám ...",
+    LOCATION: "Địa điểm",
+    EX_DAY: "Ngày khám",
+    ADD_MEDICINE: "Thêm thuốc",
+    NOTE: "Ghi chú",
+    DO_NOT_HAVE: "Không có",
+  },
   TITLE: {
     OVER_VIEW: 'Tổng quan',
     MOVING: 'Di chuyển',

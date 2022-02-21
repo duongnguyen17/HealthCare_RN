@@ -1,16 +1,14 @@
 import React from 'react';
 import {
   StyleProp,
-  Text,
-  Touchable,
-  TouchableOpacity,
+  Text, TouchableOpacity,
   View,
-  ViewStyle,
+  ViewStyle
 } from 'react-native';
-import {COLORS, FONT_SIZE, TYPE_SHOW} from '../../../common';
+import { COLORS, FONT_SIZE, TYPE_SHOW } from '../../../common';
 import HIcon from '../../../components/HIcon';
 
-const RadioList = ({style, data, selected, setSelected}: RadioListProps) => {
+const RadioList = ({ style, data, selected, setSelected }: RadioListProps) => {
   return (
     <View style={style}>
       {data.map((value, i) => (
@@ -31,9 +29,9 @@ const RadioList = ({style, data, selected, setSelected}: RadioListProps) => {
                 ? 'circle-slice-8'
                 : 'circle-outline'
             }
-            color={selected== value? COLORS.BLUE : '#000000'}
+            color={selected == value ? COLORS.BLUE : COLORS.BLACK}
           />
-          <Text style={{marginLeft: 10, fontSize: FONT_SIZE.CONTENT}}>
+          <Text style={{ marginLeft: 10, fontSize: FONT_SIZE.CONTENT }}>
             {value}
           </Text>
         </TouchableOpacity>

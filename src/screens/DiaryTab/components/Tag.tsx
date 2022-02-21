@@ -1,16 +1,17 @@
 import React from 'react';
-import {StyleProp, View, ViewStyle} from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
+import { COLORS } from '../../../common';
 
-const Tag = ({children, styles}: TagProps) => (
+const Tag = ({ children, styles }: TagProps) => (
   <View
     style={[
       {
         borderBottomWidth: 1,
-        borderColor: '#cccccc',
+        borderColor: COLORS.GRAY_DECOR,
       },
       styles,
     ]}>
-    <View style={{marginHorizontal: 10, marginVertical: 15}}>{children}</View>
+    <View style={{ marginHorizontal: 10, marginVertical: 15 }}>{children}</View>
   </View>
 );
 

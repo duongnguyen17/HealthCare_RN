@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -19,12 +19,12 @@ import {
 } from '../../../common';
 import HeaderCommon from '../../../components/HHeader/HHeaderCommon';
 import RemindItem from '../../../components/RemindItem';
-import {ScreenProps} from '../../../type/type';
+import { ScreenProps } from '../../../type/type';
 import Tag from '../components/Tag';
 import HDropDownPicker from '../../../components/HDropDownPicker';
-import {showAlert} from '../../../components/HAlert';
-import {useDispatch} from 'react-redux';
-import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
+import { showAlert } from '../../../components/HAlert';
+import { useDispatch } from 'react-redux';
+import { medicinesAction } from '../../../reduxSaga/slices/medicinesSlice';
 import TagWithIcon from '../components/TagWithIcon';
 import {
   goBack,
@@ -33,9 +33,9 @@ import {
 } from '../../../navigator/NavigationServices';
 
 const DropKey = [
-  {key: 'ngày', value: TimeUnit.DAY},
-  {key: 'tuần', value: TimeUnit.WEEK},
-  {key: 'tháng', value: TimeUnit.MONTH},
+  { key: STRINGS.MEDICINE_SCREEN.DAY, value: TimeUnit.DAY },
+  { key: STRINGS.MEDICINE_SCREEN.WEEK, value: TimeUnit.WEEK },
+  { key: STRINGS.MEDICINE_SCREEN.MONTH, value: TimeUnit.MONTH },
 ];
 
 const MedicineScreen = (props: ScreenProps) => {
@@ -60,9 +60,9 @@ const MedicineScreen = (props: ScreenProps) => {
       (e, i) => remindTimeArr.indexOf(e) != i,
     );
     if (isDuplicate) {
-      showAlert(AlertType.WARN, 'Thời gian nhắc nhở không được trùng nhau');
+      showAlert(AlertType.WARN, STRINGS.MEDICINE_SCREEN.TIME_REMIND_DO_NOT_DUPLICATE);
     } else if (title == '' || title == undefined) {
-      showAlert(AlertType.WARN, 'Không được để trống tên thuốc');
+      showAlert(AlertType.WARN, STRINGS.MEDICINE_SCREEN.DO_NOT_);
     } else if (!!medicine?.visitedId) {
       //nếu là update
       dispatch(
@@ -146,12 +146,12 @@ const MedicineScreen = (props: ScreenProps) => {
           }}
           renderTitle={() => (
             <TouchableOpacity
-              style={{alignItems: 'center'}}
+              style={{ alignItems: 'center' }}
               onPress={() => {
                 navigateTo(STRINGS.ROUTE.DIARY.VISITED, {});
               }}>
-              <Text style={{fontSize: FONT_SIZE.TITLE}}>{data.title}</Text>
-              <Text style={{color: COLORS.WHITE, fontSize: FONT_SIZE.TINY}}>
+              <Text style={{ fontSize: FONT_SIZE.TITLE }}>{data.title}</Text>
+              <Text style={{ color: COLORS.WHITE, fontSize: FONT_SIZE.TINY }}>
                 {/* {new Date(data.date).toString().slice(4, 15)} */}
               </Text>
             </TouchableOpacity>
@@ -177,9 +177,9 @@ const MedicineScreen = (props: ScreenProps) => {
         />
         <Tag>
           <TextInput
-            style={{fontSize: 30}}
+            style={{ fontSize: 30 }}
             value={title}
-            placeholder="Thêm tên thuốc ..."
+            placeholder={STRINGS.MEDICINE_SCREEN.MEDICINE_NAME}
             autoFocus
             multiline
             onChangeText={setTitle}
@@ -190,7 +190,7 @@ const MedicineScreen = (props: ScreenProps) => {
             <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
           </View> */}
           <FlatList
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <RemindItem
                 item={item}
                 index={index}
@@ -211,12 +211,12 @@ const MedicineScreen = (props: ScreenProps) => {
               paddingVertical: 5,
             }}
             onPress={addRemind}>
-            <Text style={{paddingHorizontal: 20}}>Thêm nhắc nhở</Text>
+            <Text style={{ paddingHorizontal: 20 }}>{STRINGS.MEDICINE_SCREEN.ADD_REMIND}</Text>
           </TouchableOpacity>
         </TagWithIcon>
         {/* </View> */}
         <TagWithIcon>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {/* <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Uống trong</Text> */}
             <View
               style={{
@@ -226,15 +226,15 @@ const MedicineScreen = (props: ScreenProps) => {
                 // marginLeft: 20,
               }}>
               <TextInput
-                placeholder="Uống trong"
-                style={{width: '100%'}}
+                placeholder={STRINGS.MEDICINE_SCREEN.LAST}
+                style={{ width: '100%' }}
                 value={count}
                 onChangeText={setCount}
                 keyboardType="number-pad"
               />
             </View>
 
-            <View style={{marginLeft: 8}}>
+            <View style={{ marginLeft: 8 }}>
               <HDropDownPicker
                 scrollable={false}
                 data={DropKey}
