@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootStateType } from '../../type/type';
+import React, {useRef, useState, useEffect, useCallback} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {RootStateType} from '../../type/type';
 import HIcon from '../../components/HIcon';
 import {
   AlertType,
@@ -12,21 +12,22 @@ import {
   STRINGS,
   TYPE_SHOW,
 } from '../../common';
-import { ScreenProps } from '../../type/type';
 import HHeader from '../../components/HHeader';
 import HDayTag from '../../components/HDayTag';
-import ExtendDiary, { TypeExtend } from './components/ExtendDiary';
-import { showAlert } from '../../components/HAlert';
-import { findSomeDay } from '../../utils/dateutils';
-import { eventsAction } from '../../reduxSaga/slices/eventsSlice';
-import { useIsFocused } from '@react-navigation/native';
+import ExtendDiary, {TypeExtend} from './components/ExtendDiary';
+import {showAlert} from '../../components/HAlert';
+import {findSomeDay} from '../../utils/dateutils';
+import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
+import {useIsFocused} from '@react-navigation/native';
 import TriangleAnimated from '../../components/TriangleAnimated';
-import { navigateTo } from '../../navigator/NavigationServices';
+import {navigateTo} from '../../navigator/NavigationServices';
 
 const Diary = () => {
+  // var static_Y = useRef<number>(0).current;
   const allEvent: Array<HEvent> = useSelector(
     (state: RootStateType) => state.eventState.all,
   );
+  const [current, setCurrent] = useState<Date>(new Date());
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const list = useRef<any>();
@@ -49,7 +50,7 @@ const Diary = () => {
       allEvent.forEach(element => {
         // @ts-ignore
         let arr = element.event.filter(e => e.type == eventType);
-        if (arr.length != 0) dataTemp.push({ date: element.date, event: arr });
+        if (arr.length != 0) dataTemp.push({date: element.date, event: arr});
       });
       setData(dataTemp);
     }
@@ -58,7 +59,7 @@ const Diary = () => {
   const gotoSearchScreen = (): void => {
     navigateTo(STRINGS.ROUTE.SEARCH);
   };
-  const renderItem = ({ item }: any) => <HDayTag data={item} />;
+  const renderItem = ({item}: any) => <HDayTag data={item} />;
 
   const showHideExtend = useCallback(
     (type: TypeExtend): void => {
@@ -83,14 +84,21 @@ const Diary = () => {
     if (iCurrDay == -1)
       showAlert(AlertType.SUCCESS, STRINGS.DIARY_TAB.TODAY_HAS_NO_EVENT);
     else {
-      list.current.scrollToIndex({ animated: true, index: iCurrDay });
+      list.current.scrollToIndex({animated: true, index: iCurrDay});
     }
   };
+  // const onScrollUp = (y: number) => {
+  //   if (y > static_Y) {
+  //     static_Y = y;
+  //   } else if (extendVisible) {
+  //     setExtendVisible(false);
+  //   }
+  // };
   return (
     <View style={styles.container}>
       <HHeader>
         <TouchableOpacity
-          style={{ paddingHorizontal: 10, paddingVertical: 8 }}
+          style={{paddingHorizontal: 10, paddingVertical: 8}}
           onPress={() => {
             showHideExtend(TypeExtend.option);
           }}>
@@ -108,10 +116,10 @@ const Diary = () => {
             showHideExtend(TypeExtend.calendar);
             setCalendarVisible(!calendarVisible);
           }}>
-          <Text style={{ fontSize: FONT_SIZE.CONTENT }}>Tháng 12</Text>
+          <Text style={{fontSize: FONT_SIZE.CONTENT}}>Tháng 12</Text>
           <TriangleAnimated state={calendarVisible} />
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={gotoSearchScreen}
             style={{
@@ -134,13 +142,15 @@ const Diary = () => {
         </View>
       </HHeader>
       <ExtendDiary
+        current={current}
+        setCurrent={setCurrent}
         data={allEvent}
         type={typeExtend}
         visible={extendVisible}
         eventType={eventType}
         setEventType={setEventType}
       />
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         {data.length == 0 ? (
           <Text
             style={{
@@ -155,15 +165,18 @@ const Diary = () => {
           /* chỗ này yêu cầu phải có 1 renderItem nhưng mình dùng CellRendererComponent nên nó báo lỗi
            @ts-ignore */
           <FlatList
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             ref={list}
+            // onScroll={e => {
+            //   onScrollUp(e.nativeEvent.contentOffset.y);
+            // }}
             showsVerticalScrollIndicator={false}
             CellRendererComponent={renderItem}
             data={data}
             getItemLayout={getItemLayout}
-          // onScroll={e => {
-          //   console.log(e.nativeEvent.contentOffset.y);
-          // }}
+            // onScroll={e => {
+            //   console.log(e.nativeEvent.contentOffset.y);
+            // }}
           />
         )}
       </View>
@@ -204,7 +217,7 @@ export interface DateData {
   event: Array<Object>;
 }
 
-interface EventVisit { }
+interface EventVisit {}
 interface EventMedicine {
   title: 'Panadon';
   type: EventType;

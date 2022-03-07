@@ -1,7 +1,9 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { getStatusBarHeight } from "../utils/IPhoneXHelper";
 const { height, width } = Dimensions.get('window')
 const statusBarHeight = getStatusBarHeight(true);
+
+export const isIOS = Platform.OS == 'ios'
 export const STRINGS = {
   SEARCH_SCREEN: {
     TITLE: "Tìm kiếm",
@@ -15,6 +17,7 @@ export const STRINGS = {
     CONTENT_DISPLAY: "Nội dung hiển thị",
   },
   MEDICINE_SCREEN: {
+    TITLE: 'Thuốc',
     DAY: 'ngày',
     WEEK: 'tuần',
     MONTH: 'tháng',
@@ -25,6 +28,8 @@ export const STRINGS = {
     LAST: "Uống trong",
   },
   VISITED_SCREEN: {
+    TITLE: 'Lần khám',
+    LAST_VISITED: 'Lần Khám trước',
     DO_NOT_: 'Không được để trống tên lần khám',
     VISITED_NAME: "Tên lần khám ...",
     LOCATION: "Địa điểm",

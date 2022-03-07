@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {Image, View, Text, StyleSheet} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {Button} from 'react-native-paper';
-import Swiper from 'react-native-swiper';
-import {DIMENS} from '../../common';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { Button } from 'react-native-paper';
+import Swiper from 'react-native-swiper';
+import { DIMENS } from '../../common';
 const Intro = () => {
   const [isNext, setIsNext] = useState<Boolean>(false);
   const [isFirst, setIsFirst] = useState<Boolean>(false);

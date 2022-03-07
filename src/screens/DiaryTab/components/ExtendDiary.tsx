@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import {
-  FlatList, LayoutAnimation, StyleSheet, Text, View
-} from 'react-native';
-import { COLORS, FONT_SIZE, HEvent, STRINGS, TYPE_SHOW } from '../../../common';
-import { Calendar } from '../../../components/CustomCalendar';
+import React, {useEffect, useState} from 'react';
+import {FlatList, LayoutAnimation, StyleSheet, Text, View} from 'react-native';
+import {COLORS, FONT_SIZE, HEvent, STRINGS, TYPE_SHOW} from '../../../common';
+import {Calendar} from '../../../components/CustomCalendar';
 import RadioList from './RadioList';
 
 const ExtendDiary = ({
+  current,
   data,
+  setCurrent,
   type,
   visible,
   eventType,
@@ -15,8 +15,8 @@ const ExtendDiary = ({
 }: ExtendDiaryProps): JSX.Element => {
   const [s_visible, setS_visible] = useState<boolean>();
   const [account, setAccount] = useState([
-    { username: 'duongthptnt@gmail.com' },
-    { username: 'duongthptnt@outlook.com' },
+    {username: 'duongthptnt@gmail.com'},
+    {username: 'duongthptnt@outlook.com'},
   ]);
   useEffect(() => {
     if (s_visible == undefined) setS_visible(visible);
@@ -33,9 +33,9 @@ const ExtendDiary = ({
     );
     setS_visible(!s_visible);
   };
-  const renderAccountItem = ({ item }: any) => {
+  const renderAccountItem = ({item}: any) => {
     return (
-      <View style={{ marginVertical: 2 }}>
+      <View style={{marginVertical: 2}}>
         <Text>{item.username}</Text>
       </View>
     );
@@ -44,26 +44,31 @@ const ExtendDiary = ({
     <View
       style={[
         {
-          backgroundColor: '#fff',
+          backgroundColor: COLORS.WHITE,
           borderBottomWidth: 1,
           borderColor: COLORS.GRAY_DECOR,
         },
         s_visible ? styles.extendShow : styles.extendHide,
       ]}>
       {type == TypeExtend.calendar ? (
-        <Calendar markingType='multi-dot' style={{ width: '100%', height: '100%' }} enableSwipeMonths markedDates={{}} />
+        <Calendar
+          markingType="multi-dot"
+          style={{width: '100%', height: '100%'}}
+          enableSwipeMonths
+          markedDates={{}}
+        />
       ) : (
         <View
           style={{
             flex: 1,
             marginHorizontal: 10,
           }}>
-          <View style={{ marginVertical: 10 }}>
-            <Text style={{ fontSize: FONT_SIZE.TITLE }}>
+          <View style={{marginVertical: 10}}>
+            <Text style={{fontSize: FONT_SIZE.TITLE}}>
               {STRINGS.DIARY_TAB.ACCOUNT_HAS_AUTH}
             </Text>
             <FlatList
-              style={{ marginLeft: 10, marginTop: 5 }}
+              style={{marginLeft: 10, marginTop: 5}}
               renderItem={renderAccountItem}
               data={account}
               keyExtractor={(item, index) => index.toString()}
@@ -71,14 +76,16 @@ const ExtendDiary = ({
           </View>
           <View
             style={[
-              s_visible ? { height: 1 } : { height: 0 },
-              { backgroundColor: COLORS.GRAY_DECOR },
+              s_visible ? {height: 1} : {height: 0},
+              {backgroundColor: COLORS.GRAY_DECOR},
             ]}
           />
-          <View style={{ marginTop: 10 }}>
-            <Text style={{ fontSize: FONT_SIZE.TITLE }}>{STRINGS.DIARY_TAB.CONTENT_DISPLAY}</Text>
+          <View style={{marginTop: 10}}>
+            <Text style={{fontSize: FONT_SIZE.TITLE}}>
+              {STRINGS.DIARY_TAB.CONTENT_DISPLAY}
+            </Text>
             <RadioList
-              style={{ marginLeft: 10, marginTop: 5 }}
+              style={{marginLeft: 10, marginTop: 5}}
               data={Object.values(TYPE_SHOW)}
               selected={eventType}
               setSelected={setEventType}
@@ -92,11 +99,13 @@ const ExtendDiary = ({
 export default ExtendDiary;
 
 const styles = StyleSheet.create({
-  extendShow: { width: '100%', height: 335 },
-  extendHide: { width: '100%', height: 0 },
+  extendShow: {width: '100%', height: 335},
+  extendHide: {width: '100%', height: 0},
 });
 interface ExtendDiaryProps {
-  data: Array<HEvent>,
+  current: Date;
+  setCurrent: Function;
+  data: Array<HEvent>;
   type: TypeExtend;
   visible: boolean;
   eventType: TYPE_SHOW;

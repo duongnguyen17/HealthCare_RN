@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import CardIndex from '../../../components/Frame/CardIndex';
 import { ScreenProps } from '../../../type/type';
 

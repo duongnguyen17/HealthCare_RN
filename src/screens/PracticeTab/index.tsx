@@ -1,23 +1,16 @@
-import React, {useState, useRef} from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Animated,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  ViewProps,
-  ViewPropTypes,
+  SafeAreaView, StyleSheet,
+  Text
 } from 'react-native';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import LinearGradient from 'react-native-linear-gradient';
-import OverView from './OverView';
-import Moving from './Moving';
-import {DIMENS, STRINGS} from '../../common';
-import Frame from '../../components/Frame';
+import { TabBar, TabView } from 'react-native-tab-view';
+import { DIMENS, STRINGS } from '../../common';
+import { ScreenProps } from '../../type/type';
 import HeartBeat from './HeartBeat';
-import {NavigationProp, RouteProp} from '@react-navigation/core';
-import {ScreenProps} from '../../type/type';
+import Moving from './Moving';
+import OverView from './OverView';
 
 const Practice = ({navigation}: ScreenProps) => {
   const scrollY = useRef(new Animated.Value(0)).current;

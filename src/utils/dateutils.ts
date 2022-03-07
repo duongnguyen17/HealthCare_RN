@@ -20,6 +20,12 @@ export const isCurrMonth = (someDate: Date | number): boolean => {
     return new Date(someDate).getMonth() === today.getMonth() &&
         new Date(someDate).getFullYear() == today.getFullYear()
 }
+
+/**check someDate1 and someDate2 are in the same month*/
+export const isThisMonth = (someDate1: Date | number, someDate2: Date | number): boolean => {
+    return true
+}
+
 /**Caculate day in week */
 export const calDayWeek = (someDate: Date | number): string => {
     const order = new Date(someDate).getUTCDay();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   TouchableOpacity,
   View,
@@ -19,19 +19,25 @@ import {
   Medicine,
   SearchType,
   STRINGS,
+  STYLES,
   Visited,
 } from '../../../common';
 import HHeaderCommon from '../../../components/HHeader/HHeaderCommon';
 import HIcon from '../../../components/HIcon';
 import MedicineItem from '../../../components/MedicineItem';
-import { ScreenProps } from '../../../type/type';
+import {ScreenProps} from '../../../type/type';
 import Tag from '../components/Tag';
-import { showAlert } from '../../../components/HAlert';
-import { useDispatch } from 'react-redux';
-import { visitedsAction } from '../../../reduxSaga/slices/visitedsSlice';
-import { medicinesAction } from '../../../reduxSaga/slices/medicinesSlice';
+import {showAlert} from '../../../components/HAlert';
+import {useDispatch} from 'react-redux';
+import {visitedsAction} from '../../../reduxSaga/slices/visitedsSlice';
+import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
 import TagWithIcon from '../components/TagWithIcon';
-import { goBack, navigateTo, routeParam } from '../../../navigator/NavigationServices';
+import {
+  goBack,
+  navigateTo,
+  routeParam,
+} from '../../../navigator/NavigationServices';
+import {SafeAreaView} from 'react-native-safe-area-context';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const visited: Visited = routeParam(props.route, 'visited');
@@ -101,7 +107,7 @@ const VisitedScreen = (props: ScreenProps) => {
     setDate(currentDate);
   };
   const gotoSearchScreen = (type: SearchType) => {
-    navigateTo(STRINGS.ROUTE.SEARCH, { type: type });
+    navigateTo(STRINGS.ROUTE.SEARCH, {type: type});
   };
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
@@ -109,7 +115,7 @@ const VisitedScreen = (props: ScreenProps) => {
       showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.DO_NOT_);
     } else
       navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
-        data: { title: title, date: date },
+        data: {title: title, date: date},
         medicine,
         updateMedicine,
       });
@@ -117,122 +123,87 @@ const VisitedScreen = (props: ScreenProps) => {
   // console.log(`medicines-visitedScreen`, medicines);
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          <HHeaderCommon
-            navigation={props.navigation}
-            renderRight={() => (
-              <TouchableOpacity
-                onPress={onSubmit}
-                style={{
-                  backgroundColor: COLORS.BLUE,
-                  borderRadius: 20,
-                }}>
-                <Text
-                  style={{
-                    marginHorizontal: 10,
-                    marginVertical: 5,
-                    fontSize: FONT_SIZE.CONTENT,
-                    color: COLORS.WHITE,
-                  }}>
-                  Lưu
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-          <Tag>
-            <TextInput
-              style={{ fontSize: 30 }}
-              value={title}
-              placeholder={STRINGS.VISITED_SCREEN.VISITED_NAME}
-              autoFocus
-              multiline
-              onChangeText={setTitle}
-            />
-          </Tag>
-          {/* <Tag>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text>Trạng thái</Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  borderRadius: 10,
-                  borderWidth: 1,
-                  borderColor: '#cccccc',
-                  marginLeft: width / 5,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setState(true);
-                  }}
-                  style={{
-                    backgroundColor: state ? '#00aaff' : '#fff',
-                    borderTopLeftRadius: 10,
-                    borderBottomLeftRadius: 10,
-                    paddingVertical: 3,
-                    paddingHorizontal: 5,
-                  }}>
-                  <Text style={{color: state ? '#fff' : '#000000'}}>Xong</Text>
-                </TouchableOpacity>
-                <View style={{width: 1, backgroundColor: '#cccccc'}} />
-                <TouchableOpacity
-                  onPress={() => {
-                    setState(false);
-                  }}
-                  style={{
-                    backgroundColor: state ? '#fff' : '#ff8566',
-                    borderTopRightRadius: 10,
-                    borderBottomRightRadius: 10,
-                    paddingVertical: 3,
-                    paddingHorizontal: 5,
-                  }}>
-                  <Text style={{color: state ? '#000000' : '#fff'}}>
-                    Chưa xong
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Tag> */}
-          <TagWithIcon iconName="event-note" iconFont="MaterialIcons">
-            <TouchableOpacity
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-              onPress={() => {
-                gotoSearchScreen(SearchType.VISITED);
+    style={{ flex: 1 }}
+    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View>
+      <HHeaderCommon
+        navigation={props.navigation}
+        // renderTitle={() => (
+        //   <Text style={{fontSize: FONT_SIZE.BIG_HEADER}}>
+        //     {STRINGS.VISITED_SCREEN.TITLE}
+        //   </Text>
+        // )}
+        renderRight={() => (
+          <TouchableOpacity
+            onPress={onSubmit}
+            style={{
+              backgroundColor: COLORS.BLUE,
+              borderRadius: 20,
+            }}>
+            <Text
+              style={{
+                marginHorizontal: 10,
+                marginVertical: 5,
+                fontSize: FONT_SIZE.CONTENT,
+                color: COLORS.WHITE,
               }}>
-              <Text>Lần Khám trước</Text>
-              <View
-                style={{
-                  flex: 1,
-                  marginHorizontal: 5,
-                  alignItems: 'center',
-                }}>
-                <Text>
-                  {pre ?? (
-                    <Text style={{ color: COLORS.GRAY_DECOR }}>{STRINGS.VISITED_SCREEN.DO_NOT_HAVE}</Text>
-                  )}
-                </Text>
-              </View>
-
-              <HIcon font="MaterialIcons" name="arrow-forward-ios" size={18} />
-            </TouchableOpacity>
-          </TagWithIcon>
-          <TagWithIcon iconName="map-marker" iconFont="FontAwesome">
+              Lưu
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+        <Tag>
+          <TextInput
+            style={{fontSize: 30}}
+            value={title}
+            placeholder={STRINGS.VISITED_SCREEN.VISITED_NAME}
+            autoFocus
+            multiline
+            numberOfLines={3}
+            onChangeText={setTitle}
+          />
+        </Tag>
+        <TagWithIcon iconName="event-note" iconFont="MaterialIcons">
+          <TouchableOpacity
+            style={{flexDirection: 'row', justifyContent: 'space-between'}}
+            onPress={() => {
+              gotoSearchScreen(SearchType.VISITED);
+            }}>
+            <Text>{STRINGS.VISITED_SCREEN.LAST_VISITED}</Text>
             <View
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                flex: 1,
+                marginHorizontal: 5,
                 alignItems: 'center',
               }}>
-              <TextInput
-                value={location}
-                multiline
-                onChangeText={setLocation}
-                placeholder={STRINGS.VISITED_SCREEN.LOCATION}
-                style={{ flex: 1 }}
-              />
-              {/* <TouchableOpacity
+              <Text>
+                {pre ?? (
+                  <Text style={{color: COLORS.GRAY_DECOR}}>
+                    {STRINGS.VISITED_SCREEN.DO_NOT_HAVE}
+                  </Text>
+                )}
+              </Text>
+            </View>
+
+            <HIcon font="MaterialIcons" name="arrow-forward-ios" size={18} />
+          </TouchableOpacity>
+        </TagWithIcon>
+        <TagWithIcon iconName="map-marker" iconFont="FontAwesome">
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              value={location}
+              multiline
+              onChangeText={setLocation}
+              placeholder={STRINGS.VISITED_SCREEN.LOCATION}
+              style={{flex: 1}}
+            />
+            {/* <TouchableOpacity
                 style={{marginLeft: 5}}
                 onPress={() => {
                   gotoSearchScreen(SearchType.LOCALE);
@@ -243,74 +214,70 @@ const VisitedScreen = (props: ScreenProps) => {
                   size={18}
                 />
               </TouchableOpacity> */}
-            </View>
-          </TagWithIcon>
-          <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
-            <TouchableOpacity
-              onPress={() => {
-                setDatePickerVisible(!datePickerVisible);
-              }}
-              style={{ flexDirection: 'row' }}>
-              <Text>{STRINGS.VISITED_SCREEN.EX_DAY}</Text>
-              <Text style={{ marginLeft: 50 }}>
-                {new Date(date).toString().slice(0, 10)}
-              </Text>
-            </TouchableOpacity>
-          </TagWithIcon>
-          {datePickerVisible && (
-            <DateTimePicker
-              // style={{backgroundColor: '#fff'}}
-              //@ts-ignore
-              value={date}
-              mode={'date'}
-              display="spinner"
-              onChange={onChange}
-            />
-          )}
-          <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
-            {/* <View style={{borderWidth: 1, borderColor: 'black'}}> */}
-            {/* <View style={{borderBottomWidth: 1, borderColor: '#cccccc'}}>
-              <Text style={{marginBottom: 5}}>Thuốc</Text>
-            </View> */}
-            <FlatList
-              renderItem={({ item }) => (
-                <MedicineItem
-                  medicine={item}
-                  gotoMedicine={() => {
-                    gotoMedicineScreen(item);
-                  }}
-                />
-              )}
-              data={medicines}
-            />
-            <TouchableOpacity
-              style={{
-                alignSelf: 'center',
-                borderWidth: 1,
-                borderColor: COLORS.BLUE,
-                borderRadius: 5,
-                alignItems: 'center',
-                paddingVertical: 5,
-              }}
-              onPress={() => {
-                gotoMedicineScreen();
-              }}>
-              <Text style={{ paddingHorizontal: 20 }}>{STRINGS.VISITED_SCREEN.ADD_MEDICINE}</Text>
-            </TouchableOpacity>
-            {/* </View> */}
-          </TagWithIcon>
-          <TagWithIcon iconName="notes" iconFont="MaterialIcons">
-            <TextInput
-              value={descript}
-              multiline
-              onChangeText={setDescript}
-              placeholder={STRINGS.VISITED_SCREEN.NOTE}
-            />
-          </TagWithIcon>
+          </View>
+        </TagWithIcon>
+        <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
+          <TouchableOpacity
+            onPress={() => {
+              setDatePickerVisible(!datePickerVisible);
+            }}
+            style={{flexDirection: 'row'}}>
+            <Text>{STRINGS.VISITED_SCREEN.EX_DAY}</Text>
+            <Text style={{marginLeft: 50}}>
+              {new Date(date).toString().slice(0, 10)}
+            </Text>
+          </TouchableOpacity>
+        </TagWithIcon>
+        {datePickerVisible && (
+          <DateTimePicker
+            // style={{backgroundColor: '#fff'}}
+            //@ts-ignore
+            value={date}
+            mode={'date'}
+            display="spinner"
+            onChange={onChange}
+          />
+        )}
+        <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
+          <FlatList
+            renderItem={({item}) => (
+              <MedicineItem
+                medicine={item}
+                gotoMedicine={() => {
+                  gotoMedicineScreen(item);
+                }}
+              />
+            )}
+            data={medicines}
+          />
+          <TouchableOpacity
+            style={{
+              alignSelf: 'center',
+              borderWidth: 1,
+              borderColor: COLORS.BLUE,
+              borderRadius: 5,
+              alignItems: 'center',
+              paddingVertical: 5,
+            }}
+            onPress={() => {
+              gotoMedicineScreen();
+            }}>
+            <Text style={{paddingHorizontal: 20}}>
+              {STRINGS.VISITED_SCREEN.ADD_MEDICINE}
+            </Text>
+          </TouchableOpacity>
+        </TagWithIcon>
+        <TagWithIcon iconName="notes" iconFont="MaterialIcons">
+          <TextInput
+            value={descript}
+            multiline
+            onChangeText={setDescript}
+            placeholder={STRINGS.VISITED_SCREEN.NOTE}
+          />
+        </TagWithIcon>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };
 export default VisitedScreen;
-const styles = StyleSheet.create({});

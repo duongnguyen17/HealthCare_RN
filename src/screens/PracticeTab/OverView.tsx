@@ -1,22 +1,15 @@
-import React, {useRef, useState} from 'react';
+import React, { useState } from 'react';
 import {
-  Text,
-  ViewProps,
-  View,
-  StyleSheet,
-  ScrollView,
   Animated,
-  RefreshControl,
-  TouchableOpacity,
-  SafeAreaView,
+  RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
-import {FONT_SIZE, SCREEN} from '../../common';
+import { FONT_SIZE, STRINGS } from '../../common';
 import Frame from '../../components/Frame';
 import HairLine from '../../components/HairLine';
-import HSwipe from '../../components/HSwipe';
-import {TabViewProps} from '../../type/type';
+import { navigateTo } from '../../navigator/NavigationServices';
+import { TabViewProps } from '../../type/type';
 
-const OverView = ({scrollY, navigation}: TabViewProps) => {
+const OverView = ({scrollY}: TabViewProps) => {
   const [isReFresh, setIsReFresh] = useState(false);
   const onRefresh = () => {
     setIsReFresh(true);
@@ -71,7 +64,7 @@ const OverView = ({scrollY, navigation}: TabViewProps) => {
             <TouchableOpacity
               style={{width: '100%', alignItems: 'center'}}
               onPress={() => {
-                navigation?.navigate(SCREEN.PRACTICE.OVERVIEW);
+                navigateTo(STRINGS.ROUTE.PRACTICE.OVERVIEW);
               }}>
               <Text style={{marginTop: 8}}>Xem thêm</Text>
             </TouchableOpacity>
@@ -83,15 +76,13 @@ const OverView = ({scrollY, navigation}: TabViewProps) => {
               <Text style={{fontSize: FONT_SIZE.HEADER}}>
                 Một số sản phẩm phù hợp cho bạn
               </Text>
-              <View>
-                {/* <HSwipe data={dataRe} /> */}
-              </View>
+              <View>{/* <HSwipe data={dataRe} /> */}</View>
             </View>
             <HairLine style={{width: '60%'}} />
             <TouchableOpacity
               style={{width: '100%', alignItems: 'center'}}
               onPress={() => {
-                navigation?.navigate(SCREEN.PRACTICE.OVERVIEW);
+                navigateTo(STRINGS.ROUTE.PRACTICE.OVERVIEW);
               }}>
               <Text style={{marginTop: 8}}>Xem thêm</Text>
             </TouchableOpacity>
@@ -117,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  frame: {height:300},
+  frame: {height: 300},
   inLineFrame: {
     // backgroundColor: 'gray',
     marginHorizontal: 10,
