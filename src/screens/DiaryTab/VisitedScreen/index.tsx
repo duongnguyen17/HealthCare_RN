@@ -129,11 +129,11 @@ const VisitedScreen = (props: ScreenProps) => {
       <View>
       <HHeaderCommon
         navigation={props.navigation}
-        renderTitle={() => (
-          <Text style={{fontSize: FONT_SIZE.BIG_HEADER}}>
-            {STRINGS.MEDICINE_SCREEN.TITLE}
-          </Text>
-        )}
+        // renderTitle={() => (
+        //   <Text style={{fontSize: FONT_SIZE.BIG_HEADER}}>
+        //     {STRINGS.VISITED_SCREEN.TITLE}
+        //   </Text>
+        // )}
         renderRight={() => (
           <TouchableOpacity
             onPress={onSubmit}
