@@ -81,6 +81,7 @@ export const COLORS = {
   BLUE: '#047AFF',
   WHITE: '#fff',
   LIGHT_BLUE: '#3DBBED',
+  DARK_BLUE:'#182537',
   GRAY_DECOR: '#cccccc',
   GRAY_TEXT_1: '#cccccc',
   GRAY_TEXT_2: '#999999',
