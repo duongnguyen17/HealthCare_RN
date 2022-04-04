@@ -21,22 +21,22 @@ import {
   STRINGS,
   STYLES,
   Visited,
-} from '../../../common';
-import HHeaderCommon from '../../../components/HHeader/HHeaderCommon';
-import HIcon from '../../../components/HIcon';
-import MedicineItem from '../../../components/MedicineItem';
-import {ScreenProps} from '../../../type/type';
+} from '../../../../common';
+import HHeaderCommon from '../../../../components/HHeader/HHeaderCommon';
+import HIcon from '../../../../components/HIcon';
+import MedicineItem from '../../../../components/MedicineItem';
+import {ScreenProps} from '../../../../type/type';
 import Tag from '../components/Tag';
-import {showAlert} from '../../../components/HAlert';
+import {showAlert} from '../../../../components/HAlert';
 import {useDispatch} from 'react-redux';
-import {visitedsAction} from '../../../reduxSaga/slices/visitedsSlice';
-import {medicinesAction} from '../../../reduxSaga/slices/medicinesSlice';
+import {visitedsAction} from '../../../../reduxSaga/slices/visitedsSlice';
+import {medicinesAction} from '../../../../reduxSaga/slices/medicinesSlice';
 import TagWithIcon from '../components/TagWithIcon';
 import {
   goBack,
   navigateTo,
   routeParam,
-} from '../../../navigator/NavigationServices';
+} from '../../../../navigator/NavigationServices';
 import {SafeAreaView} from 'react-native-safe-area-context';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();

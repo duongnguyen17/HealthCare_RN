@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleProp, View, ViewStyle } from 'react-native';
-import { COLORS } from '../../../common';
+import { COLORS } from '../../../../common';
 
 const Tag = ({ children, styles }: TagProps) => (
   <View

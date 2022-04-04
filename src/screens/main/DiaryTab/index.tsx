@@ -1,8 +1,8 @@
 import React, {useRef, useState, useEffect, useCallback} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View, FlatList} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {RootStateType} from '../../type/type';
-import HIcon from '../../components/HIcon';
+import {RootStateType} from '../../../type/type';
+import HIcon from '../../../components/HIcon';
 import {
   AlertType,
   COLORS,
@@ -11,16 +11,16 @@ import {
   HEvent,
   STRINGS,
   TYPE_SHOW,
-} from '../../common';
-import HHeader from '../../components/HHeader';
-import HDayTag from '../../components/HDayTag';
+} from '../../../common';
+import HHeader from '../../../components/HHeader';
+import HDayTag from '../../../components/HDayTag';
 import ExtendDiary, {TypeExtend} from './components/ExtendDiary';
-import {showAlert} from '../../components/HAlert';
-import {findSomeDay} from '../../utils/dateutils';
-import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
+import {showAlert} from '../../../components/HAlert';
+import {findSomeDay} from '../../../utils/dateutils';
+import {eventsAction} from '../../../reduxSaga/slices/eventsSlice';
 import {useIsFocused} from '@react-navigation/native';
-import TriangleAnimated from '../../components/TriangleAnimated';
-import {navigateTo} from '../../navigator/NavigationServices';
+import TriangleAnimated from '../../../components/TriangleAnimated';
+import {navigateTo} from '../../../navigator/NavigationServices';
 
 const Diary = () => {
   // var static_Y = useRef<number>(0).current;

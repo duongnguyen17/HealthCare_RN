@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text } from 'react-native';
-import { TabViewProps } from '../../type/type';
+import { TabViewProps } from '../../../type/type';
 
 const HeartBeat = (props: TabViewProps) => {
   return (

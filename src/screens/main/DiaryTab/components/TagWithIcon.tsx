@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import HIcon, {HIconProps} from '../../../components/HIcon';
+import HIcon, { HIconProps } from '../../../../components/HIcon';
 import Tag, {TagProps} from './Tag';
 const TagWithIcon = ({
   children,

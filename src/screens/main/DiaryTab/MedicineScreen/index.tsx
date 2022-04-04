@@ -16,21 +16,21 @@ import {
   Remind,
   STRINGS,
   TimeUnit,
-} from '../../../common';
-import HeaderCommon from '../../../components/HHeader/HHeaderCommon';
-import RemindItem from '../../../components/RemindItem';
-import { ScreenProps } from '../../../type/type';
+} from '../../../../common';
+import HeaderCommon from '../../../../components/HHeader/HHeaderCommon';
+import RemindItem from '../../../../components/RemindItem';
+import { ScreenProps } from '../../../../type/type';
 import Tag from '../components/Tag';
-import HDropDownPicker from '../../../components/HDropDownPicker';
-import { showAlert } from '../../../components/HAlert';
+import HDropDownPicker from '../../../../components/HDropDownPicker';
+import { showAlert } from '../../../../components/HAlert';
 import { useDispatch } from 'react-redux';
-import { medicinesAction } from '../../../reduxSaga/slices/medicinesSlice';
+import { medicinesAction } from '../../../../reduxSaga/slices/medicinesSlice';
 import TagWithIcon from '../components/TagWithIcon';
 import {
   goBack,
   navigateTo,
   routeParam,
-} from '../../../navigator/NavigationServices';
+} from '../../../../navigator/NavigationServices';
 
 const DropKey = [
   { key: STRINGS.MEDICINE_SCREEN.DAY, value: TimeUnit.DAY },

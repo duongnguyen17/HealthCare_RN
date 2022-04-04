@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import {
-  Animated,
-  RefreshControl, SafeAreaView, StyleSheet, Text, TouchableOpacity, View
+  RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
-import { FONT_SIZE, STRINGS } from '../../common';
-import Frame from '../../components/Frame';
-import HairLine from '../../components/HairLine';
-import { navigateTo } from '../../navigator/NavigationServices';
-import { TabViewProps } from '../../type/type';
+import LinearGradient from 'react-native-linear-gradient';
+import { DIMENS, FONT_SIZE, STRINGS } from '../../../common';
+import Frame from '../../../components/Frame';
+import HairLine from '../../../components/HairLine';
+import { navigateTo } from '../../../navigator/NavigationServices';
+import { TabViewProps } from '../../../type/type';
 
-const OverView = ({scrollY}: TabViewProps) => {
+const OverView = ({ }: TabViewProps) => {
   const [isReFresh, setIsReFresh] = useState(false);
   const onRefresh = () => {
     setIsReFresh(true);
@@ -20,26 +20,27 @@ const OverView = ({scrollY}: TabViewProps) => {
   const dataRe = [{}];
   return (
     <SafeAreaView style={styles.container}>
-      <Animated.ScrollView
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: scrollY,
-                },
-              },
-            },
-          ],
-          {useNativeDriver: false},
-        )}
-        scrollEventThrottle={6}
+      <LinearGradient
+        style={{
+          height: DIMENS.SCREEN_HEIGHT,
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 0,
+        }}
+        colors={['#4da6ff', '#e6f2ff', '#ffffff']}
+        start={{ x: 0.5, y: 0.25 }}
+        end={{ x: 0, y: 1.0 }}
+      />
+      <ScrollView
         refreshControl={
           <RefreshControl refreshing={isReFresh} onRefresh={onRefresh} />
         }>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <View style={{marginVertical: 16, width: '100%'}}>
+            <View style={{ marginVertical: 16, width: '100%' }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -47,44 +48,44 @@ const OverView = ({scrollY}: TabViewProps) => {
                   justifyContent: 'space-between',
                   // marginHorizontal: 10,
                 }}>
-                <View style={{flexDirection: 'column'}}>
+                <View style={{ flexDirection: 'column' }}>
                   <Text style={styles.textTarget}>60</Text>
                   <Text>còn 1940 bước để hoàn thành mục tiêu</Text>
                 </View>
                 <View
-                  style={{width: 50, height: 50, backgroundColor: 'gray'}}
+                  style={{ width: 50, height: 50, backgroundColor: 'gray' }}
                 />
               </View>
             </View>
-            <HairLine style={{width: '100%'}} />
-            <View style={{marginVertical: 10}}>
+            <HairLine style={{ width: '100%' }} />
+            <View style={{ marginVertical: 10 }}>
               <Text>Hiện 1 ít chỉ số ở đây</Text>
             </View>
-            <HairLine style={{width: '60%'}} />
+            <HairLine style={{ width: '60%' }} />
             <TouchableOpacity
-              style={{width: '100%', alignItems: 'center'}}
+              style={{ width: '100%', alignItems: 'center' }}
               onPress={() => {
-                navigateTo(STRINGS.ROUTE.PRACTICE.OVERVIEW);
+                navigateTo(STRINGS.ROUTE.REPORT_DETAIL);
               }}>
-              <Text style={{marginTop: 8}}>Xem thêm</Text>
+              <Text style={{ marginTop: 8 }}>Xem thêm</Text>
             </TouchableOpacity>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
             <View>
-              <Text style={{fontSize: FONT_SIZE.HEADER}}>
+              <Text style={{ fontSize: FONT_SIZE.HEADER }}>
                 Một số sản phẩm phù hợp cho bạn
               </Text>
               <View>{/* <HSwipe data={dataRe} /> */}</View>
             </View>
-            <HairLine style={{width: '60%'}} />
+            <HairLine style={{ width: '60%' }} />
             <TouchableOpacity
-              style={{width: '100%', alignItems: 'center'}}
+              style={{ width: '100%', alignItems: 'center' }}
               onPress={() => {
-                navigateTo(STRINGS.ROUTE.PRACTICE.OVERVIEW);
+                navigateTo(STRINGS.ROUTE.REPORT_DETAIL);
               }}>
-              <Text style={{marginTop: 8}}>Xem thêm</Text>
+              <Text style={{ marginTop: 8 }}>Xem thêm</Text>
             </TouchableOpacity>
           </View>
         </Frame>
@@ -98,7 +99,7 @@ const OverView = ({scrollY}: TabViewProps) => {
             <Text>Chỗ này hiện 1 thông tin này</Text>
           </View>
         </Frame>
-      </Animated.ScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  frame: {height: 300},
+  frame: { height: 300 },
   inLineFrame: {
     // backgroundColor: 'gray',
     marginHorizontal: 10,
