@@ -7,7 +7,7 @@ import {
   HEventMedicine,
   HEventVisited,
 } from '../../common';
-import { getHoursMinutes } from '../../utils/dateutils';
+import { getHoursMinutes } from '../../utils/dateUtils';
 import {showLoading} from '../Loading';
 const EventTag = ({data}: TaskTagProps) => {
   return (

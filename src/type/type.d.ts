@@ -34,6 +34,7 @@ export interface RootStateType {
 export interface ScreenProps extends ViewProps {
     navigation?: NavigationProp<any, any>,
     route?: RouteProp<any>,
+    title?: string
 }
 export interface TabViewProps extends ScreenProps {
 }

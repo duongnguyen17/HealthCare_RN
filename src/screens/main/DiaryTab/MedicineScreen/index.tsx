@@ -1,36 +1,31 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-  TextInput,
   FlatList,
-  Keyboard,
-  TouchableWithoutFeedback,
+  Keyboard, StyleSheet, Text,
+  TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import {
   AlertType,
   COLORS,
   FONT_SIZE,
   Remind,
   STRINGS,
-  TimeUnit,
+  TimeUnit
 } from '../../../../common';
+import { showAlert } from '../../../../components/HAlert';
+import HDropDownPicker from '../../../../components/HDropDownPicker';
 import HeaderCommon from '../../../../components/HHeader/HHeaderCommon';
 import RemindItem from '../../../../components/RemindItem';
-import { ScreenProps } from '../../../../type/type';
-import Tag from '../components/Tag';
-import HDropDownPicker from '../../../../components/HDropDownPicker';
-import { showAlert } from '../../../../components/HAlert';
-import { useDispatch } from 'react-redux';
-import { medicinesAction } from '../../../../reduxSaga/slices/medicinesSlice';
-import TagWithIcon from '../components/TagWithIcon';
 import {
   goBack,
   navigateTo,
-  routeParam,
+  routeParam
 } from '../../../../navigator/NavigationServices';
+import { medicinesAction } from '../../../../reduxSaga/slices/medicinesSlice';
+import { ScreenProps } from '../../../../type/type';
+import Tag from '../components/Tag';
+import TagWithIcon from '../components/TagWithIcon';
 
 const DropKey = [
   { key: STRINGS.MEDICINE_SCREEN.DAY, value: TimeUnit.DAY },

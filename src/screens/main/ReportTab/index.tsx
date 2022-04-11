@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import {
-  RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View
+  RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { DIMENS, FONT_SIZE, STRINGS } from '../../../common';
+import { COLORS, DIMENS, FONT_SIZE, STRINGS } from '../../../common';
+import ContainerView from '../../../components/ContainerView';
 import Frame from '../../../components/Frame';
 import HairLine from '../../../components/HairLine';
 import { navigateTo } from '../../../navigator/NavigationServices';
@@ -19,7 +20,7 @@ const OverView = ({ }: TabViewProps) => {
   };
   const dataRe = [{}];
   return (
-    <SafeAreaView style={styles.container}>
+    <ContainerView>
       <LinearGradient
         style={{
           height: DIMENS.SCREEN_HEIGHT,
@@ -30,7 +31,7 @@ const OverView = ({ }: TabViewProps) => {
           right: 0,
           zIndex: 0,
         }}
-        colors={['#4da6ff', '#e6f2ff', '#ffffff']}
+        colors={[COLORS.LIGHT_BLUE, '#e6f2ff', '#ffffff']}
         start={{ x: 0.5, y: 0.25 }}
         end={{ x: 0, y: 1.0 }}
       />
@@ -67,7 +68,7 @@ const OverView = ({ }: TabViewProps) => {
               onPress={() => {
                 navigateTo(STRINGS.ROUTE.REPORT_DETAIL);
               }}>
-              <Text style={{ marginTop: 8 }}>Xem thêm</Text>
+              <Text style={{ marginTop: 8 }}>{STRINGS.REPORT_TAB.SEE_MORE}</Text>
             </TouchableOpacity>
           </View>
         </Frame>
@@ -75,7 +76,7 @@ const OverView = ({ }: TabViewProps) => {
           <View style={styles.inLineFrame}>
             <View>
               <Text style={{ fontSize: FONT_SIZE.HEADER }}>
-                Một số sản phẩm phù hợp cho bạn
+                {STRINGS.REPORT_TAB.SOME_PRODUCTS_FOR_YOU}
               </Text>
               <View>{/* <HSwipe data={dataRe} /> */}</View>
             </View>
@@ -85,22 +86,37 @@ const OverView = ({ }: TabViewProps) => {
               onPress={() => {
                 navigateTo(STRINGS.ROUTE.REPORT_DETAIL);
               }}>
-              <Text style={{ marginTop: 8 }}>Xem thêm</Text>
+              <Text style={{ marginTop: 8 }}>{STRINGS.REPORT_TAB.SEE_MORE}</Text>
             </TouchableOpacity>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text>Chỗ này hiện 1 thông tin này</Text>
+            <Text>{STRINGS.REPORT_TAB.SLEEP}</Text>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text>Chỗ này hiện 1 thông tin này</Text>
+            <Text>{STRINGS.REPORT_TAB.HEART_RATE}</Text>
+          </View>
+        </Frame>
+        <Frame style={styles.frame}>
+          <View style={styles.inLineFrame}>
+            <Text>{STRINGS.REPORT_TAB.PRACTICE_HISTORY}</Text>
+          </View>
+        </Frame>
+        <Frame style={styles.frame}>
+          <View style={styles.inLineFrame}>
+            <Text>SpO2</Text>
+          </View>
+        </Frame>
+        <Frame style={styles.frame}>
+          <View style={styles.inLineFrame}>
+            <Text>{STRINGS.REPORT_TAB.WEIGHT_HEIGHT}</Text>
           </View>
         </Frame>
       </ScrollView>
-    </SafeAreaView>
+    </ContainerView>
   );
 };
 

@@ -16,6 +16,14 @@ export const STRINGS = {
     ACCOUNT_HAS_AUTH: "Tài khoản đã liên kết",
     CONTENT_DISPLAY: "Nội dung hiển thị",
   },
+  REPORT_TAB: {
+    SEE_MORE: "Xem thêm",
+    SOME_PRODUCTS_FOR_YOU: "Một số sản phẩm phù hợp cho bạn",
+    SLEEP: "Ngủ",
+    HEART_RATE: "Nhịp tim",
+    PRACTICE_HISTORY: "Lịch sử luyện tập",
+    WEIGHT_HEIGHT: "Chiều cao, cân nặng"
+  },
   MEDICINE_SCREEN: {
     TITLE: 'Thuốc',
     DAY: 'ngày',
@@ -38,10 +46,12 @@ export const STRINGS = {
     NOTE: "Ghi chú",
     DO_NOT_HAVE: "Không có",
   },
-  TITLE: {
-    OVER_VIEW: 'Tổng quan',
-    MOVING: 'Di chuyển',
-    HEART_BEAT: 'Nhịp tim',
+  PRACTICE_TAB: {
+    TITLE: {
+      OVER_VIEW: 'Tổng quan',
+      MOVING: 'Di chuyển',
+      HEART_BEAT: 'Nhịp tim',
+    },
   },
   ROUTE: {
     MAIN_TABS: {
@@ -99,13 +109,14 @@ export const COLORS = {
       textColor: '#009933'
     },
   },
+  TRANSPARENTS: "rgba(0, 0, 0, 0)"
 }
 export const FONT_SIZE = {
   TINY: 12,
   CONTENT: 14,
   TITLE: 18,
   HEADER: 22,
-  BIG_HEADER: 28,
+  BIG_HEADER: 20,
   HEADER_TAG: 16
 }
 
@@ -216,7 +227,7 @@ export const DIMENS = {
   SCREEN_WIDTH: width,
   SCREEN_HEIGHT: height,
   STATUS_BAR_HEIGHT: statusBarHeight,
-  HEADER_STATUS_BAR_HEIGHT: statusBarHeight + 50,
+  HEADER_STATUS_BAR_HEIGHT: 50,
   HEADER_HEIGHT: 50
 }
 

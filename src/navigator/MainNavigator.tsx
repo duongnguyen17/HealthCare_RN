@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Image, TouchableOpacity } from 'react-native';
-import { COLORS, STRINGS } from '../common';
+import { COLORS, FONT_SIZE, STRINGS } from '../common';
 
 //import screen
 import Practice from '../screens/main/PracticeTab';
@@ -90,12 +90,13 @@ const MainNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          component={Report}
+          component={ReportDetail}
           name={STRINGS.ROUTE.REPORT_DETAIL}
           options={({ navigation }) => ({
-            title: STRINGS.TITLE.OVER_VIEW,
+            title: STRINGS.REPORT_TAB.HEART_RATE,
             headerLeft: () => (
               <TouchableOpacity
+                style={{ backgroundColor: 'gray', height: '100%' }}
                 onPress={() => {
                   navigation.goBack();
                 }}>
@@ -106,7 +107,7 @@ const MainNavigator = () => {
                 />
               </TouchableOpacity>
             ),
-            headerTitleStyle: { fontSize: 28 },
+            headerTitleStyle: { fontSize: FONT_SIZE.BIG_HEADER },
             headerTitleAlign: 'center',
           })}
         />

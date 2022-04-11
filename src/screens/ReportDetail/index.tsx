@@ -1,11 +1,19 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import ContainerView from '../../components/ContainerView';
 import CardIndex from '../../components/Frame/CardIndex';
+import HHeader from '../../components/HHeader';
+import HeaderCommon from '../../components/HHeader/HHeaderCommon';
+import { goBack } from '../../navigator/NavigationServices';
 import { ScreenProps } from '../../type/type';
 
-export default (props: ScreenProps) => {
+export default ({ title }: ScreenProps) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <ContainerView>
+      <HeaderCommon onPressLeftIcon={() => {
+        goBack();
+      }}
+        title={title ?? ""} />
       <ScrollView>
         <CardIndex
           title='Di chuyển'
@@ -29,7 +37,7 @@ export default (props: ScreenProps) => {
           measurementTime={'đo lúc 08:00 AM'}
           style={{ height: 300 }}></CardIndex>
       </ScrollView>
-    </SafeAreaView>
+    </ContainerView >
   )
 
 }

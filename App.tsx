@@ -10,6 +10,8 @@ import AuthNavigator from './src/navigator/AuthNavigator';
 import { HAlert } from './src/components/HAlert';
 import { Platform, UIManager } from 'react-native';
 import RealmManager from './src/realm';
+import { setStatusBarBackground } from './src/utils/statusBarUtils';
+import { COLORS } from './src/common';
 
 // để sử dụng LayoutAnimation
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -30,6 +32,7 @@ const AppRoot = () => {
 const App = () => {
   const ref = useRef<Realm>();
   useEffect(() => {
+    setStatusBarBackground(COLORS.TRANSPARENTS)
     RealmManager.getRealm().then(realm => {
       ref.current = realm;
     });

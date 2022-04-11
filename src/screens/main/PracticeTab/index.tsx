@@ -1,23 +1,34 @@
-import React, { useState } from 'react';
-import {
-  SafeAreaView, StyleSheet
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { TabBar, TabView } from 'react-native-tab-view';
-import { DIMENS, STRINGS } from '../../../common';
+import { COLORS, DIMENS, STRINGS } from '../../../common';
+import ContainerView from '../../../components/ContainerView';
 import { ScreenProps } from '../../../type/type';
 import HeartBeat from './HeartBeat';
 import Moving from './Moving';
 
 const Practice = ({ navigation }: ScreenProps) => {
   const [index, setIndex] = useState(0);
+  const [bgColor, setBgColor] = useState<Array<string>>(['#4da6ff', '#e6f2ff', '#ffffff'])
   const [routes] = useState([
-    { key: 'moving', title: STRINGS.TITLE.MOVING },
-    { key: 'heartBeat', title: STRINGS.TITLE.HEART_BEAT },
+    { key: STRINGS.PRACTICE_TAB.TITLE.MOVING, title: STRINGS.PRACTICE_TAB.TITLE.MOVING },
+    { key: STRINGS.PRACTICE_TAB.TITLE.HEART_BEAT, title: STRINGS.PRACTICE_TAB.TITLE.HEART_BEAT },
   ]);
 
+  useEffect(() => {
+    switch (index) {
+      case 0:
+        setBgColor([COLORS.LIGHT_BLUE, '#e6f2ff', '#ffffff'])
+        break;
+
+      default:
+        setBgColor([COLORS.PURPLE, '#e6f2ff', '#ffffff'])
+        break;
+    }
+  }, [index]);
   return (
-    <SafeAreaView style={styles.container}>
+    <ContainerView>
       <LinearGradient
         style={{
           height: DIMENS.SCREEN_HEIGHT,
@@ -28,7 +39,7 @@ const Practice = ({ navigation }: ScreenProps) => {
           right: 0,
           zIndex: 0,
         }}
-        colors={['#4da6ff', '#e6f2ff', '#ffffff']}
+        colors={bgColor}
         start={{ x: 0.5, y: 0.25 }}
         end={{ x: 0, y: 1.0 }}
       />
@@ -39,7 +50,7 @@ const Practice = ({ navigation }: ScreenProps) => {
             {...props}
             indicatorStyle={{ backgroundColor: 'white', height: 1 }}
             style={{
-              backgroundColor: 'rgba(217, 217, 217,0)',
+              backgroundColor: COLORS.TRANSPARENTS,
               elevation: 0,
             }}
           />
@@ -49,7 +60,7 @@ const Practice = ({ navigation }: ScreenProps) => {
           switch (route.key) {
             // case 'overView':
             //   return <OverView scrollY={scrollY} navigation={navigation} />;
-            case 'moving':
+            case STRINGS.PRACTICE_TAB.TITLE.MOVING:
               return <Moving navigation={navigation} />;
             default:
               return <HeartBeat navigation={navigation} />;
@@ -58,7 +69,7 @@ const Practice = ({ navigation }: ScreenProps) => {
         onIndexChange={setIndex}
         initialLayout={{ width: DIMENS.SCREEN_WIDTH }}
       />
-    </SafeAreaView>
+    </ContainerView >
   );
 };
 
