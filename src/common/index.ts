@@ -15,6 +15,7 @@ export const STRINGS = {
     THIS_MONTH_HAS_NO_EVENT: "Tháng này không có sự kiện nào",
     ACCOUNT_HAS_AUTH: "Tài khoản đã liên kết",
     CONTENT_DISPLAY: "Nội dung hiển thị",
+    CAN_NOT_SEE_DETAIL: "Có lỗi xảy ra, không thể xem chi tiết!"
   },
   MEDICINE_SCREEN: {
     TITLE: 'Thuốc',

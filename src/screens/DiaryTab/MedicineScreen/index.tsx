@@ -150,7 +150,7 @@ const MedicineScreen = (props: ScreenProps) => {
               onPress={() => {
                 navigateTo(STRINGS.ROUTE.DIARY.VISITED, {});
               }}>
-              <Text style={{ fontSize: FONT_SIZE.TITLE }}>{data.title}</Text>
+              <Text style={{ fontSize: FONT_SIZE.TITLE }}>{data?.visited?.title}</Text>
               <Text style={{ color: COLORS.WHITE, fontSize: FONT_SIZE.TINY }}>
                 {/* {new Date(data.date).toString().slice(4, 15)} */}
               </Text>

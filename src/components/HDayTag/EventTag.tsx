@@ -1,15 +1,31 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {
+  AlertType,
   COLORS,
   EventType,
   FONT_SIZE,
   HEventMedicine,
   HEventVisited,
+  STRINGS,
 } from '../../common';
-import { getHoursMinutes } from '../../utils/dateutils';
-import {showLoading} from '../Loading';
+import {navigateTo} from '../../navigator/NavigationServices';
+import {getHoursMinutes} from '../../utils/dateutils';
+import {showAlert} from '../HAlert';
 const EventTag = ({data}: TaskTagProps) => {
+  const gotoDetail = (type: EventType, _id: number) => {
+    switch (type) {
+      case EventType.MEDICINE:
+        navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {_id});
+        break;
+      case EventType.VISITED:
+        navigateTo(STRINGS.ROUTE.DIARY.VISITED, {_id});
+        break;
+      default:
+        showAlert(AlertType.FAIL, STRINGS.DIARY_TAB.CAN_NOT_SEE_DETAIL);
+        break;
+    }
+  };
   return (
     <TouchableOpacity
       style={{
@@ -28,7 +44,7 @@ const EventTag = ({data}: TaskTagProps) => {
       }}
       activeOpacity={0.6}
       onPress={() => {
-       
+        gotoDetail(data?.type, data._id);
       }}>
       <View style={{flex: 5}}>
         <Text

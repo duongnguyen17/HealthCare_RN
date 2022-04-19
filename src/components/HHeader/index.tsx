@@ -33,7 +33,6 @@ const HHeader = ({hasLinear = true, children}: HHeaderProps) => {
       <View
         style={{
           flexDirection: 'row',
-          marginHorizontal: 10,
           marginTop: statusBarHeight,
           height: DIMENS.HEADER_HEIGHT,
           alignItems: 'center',

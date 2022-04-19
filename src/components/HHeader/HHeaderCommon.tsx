@@ -31,7 +31,7 @@ const HeaderCommon = ({
             <TouchableOpacity
               onPress={m_onPressLeftIcon}
               style={{
-                paddingHorizontal: 4,
+                paddingLeft: 10,
                 paddingVertical: 8,
               }}>
               <HIcon
@@ -44,7 +44,7 @@ const HeaderCommon = ({
             renderLeft()
           )}
         </View>
-        <View>
+        <View >
           {!renderTitle ? (
             <Text style={{fontSize: FONT_SIZE.HEADER, alignSelf: 'center'}}>
               {title}
@@ -53,7 +53,7 @@ const HeaderCommon = ({
             renderTitle()
           )}
         </View>
-        <View>{!renderRight ? <View /> : renderRight()}</View>
+        <View style={{marginEnd: 10}}>{!renderRight ? <View /> : renderRight()}</View>
       </View>
     </HHeader>
   );

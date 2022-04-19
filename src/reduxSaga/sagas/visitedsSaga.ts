@@ -2,14 +2,13 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { AlertType } from "../../common";
 import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
-import { addVisited, deleteVisited, getAllVisited, updateVisited } from "../../realm/controllers/visited.controller";
+import { addVisited, deleteVisited, getAllVisited, getVisited, updateVisited } from "../../realm/controllers/visited.controller";
 import { visitedsAction } from "../slices/visitedsSlice";
-
-
 
 export default [
     takeLatest(visitedsAction.getAllVisited.type, getAllVisitedSaga),
     takeLatest(visitedsAction.addVisited.type, addVisitedSaga),
+    takeLatest(visitedsAction.getVisited.type, getVisitedSaga),
     takeLatest(visitedsAction.updateVisited.type, updateVisitedSaga),
     takeLatest(visitedsAction.deleteVisited.type, deleteVisitedSaga)
 ]
@@ -23,6 +22,23 @@ function* getAllVisitedSaga(action: any) {
     } catch (error) {
         console.log("🚀 ~ file: visitedSaga.ts ~ line 23 ~ function*getAllVisited ~ error", error)
         showAlert(AlertType.FAIL, 'Không thể lấy danh sách lần khám')
+    } finally {
+        hideLoading()
+    }
+}
+
+function* getVisitedSaga(action: any) {
+    try {
+        showLoading()
+        const _id = action.payload._id
+        if (_id == undefined || _id == null) {
+            throw new Error("getVisitedSaga undefine id");
+        }
+        //@ts-ignore
+        const visited = yield call(getVisited, _id)
+        yield put(visitedsAction.getAllVisitedSuccess({ visited }))
+    } catch (error) {
+        showAlert(AlertType.FAIL, 'Đã có lỗi xảy ra. Không thể lấy dữ liệu cuộc hẹn.')
     } finally {
         hideLoading()
     }
@@ -59,7 +75,7 @@ function* updateVisitedSaga(action: any) {
 
 function* deleteVisitedSaga(action: any) {
     try {
-        const _id = action.payload
+        const _id = action.payload._id
         showLoading()
         yield call(deleteVisited, _id)
         yield put(visitedsAction.deleteVisitedSuccess(_id))

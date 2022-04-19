@@ -6,14 +6,13 @@ import visitedsSaga from "./visitedsSaga";
 
 export default function* rootSaga() {
   yield all([
-    // takeEvery('*', getInfoAction),
-    // ...testSaga
+    takeEvery('*', getInfoAction),
     ...medicinesSaga,
     ...visitedsSaga,
     ...eventsSaga
   ])
 }
 
-// function* getInfoAction(action: PayloadAction) {
-//   console.log(`**action: `, JSON.stringify(action))
-// }
+function* getInfoAction(action: any) {
+  console.log(`action ${action.type}`, action.payload)
+}

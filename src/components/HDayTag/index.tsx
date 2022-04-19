@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, LegacyRef, RefObject} from 'react';
 import {
   Animated,
+  GestureResponderEvent,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -35,7 +36,7 @@ const HDayTag = ({data}: HDayTagProps) => {
                 padding: 5,
                 backgroundColor: m_isToday ? COLORS.LIGHT_BLUE : '',
               }}>
-              <Text style={{color: m_isToday ? '#fff' : '#000'}}>
+              <Text style={{color: m_isToday ? COLORS.WHITE : COLORS.BLACK}}>
                 {new Date(data?.date).getDate()}
               </Text>
             </View>

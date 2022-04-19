@@ -59,8 +59,11 @@ const Diary = () => {
   const gotoSearchScreen = (): void => {
     navigateTo(STRINGS.ROUTE.SEARCH);
   };
-  const renderItem = ({item}: any) => <HDayTag data={item} />;
+  const renderItem = ({item}: any) => (
+    <HDayTag data={item} />
+  );
 
+  //ẩn hiện ext
   const showHideExtend = useCallback(
     (type: TypeExtend): void => {
       if (extendVisible && type != typeExtend) {

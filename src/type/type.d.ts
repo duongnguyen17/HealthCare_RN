@@ -20,7 +20,8 @@ export interface MedicinesStateType {
     all: Array<Medicine>,
 }
 export interface VisitedsStateType {
-    all: Array<Visited>
+    all: Array<Visited>,
+    current: Visited | null
 }
 export interface EventsStateType {
     all: Array<HEvent>,

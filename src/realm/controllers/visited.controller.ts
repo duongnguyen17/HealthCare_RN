@@ -33,9 +33,8 @@ export const addVisited = async (newVisited: any) => {
         realm.write(() => {
             realm.create(SCHEMA.VISITED, newVisited)
         })
-    } catch (error: any) {
-        console.log("🚀 ~ file: visited.controller.ts ~ line 36 ~ addVisited ~ error", error.mesage)
-
+    } catch (error) {
+        console.log("🚀 ~ file: visited.controller.ts ~ line 37 ~ addVisited ~ error", error)
     }
 }
 
@@ -54,7 +53,6 @@ export const deleteVisited = async (id: number) => {
         })
     } catch (error) {
         console.log("🚀 ~ file: visited.controller.ts ~ line 55 ~ deleteVisited ~ error", error)
-
     }
 }
 /**update visited */
@@ -74,8 +72,7 @@ export const updateVisited = async (visited: any) => {
             return editVisited
         })
     } catch (error) {
-        console.log("🚀 ~ file: medicine.controller.ts ~ line 56 ~ updateMedicine ~ error", error)
-
+        console.log("🚀 ~ file: visited.controller.ts ~ line 75 ~ updateVisited ~ error", error)
     }
 }
 
@@ -89,6 +86,17 @@ export const searchVisited = async (keyword: String) => {
         return searchResult
     } catch (error) {
         console.log("🚀 ~ file: visited.controller.ts ~ line 88 ~ searchVisited ~ error", error)
+    }
+}
 
+/**lấy thông tin chi tiết của lần khám */
+export const getVisited = async (_id: number) => {
+    try {
+        const realm = await RealmManager.getRealm()
+        const visited = realm.objectForPrimaryKey<Visited>(SCHEMA.VISITED, _id)
+        return visited
+    } catch (error: any) {
+        console.log("🚀 ~ file: visited.controller.ts ~ line 98 ~ getVisited ~ error", error)
+        throw new Error(error.message);
     }
 }
