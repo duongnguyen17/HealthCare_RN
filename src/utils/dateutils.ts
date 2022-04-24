@@ -1,5 +1,3 @@
-
-
 /**Check someDate is today */
 export const isToday = (someDate: Date | number): boolean => {
     const today = new Date()
@@ -37,7 +35,7 @@ export const calDayWeek = (someDate: Date | number): string => {
     }
 }
 
-/**find index of some day in an array, 
+/**find index of some day in an array,
  * @param someDate ngày cần tìm
  * @param arr mảng này chứa các object có dạng: {date:Date,.......}
 */

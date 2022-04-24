@@ -21,7 +21,7 @@ import TriangleAnimated from '../../../components/TriangleAnimated';
 import { navigateTo } from '../../../navigator/NavigationServices';
 import { eventsAction } from '../../../reduxSaga/slices/eventsSlice';
 import { RootStateType } from '../../../type/type';
-import { findSomeDay } from '../../../utils/dateUtils';
+// import { findSomeDay } from '../../../utils/dateUtils';
 import ExtendDiary, { TypeExtend } from './components/ExtendDiary';
 
 const Diary = () => {
@@ -82,7 +82,7 @@ const Diary = () => {
     index,
   });
   const scrollToSomeDay = (someDay: Date) => {
-    const iCurrDay: number = findSomeDay(someDay, data);
+    const iCurrDay: number = -1
     if (iCurrDay == -1)
       showAlert(AlertType.SUCCESS, STRINGS.DIARY_TAB.TODAY_HAS_NO_EVENT);
     else {
