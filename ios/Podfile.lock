@@ -351,7 +351,7 @@ PODS:
     - React
   - RNCAsyncStorage (1.15.11):
     - React-Core
-  - RNDateTimePicker (5.0.2):
+  - RNDateTimePicker (5.1.0):
     - React-Core
   - RNScreens (3.9.0):
     - React-Core
@@ -570,7 +570,7 @@ SPEC CHECKSUMS:
   ReactCommon: 620442811dc6f707b4bf5e3b27d4f19c12d5a821
   RealmJS: de65cc7c3ea041750d66beaa28b30585222c3d94
   RNCAsyncStorage: eb05c0284dd6b50b32f92fad55e2a41e03358c43
-  RNDateTimePicker: b829aa2110816633975f40161d04c42b64ca4459
+  RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNScreens: 4d79118be80f79fa1f4aa131909a1d6e86280af3
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   Yoga: 2b4a01651f42a32f82e6cef3830a3ba48088237f
@@ -578,4 +578,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 21067ceb16dc74b21db632704d0599b5fbc41954
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
