@@ -4,7 +4,7 @@ import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
 import { getAllMedicine, searchMedicine } from "../../realm/controllers/medicine.controller";
 import { getAllVisited, searchVisited } from "../../realm/controllers/visited.controller";
-import { isEqualDay, setHoursMinutes } from "../../utils/dateUtils";
+import { isEqualDay, setHoursMinutes } from "../../utils/dateutils";
 import { eventsAction } from "../slices/eventsSlice";
 
 

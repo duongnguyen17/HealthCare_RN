@@ -3,6 +3,7 @@ export const isToday = (someDate: Date | number): boolean => {
     const today = new Date()
     return isEqualDay(someDate, today)
 }
+
 /**check same day */
 export const isEqualDay = (someDate1: Date | number, someDate2: Date | number): boolean => {
     // console.log(`someDate12 - isEqualDay - utils`, someDate1, someDate2)
@@ -12,6 +13,7 @@ export const isEqualDay = (someDate1: Date | number, someDate2: Date | number): 
         someDate1Temp.getMonth() == someDate2temp.getMonth() &&
         someDate1Temp.getFullYear() == someDate2temp.getFullYear()
 }
+
 /**check is curr month-year */
 export const isCurrMonth = (someDate: Date | number): boolean => {
     const today = new Date()

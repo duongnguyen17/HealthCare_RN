@@ -1,4 +1,4 @@
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,8 @@ import TriangleAnimated from '../../../components/TriangleAnimated';
 import { navigateTo } from '../../../navigator/NavigationServices';
 import { eventsAction } from '../../../reduxSaga/slices/eventsSlice';
 import { RootStateType } from '../../../type/type';
-// import { findSomeDay } from '../../../utils/dateUtils';
+import { findSomeDay } from '../../../utils/dateUtils';
+import { setStatusBarBackground } from '../../../utils/statusBarUtils';
 import ExtendDiary, { TypeExtend } from './components/ExtendDiary';
 
 const Diary = () => {
@@ -38,9 +39,11 @@ const Diary = () => {
   const [typeExtend, setTypeExtend] = useState<TypeExtend>(TypeExtend.calendar);
   const [data, setData] = useState<Array<HEvent>>([]);
   const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
-
   useEffect(() => {
-    isFocused && dispatch(eventsAction.getAllEvent());
+    if (isFocused) {
+      setStatusBarBackground(COLORS.LIGHT_BLUE)
+      dispatch(eventsAction.getAllEvent())
+    }
   }, [isFocused]);
 
   useEffect(() => {
@@ -97,7 +100,7 @@ const Diary = () => {
   //   }
   // };
   return (
-    <ContainerView statusBarBackgroundColor={COLORS.LIGHT_BLUE} >
+    <ContainerView>
       <HHeader
         style={{
           flexDirection: 'row',

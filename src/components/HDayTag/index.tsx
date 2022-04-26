@@ -8,7 +8,7 @@ import {
   ViewProps,
 } from 'react-native';
 import {COLORS, EventType, HEvent} from '../../common';
-import {calDayWeek, isToday} from '../../utils/dateUtils';
+import {calDayWeek, isToday} from '../../utils/dateutils';
 import EventTag from './EventTag';
 
 const HDayTag = ({data}: HDayTagProps) => {

@@ -32,7 +32,7 @@ const AppRoot = () => {
 const App = () => {
   const ref = useRef<Realm>();
   useEffect(() => {
-    setStatusBarBackground(COLORS.TRANSPARENTS)
+    // setStatusBarBackground("rgba(0, 0, 0, 0.1)")
     RealmManager.getRealm().then(realm => {
       ref.current = realm;
     });
