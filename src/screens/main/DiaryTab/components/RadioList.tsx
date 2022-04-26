@@ -5,8 +5,8 @@ import {
   View,
   ViewStyle
 } from 'react-native';
-import { COLORS, FONT_SIZE, TYPE_SHOW } from '../../../common';
-import HIcon from '../../../components/HIcon';
+import { COLORS, FONT_SIZE, TYPE_SHOW } from '../../../../common';
+import HIcon from '../../../../components/HIcon';
 
 const RadioList = ({ style, data, selected, setSelected }: RadioListProps) => {
   return (

@@ -1,21 +1,22 @@
-import React, {useState, useEffect} from 'react';
-import {View, TextInput, TouchableOpacity, Text, FlatList} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {COLORS, DIMENS, FONT_SIZE, SearchType, STRINGS} from '../../common';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { COLORS, DIMENS, FONT_SIZE, SearchType, STRINGS } from '../../common';
+import ContainerView from '../../components/ContainerView';
 import HDayTag from '../../components/HDayTag';
 import HDropDownPicker from '../../components/HDropDownPicker';
 import HeaderCommon from '../../components/HHeader/HHeaderCommon';
 import HIcon from '../../components/HIcon';
-import {useDebounceValue} from '../../customHooks';
-import {routeParam} from '../../navigator/NavigationServices';
-import {eventsAction} from '../../reduxSaga/slices/eventsSlice';
-import {RootStateType, ScreenProps} from '../../type/type';
+import { useDebounceValue } from '../../customHooks';
+import { routeParam } from '../../navigator/NavigationServices';
+import { eventsAction } from '../../reduxSaga/slices/eventsSlice';
+import { RootStateType, ScreenProps } from '../../type/type';
 const DropKey = [
-  {key: 'all', value: SearchType.ALL},
+  { key: 'all', value: SearchType.ALL },
   // {key: 'dat', value: SearchType.DATE},
   // {key: 'loc', value: SearchType.LOCATION},
-  {key: 'med', value: SearchType.MEDICINE},
-  {key: 'vis', value: SearchType.VISITED},
+  { key: 'med', value: SearchType.MEDICINE },
+  { key: 'vis', value: SearchType.VISITED },
 ];
 const SearchScreen = (props: ScreenProps) => {
   const searchResult = useSelector(
@@ -32,16 +33,15 @@ const SearchScreen = (props: ScreenProps) => {
   useEffect(() => {
     search(keyword, searchType);
   }, [keyword, searchType]);
-  const renderItem = ({item}: any) => <HDayTag data={item} />;
+  const renderItem = ({ item }: any) => <HDayTag data={item} />;
 
   const search = (keyword: String, type: SearchType) => {
-    dispatch(eventsAction.searchEvent({keyword, searchType: type}));
+    dispatch(eventsAction.searchEvent({ keyword, searchType: type }));
   };
   return (
-    <View style={{flex: 1}}>
+    <ContainerView>
       <HeaderCommon
         hasLinear
-        navigation={props.navigation}
         renderTitle={() => (
           <View
             style={{
@@ -59,7 +59,7 @@ const SearchScreen = (props: ScreenProps) => {
               value={textInput}
               onChangeText={setTextInput}
               placeholder={STRINGS.SEARCH_SCREEN.INPUT_SEARCH_KEY_WORD}
-              style={{width: (DIMENS.SCREEN_WIDTH * 11) / 20}}
+              style={{ width: (DIMENS.SCREEN_WIDTH * 11) / 20 }}
             />
             <View
               style={{
@@ -121,7 +121,7 @@ const SearchScreen = (props: ScreenProps) => {
           <FlatList data={searchResult} renderItem={renderItem} />
         )}
       </View>
-    </View>
+    </ContainerView>
   );
 };
 export default SearchScreen;

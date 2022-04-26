@@ -3,7 +3,7 @@ import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {COLORS, Remind} from '../../common';
 import HIcon from '../HIcon';
-import {getHoursMinutes, setHoursMinutes} from '../../utils/dateutils';
+import { getHoursMinutes, setHoursMinutes } from '../../utils/dateutils';
 const RemindItem = ({
   item,
   index,

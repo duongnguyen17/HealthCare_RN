@@ -1,54 +1,69 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   NavigationContainer,
   NavigationContainerRef,
 } from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {TouchableOpacity} from 'react-native';
-import {COLORS, STRINGS} from '../common';
+import { Image, TouchableOpacity } from 'react-native';
+import { COLORS, FONT_SIZE, STRINGS } from '../common';
 
 //import screen
-import Practice from '../screens/PracticeTab';
-import Diary from '../screens/DiaryTab';
-import Profile from '../screens/ProfileTab';
-import OverView from '../screens/PracticeTab/OverViewScreen';
-import MedicineScreen from '../screens/DiaryTab/MedicineScreen';
+import Practice from '../screens/main/PracticeTab';
+import Diary from '../screens/main/DiaryTab';
+import Profile from '../screens/main/ProfileTab';
+import Report from '../screens/main/ReportTab/index';
+import MedicineScreen from '../screens/main/DiaryTab/MedicineScreen';
+import ReportDetail from '../screens/ReportDetail'
 import SearchScreen from '../screens/SearchScreen';
-import VisitedScreen from '../screens/DiaryTab/VisitedScreen';
-import {setNavigator} from './NavigationServices';
+import VisitedScreen from '../screens/main/DiaryTab/VisitedScreen';
+import { setNavigator } from './NavigationServices';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName={STRINGS.ROUTE.MAIN_TABS.PRACTICE}
-      screenOptions={({route}) => ({
+      initialRouteName={STRINGS.ROUTE.MAIN_TABS.REPORT}
+      screenOptions={({ route }) => ({
         headerShown: false,
 
-        tabBarIcon: ({focused, color}) => {
-          let iconName: any;
-          if (route.name === 'Practice') {
-            iconName = 'sports';
-          } else if (route.name === 'Diary') {
-            iconName = 'event-note';
-          } else {
-            iconName = 'person';
+        tabBarIcon: ({ focused, color }) => {
+          let icon: any
+          switch (route.name) {
+            case STRINGS.ROUTE.MAIN_TABS.PRACTICE:
+              icon = <MaterialIcons
+                name={"sports"}
+                size={focused ? 37 : 28}
+                color={color}
+              />
+              break;
+            case STRINGS.ROUTE.MAIN_TABS.DIARY:
+              icon = <MaterialIcons
+                name={"event-note"}
+                size={focused ? 34 : 26}
+                color={color}
+              />
+              break;
+            case STRINGS.ROUTE.MAIN_TABS.PROFILE:
+              icon = <MaterialIcons
+                name={"person"}
+                size={focused ? 34 : 26}
+                color={color}
+              />
+              break;
+            default:
+              icon = focused ? <Image style={{ width: 22, height: 22 }} source={require('../../assets/images/report_focused.png')} /> : <Image style={{ width: 18, height: 18 }} source={require('../../assets/images/report_unfocused.png')} />
+              break;
           }
-          return (
-            <MaterialIcons
-              name={iconName}
-              size={focused ? 37 : 26}
-              color={color}
-            />
-          );
+          return icon
         },
-        tabBarActiveTintColor: COLORS.LIGHT_BLUE,
+        tabBarActiveTintColor: COLORS.PURPLE,
         tabBarInactiveTintColor: COLORS.GRAY_DECOR,
-        // tabBarStyle: { height: 55 },
-        tabBarLabelStyle: {fontSize: 13},
+        tabBarStyle: { height: 56 },
+        tabBarLabelStyle: { fontSize: 14 },
       })}>
+      <Tab.Screen component={Report} name={STRINGS.ROUTE.MAIN_TABS.REPORT} />
       <Tab.Screen
         component={Practice}
         name={STRINGS.ROUTE.MAIN_TABS.PRACTICE}
@@ -66,21 +81,22 @@ const MainNavigator = () => {
     setNavigator(navigation);
   }, []);
   return (
-    ///@ts-ignore cònlig giữa react-navigation-ts và React-ts
+    ///@ts-ignore conflict giữa react-navigation-ts và React-ts
     <NavigationContainer ref={navigation}>
       <Stack.Navigator initialRouteName={STRINGS.ROUTE.TAB_NAVIGATOR}>
         <Stack.Screen
           component={TabNavigator}
           name={STRINGS.ROUTE.TAB_NAVIGATOR}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-          component={OverView}
-          name={STRINGS.ROUTE.PRACTICE.OVERVIEW}
-          options={({navigation}) => ({
-            title: STRINGS.TITLE.OVER_VIEW,
+          component={ReportDetail}
+          name={STRINGS.ROUTE.REPORT_DETAIL}
+          options={({ navigation }) => ({
+            title: STRINGS.REPORT_TAB.HEART_RATE,
             headerLeft: () => (
               <TouchableOpacity
+                style={{ backgroundColor: 'gray', height: '100%' }}
                 onPress={() => {
                   navigation.goBack();
                 }}>
@@ -91,7 +107,7 @@ const MainNavigator = () => {
                 />
               </TouchableOpacity>
             ),
-            headerTitleStyle: {fontSize: 28},
+            headerTitleStyle: { fontSize: FONT_SIZE.BIG_HEADER },
             headerTitleAlign: 'center',
           })}
         />
@@ -105,12 +121,12 @@ const MainNavigator = () => {
         <Stack.Screen
           component={SearchScreen}
           name={STRINGS.ROUTE.SEARCH}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           component={VisitedScreen}
           name={STRINGS.ROUTE.DIARY.VISITED}
-          options={{headerShown: false}}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

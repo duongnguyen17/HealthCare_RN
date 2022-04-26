@@ -1,31 +1,10 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  StatusBar,
-  SafeAreaView,
-  ColorValue,
-  ImageSourcePropType,
-  Animated,
+  Animated, ColorValue, Image, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
+import { AlertType, COLORS, DIMENS, TIMING } from '../../common';
+import { hideAlert } from './index';
 
-import {hideAlert, slideOutAlert} from './index';
-import {AlertType, COLORS, DIMENS, TIMING} from '../../common';
-
-const STATUSBAR_HEIGHT = StatusBar.currentHeight;
-
-const MyStatusBar = ({backgroundColor, ...props}: MyStatusBarProps) => {
-  return (
-    <View style={[styles.statusBar, {backgroundColor}]}>
-      <SafeAreaView>
-        <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-      </SafeAreaView>
-    </View>
-  );
-};
 
 export default function AlertView({
   message = '',
@@ -68,7 +47,7 @@ export default function AlertView({
       }}>
       {/* @ts-ignore */}
       {/* <MyStatusBar backgroundColor={color} barStyle="light-content" /> */}
-      <Animated.View style={{transform: [{translateY}]}}>
+      <Animated.View style={{ transform: [{ translateY }] }}>
         {cancelable ? (
           <TouchableOpacity
             style={[
@@ -134,12 +113,9 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
   },
   statusBar: {
-    height: STATUSBAR_HEIGHT,
+    height: DIMENS.STATUS_BAR_HEIGHT,
   },
 });
-interface MyStatusBarProps {
-  backgroundColor: ColorValue;
-}
 interface AlertViewProps {
   slide: Boolean;
   type: AlertType;

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, LayoutAnimation, StyleSheet, Text, View} from 'react-native';
-import {COLORS, FONT_SIZE, HEvent, STRINGS, TYPE_SHOW} from '../../../common';
-import {Calendar} from '../../../components/CustomCalendar';
+import { COLORS, FONT_SIZE, HEvent, STRINGS, TYPE_SHOW } from '../../../../common';
+import { Calendar } from '../../../../components/CustomCalendar';
 import RadioList from './RadioList';
 
 const ExtendDiary = ({

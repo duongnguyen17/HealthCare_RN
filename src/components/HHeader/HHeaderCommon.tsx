@@ -1,24 +1,22 @@
 import React from 'react';
+import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import HHeader from '.';
-import {Text, View, TouchableOpacity} from 'react-native';
+import { COLORS, DIMENS, FONT_SIZE, ICON_SIZE } from '../../common';
+import { goBack } from '../../navigator/NavigationServices';
 import HIcon from '../HIcon';
-import {FONT_SIZE, ICON_SIZE} from '../../common';
-import {NavigationProp} from '@react-navigation/native';
 const HeaderCommon = ({
   renderLeft,
   renderRight,
   renderTitle,
   onPressLeftIcon,
-  navigation,
   title = '',
   hasLinear = false,
+  style
 }: HeaderOfAddScreenProps) => {
-  const goBack = () => {
-    navigation?.goBack();
-  };
+
   const m_onPressLeftIcon = onPressLeftIcon ?? goBack;
   return (
-    <HHeader hasLinear={hasLinear}>
+    <HHeader hasLinear={hasLinear} style={[{ minHeight: DIMENS.HEADER_STATUS_BAR_HEIGHT, backgroundColor: COLORS.WHITE }, style]}>
       <View
         style={{
           flexDirection: 'row',
@@ -31,8 +29,11 @@ const HeaderCommon = ({
             <TouchableOpacity
               onPress={m_onPressLeftIcon}
               style={{
-                paddingHorizontal: 4,
-                paddingVertical: 8,
+                paddingStart: 16,
+                paddingEnd: 8,
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}>
               <HIcon
                 font="MaterialIcons"
@@ -46,14 +47,14 @@ const HeaderCommon = ({
         </View>
         <View>
           {!renderTitle ? (
-            <Text style={{fontSize: FONT_SIZE.HEADER, alignSelf: 'center'}}>
+            <Text style={{ fontSize: FONT_SIZE.HEADER, alignSelf: 'center' }}>
               {title}
             </Text>
           ) : (
             renderTitle()
           )}
         </View>
-        <View>{!renderRight ? <View /> : renderRight()}</View>
+        <View style={{ marginEnd: 8 }}>{!renderRight ? <View /> : renderRight()}</View>
       </View>
     </HHeader>
   );
@@ -66,5 +67,6 @@ interface HeaderOfAddScreenProps {
   renderRight?: () => React.ReactNode;
   renderTitle?: () => React.ReactNode;
   hasLinear?: boolean;
-  navigation?: NavigationProp<any, any>;
+  style?: StyleProp<ViewStyle>
+  // navigation?: NavigationProp<any, any>;
 }

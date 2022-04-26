@@ -85,6 +85,7 @@ export interface HIconProps {
   style?: TextStyle;
   size?: number;
 }
+
 export const HIconFont = {
   MaterialIcons: 'MaterialIcons',
   Ionicons: 'Ionicons',

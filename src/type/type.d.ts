@@ -34,9 +34,9 @@ export interface RootStateType {
 export interface ScreenProps extends ViewProps {
     navigation?: NavigationProp<any, any>,
     route?: RouteProp<any>,
+    title?: string
 }
 export interface TabViewProps extends ScreenProps {
-    scrollY: Animated.Value,
 }
 
 export interface HButtonProps extends PressableProps {

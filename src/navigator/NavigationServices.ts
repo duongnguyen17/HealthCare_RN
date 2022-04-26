@@ -29,9 +29,6 @@ export const push = (routeName: string, params?: object) => {
     }
 }
 
-/**
- * go back to pre screen
-*/
 export const goBack = () => {
     if (config.navigator) {
         let action = CommonActions.goBack()
