@@ -3,7 +3,8 @@ import { Medicine } from "../../common"
 import { MedicinesStateType } from "../../type/type"
 
 const initialState: MedicinesStateType = {
-    all: []
+    all: [],
+    tempMedicine: null
 }
 
 const medicinesSlice = createSlice({
@@ -29,6 +30,10 @@ const medicinesSlice = createSlice({
             allTemp.splice(index, 1)
             state.all = allTemp
         },
+        addTempMedicine: (state, { payload }) => {
+            state.tempMedicine = payload.medicine
+        },
+
         updateMedicine: (state, { payload }) => {
         },
         updateMedicineSuccess: (state, { payload }) => {

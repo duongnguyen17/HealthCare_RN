@@ -53,7 +53,9 @@ export const findSomeDay = (someDate: Date, arr: Array<Object>): number => {
  */
 export const getHoursMinutes = (date: Date | number): string => {
     var newDate = new Date(date)
-    return '' + newDate.getHours() + ':' + newDate.getMinutes()
+    let minute = newDate.getMinutes()
+    let hour = newDate.getHours()
+    return '' + (hour < 10 ? `0${hour}` : hour) + ':' + (minute < 10 ? `0${minute}` : minute)
 }
 
 /**
@@ -73,8 +75,60 @@ export const splitHoursMinutes = (hm: string) => {
 export const setHoursMinutes = (date: Date | number, hm: string) => {
     var newDate = new Date(date)
     const { hours, minutes } = splitHoursMinutes(hm)
-
     newDate.setHours(hours)
     newDate.setMinutes(minutes)
+    newDate.setSeconds(0)
     return newDate
+}
+
+/**
+ * get date:Date
+ * @param date date in milisecond
+ * @returns Date
+ */
+export const getDateTime = (date: number | Date): Date => {
+    return new Date(date)
+}
+
+
+/**
+ * add days
+ * @param date start date
+ * @param days num days
+ * @returns last day
+ */
+export const addDays = (date: number | Date, days: number) => {
+    let curDate = new Date(date)
+    curDate.setDate(curDate.getDate() + days)
+    return curDate
+}
+
+/**
+ * add time
+ * @param date date
+ * @param time time add
+ * @returns date with true time
+ */
+export const addTime = (date: number | Date, hour: number, minute?: number, second?: number) => {
+    let curDate = new Date(date)
+    curDate.setHours(curDate.getHours() + hour)
+    if (minute != undefined) curDate.setMinutes(curDate.getMinutes() + minute)
+    if (second != undefined) curDate.setSeconds(curDate.getSeconds() + second)
+    return curDate
+}
+
+/**
+ * get current time in some area
+ */
+export function getCurrentLocalTime(param: 'VN' | ''): Date {
+    let now = new Date()
+    switch (param) {
+        case 'VN':
+            now = addTime(now, 7)
+            break;
+        default:
+            now = addTime(now, 7)
+            break;
+    }
+    return now
 }

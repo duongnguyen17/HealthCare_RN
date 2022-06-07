@@ -28,7 +28,7 @@ export const getVisitedInMonth = async (date: Date) => {
 /**add new visited */
 export const addVisited = async (newVisited: any) => {
     try {
-        console.log(`addVisited`, newVisited)
+        // console.log(`addVisited`, newVisited)
         const realm = await RealmManager.getRealm()
         realm.write(() => {
             realm.create(SCHEMA.VISITED, newVisited)

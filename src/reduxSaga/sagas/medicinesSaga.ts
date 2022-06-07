@@ -1,10 +1,11 @@
-import { takeLatest, call, put, select, take } from 'redux-saga/effects'
+import { call, put, takeLatest } from 'redux-saga/effects'
 import { AlertType, Medicine } from '../../common'
 import { showAlert } from '../../components/HAlert'
-
 import { hideLoading, showLoading } from '../../components/Loading'
 import { addMedicine, deleteMedicine, getAllMedicine, updateMedicine, updateMedicines } from '../../realm/controllers/medicine.controller'
+import NotifiSchedule from '../../utils/Notifi'
 import { medicinesAction } from '../slices/medicinesSlice'
+
 
 
 export default [
@@ -13,7 +14,7 @@ export default [
     takeLatest(medicinesAction.updateMedicine.type, updateMedicineSaga),
     takeLatest(medicinesAction.deleteMedicine.type, deleteMedicineSaga),
     takeLatest(medicinesAction.getAllMedicineOfVisited.type, getAllMedicineOfVisitedSaga),
-    takeLatest(medicinesAction.updateAllMedicineOfVisited.type, updateAllMedicineOfVisitedSaga)
+    takeLatest(medicinesAction.updateAllMedicineOfVisited.type, updateAllMedicineOfVisitedSaga),
 ]
 
 function* getAllMedicineSaga(action: any) {
@@ -36,8 +37,8 @@ function* addMedicineSaga(action: any) {
         // console.log(`visited`, visited)
         showLoading()
         yield call(addMedicine, medicine)
-
-        //tạm thời thì sau khi thêm thì add luôn víited kia vào víitedState
+        NotifiSchedule.genNotifi(medicine)
+        //tạm thời thì sau khi thêm thì add luôn víited kia vào visitedState
         yield put(medicinesAction.addMedicineSuccess({ medicine }))
     } catch (error) {
         console.log("🚀 ~ file: medicineSaga.ts ~ line 41 ~ function*addMedicineSaga ~ error", error)
@@ -98,3 +99,4 @@ function* updateAllMedicineOfVisitedSaga(action: any) {
         hideLoading()
     }
 }
+

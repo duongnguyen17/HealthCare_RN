@@ -30,7 +30,7 @@ export const STRINGS = {
     WEEK: 'tuần',
     MONTH: 'tháng',
     TIME_REMIND_DO_NOT_DUPLICATE: 'Thời gian nhắc nhở không được trùng nhau',
-    DO_NOT_: 'Không được để trống tên thuốc',
+    THE_NAME_OF_DRUG_CANNOT_BE_LEFT_BLANK: 'Không được để trống tên thuốc',
     MEDICINE_NAME: "Tên thuốc ...",
     ADD_REMIND: "Thêm nhắc nhở",
     LAST: "Uống trong",
@@ -38,7 +38,7 @@ export const STRINGS = {
   VISITED_SCREEN: {
     TITLE: 'Lần khám',
     LAST_VISITED: 'Lần Khám trước',
-    DO_NOT_: 'Không được để trống tên lần khám',
+    THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK: 'Không được để trống tên lần khám',
     VISITED_NAME: "Tên lần khám ...",
     LOCATION: "Địa điểm",
     EX_DAY: "Ngày khám",
@@ -69,8 +69,14 @@ export const STRINGS = {
       REGISTER: 'Register',
       FORGOT_PASSWORD: 'ForgotPasswordScreen',
       VERIFY_OTP: 'VerifyOTP',
-      REGISTER_FINISH: 'RegisterFinish'
+      REGISTER_FINISH: 'RegisterFinish',
     },
+  },
+  NOTIFICATION_ACTION: {
+    OK: "OK",
+  },
+  STORAGE_KEY: {
+    OPENED_NOTIFICATION: "OPENED_NOTIFICATION",
   }
 }
 
@@ -235,3 +241,13 @@ export const TIMING = {
   HEADER_ALERT_SLIDE: 100,
   HEADER_ALERT_ALIVE_DEFAULT: 1100,
 }
+
+export const CHANNEL_ID = {
+  MEDICINE: "meidicineChannelId"
+}
+
+export const CHANNEL_NAME = {
+  MEDICINE: 'medicineChannel'
+}
+
+export const TIMEOUT_NOTIFI = 30000

@@ -19,6 +19,7 @@ import ReportDetail from '../screens/ReportDetail'
 import SearchScreen from '../screens/SearchScreen';
 import VisitedScreen from '../screens/main/DiaryTab/VisitedScreen';
 import { setNavigator } from './NavigationServices';
+import Storage from '../utils/Storage';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
@@ -79,6 +80,19 @@ const MainNavigator = () => {
 
   useEffect(() => {
     setNavigator(navigation);
+
+    if (navigation.current) {
+      Storage.getItem(STRINGS.STORAGE_KEY.OPENED_NOTIFICATION).then(notify => {
+
+        if (!notify) return;
+        // remove cache
+        Storage.setItem(STRINGS.STORAGE_KEY.OPENED_NOTIFICATION, null);
+
+        switch (notify.action) {
+
+        }
+      })
+    }
   }, []);
   return (
     ///@ts-ignore conflict giữa react-navigation-ts và React-ts

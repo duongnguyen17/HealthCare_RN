@@ -1,11 +1,11 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList, Keyboard, KeyboardAvoidingView,
   Platform, Text,
   TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   AlertType,
   COLORS,
@@ -25,11 +25,12 @@ import {
 } from '../../../../navigator/NavigationServices';
 import { medicinesAction } from '../../../../reduxSaga/slices/medicinesSlice';
 import { visitedsAction } from '../../../../reduxSaga/slices/visitedsSlice';
-import { ScreenProps } from '../../../../type/type';
+import { RootStateType, ScreenProps } from '../../../../type/type';
 import Tag from '../components/Tag';
 import TagWithIcon from '../components/TagWithIcon';
 const VisitedScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
+  const tempMedicine = useSelector((state: RootStateType) => state.medicineState.tempMedicine)
   const visited: Visited = routeParam(props.route, 'visited');
   const [title, setTitle] = useState<string>(visited?.title ?? '');
   // const [state, setState] = useState<boolean>(true);
@@ -42,9 +43,14 @@ const VisitedScreen = (props: ScreenProps) => {
   const [descript, setDescript] = useState<string>(visited?.descript ?? '');
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
+  useEffect(() => {
+    if (tempMedicine != null && tempMedicine != undefined)
+      updateMedicine({...tempMedicine})
+  }, [tempMedicine])
+
   const onSubmit = () => {
     if (title == '' || title == undefined) {
-      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.DO_NOT_);
+      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
     } else {
       let visitedId = visited?._id ?? Date.now();
       let tempVisited = {
@@ -63,7 +69,7 @@ const VisitedScreen = (props: ScreenProps) => {
       if (medicines.length != 0) {
         let medicinesTemp = [...medicines];
         medicinesTemp.forEach(e => {
-          if (e.visitedId != visitedId) {
+          if (e.visitedId !== visitedId) {
             e.visitedId = visitedId;
             e.start = date;
           }
@@ -73,8 +79,8 @@ const VisitedScreen = (props: ScreenProps) => {
       goBack();
     }
   };
+
   const updateMedicine = (medicine: Medicine) => {
-    // console.log(`medicine-visited`, medicine);
     let have = false;
     medicines.forEach((element: Medicine) => {
       if (element._id == medicine._id) {
@@ -91,7 +97,9 @@ const VisitedScreen = (props: ScreenProps) => {
     } else {
       setMedicines([...medicines, medicine]);
     }
+    dispatch(medicinesAction.addTempMedicine({ medicine: null }))
   };
+
   const onChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
@@ -102,12 +110,11 @@ const VisitedScreen = (props: ScreenProps) => {
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
       // hiện cảnh báo: không được để trống title
-      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.DO_NOT_);
+      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
     } else
       navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
         data: { title: title, date: date },
         medicine,
-        updateMedicine,
       });
   };
   // console.log(`medicines-visitedScreen`, medicines);

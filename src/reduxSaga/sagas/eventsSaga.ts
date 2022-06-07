@@ -12,7 +12,6 @@ export default [
     takeLatest(eventsAction.getAllEvent.type, getAllEventSaga),
     takeLatest(eventsAction.getEventInMonth.type, getEventInMonthSaga),
     takeLatest(eventsAction.searchEvent.type, searchEventSaga)
-
 ]
 
 function* getAllEventSaga() {

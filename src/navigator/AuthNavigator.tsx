@@ -21,7 +21,7 @@ const AuthNavigator = () => {
     setNavigator(navigation);
   }, []);
   return (
-    ///@ts-ignore cònlig giữa react-navigation-ts và React-ts
+    ///@ts-ignore conflict giữa react-navigation-ts và React-ts
     <NavigationContainer ref={navigation}>
       <Stack.Navigator
         initialRouteName={STRINGS.ROUTE.AUTH.LOGIN}

@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import React, { useState } from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {COLORS, Remind} from '../../common';
+import { COLORS, Remind } from '../../common';
 import HIcon from '../HIcon';
 import { getHoursMinutes, setHoursMinutes } from '../../utils/dateutils';
 const RemindItem = ({
@@ -32,7 +32,8 @@ const RemindItem = ({
   };
   const onChange = (event: any, selectedDate: any) => {
     const currTime = selectedDate;
-    setTime(currTime);
+    if (currTime != undefined) setTime(currTime);
+    setIsShowTimePicker(false)
   };
   return (
     <TouchableOpacity
@@ -59,21 +60,28 @@ const RemindItem = ({
             alignItems: 'center',
             // justifyContent: 'space-around',
           }}>
-          <View style={{width: 100}}>
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={time}
-              mode="time"
-              is24Hour={true}
-              display="default"
-              onChange={onChange}
-            />
+          <View style={{ width: 100, alignItems: 'center' }}>
+            <TouchableOpacity style={{ flex: 1 }} onPress={() => { setIsShowTimePicker(true) }} disabled={!isEdit} >
+              <Text>{getHoursMinutes(time)}</Text>
+            </TouchableOpacity>
+
+            {isShowTimePicker &&
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={time}
+                mode="time"
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />}
           </View>
           <TouchableOpacity
-            style={{marginLeft: 20}}
+            style={{ marginLeft: 20 }}
             onPress={() => {
               setRepeat(!repeat);
-            }}>
+            }}
+            disabled={!isEdit}
+          >
             <HIcon
               font="MaterialCommunityIcons"
               name={repeat ? 'repeat' : 'repeat-off'}
@@ -87,7 +95,7 @@ const RemindItem = ({
               height: '100%',
             }}>
             <View
-              style={isEdit ? {flexDirection: 'row'} : {width: 0, height: 0}}>
+              style={isEdit ? { flexDirection: 'row' } : { width: 0, height: 0 }}>
               <TouchableOpacity
                 style={{}}
                 onPress={() => {
@@ -100,11 +108,11 @@ const RemindItem = ({
                   font="MaterialCommunityIcons"
                   name={'trash-can-outline'}
                   color={'red'}
-                  // size={18}
+                // size={18}
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{marginLeft: 20}}
+                style={{ marginLeft: 20 }}
                 onPress={() => {
                   if (isEdit) {
                     setIsEdit(false);
