@@ -3,6 +3,7 @@
  */
 
 import { AppRegistry } from 'react-native';
+
 import PushNotification, { Importance } from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios'
 import App from './App';
@@ -16,6 +17,7 @@ PushNotification.configure({
     onRegister: function (token) {
         console.log("TOKEN:", token);
     },
+
     // (required) Called when a remote is received or opened, or local notification is opened
     onNotification: function (notification) {
         console.log("NOTIFICATION:", notification);
