@@ -28,7 +28,7 @@ export const getVisitedInMonth = async (date: Date) => {
 /**add new visited */
 export const addVisited = async (newVisited: any) => {
     try {
-        console.log(`addVisited`, newVisited)
+        // console.log(`addVisited`, newVisited)
         const realm = await RealmManager.getRealm()
         realm.write(() => {
             realm.create(SCHEMA.VISITED, newVisited)
@@ -90,5 +90,15 @@ export const searchVisited = async (keyword: String) => {
     } catch (error) {
         console.log("🚀 ~ file: visited.controller.ts ~ line 88 ~ searchVisited ~ error", error)
 
+    }
+}
+
+export const getVisited = async (_id: number) => {
+    try {
+        const realm = await RealmManager.getRealm()
+        const visited = realm.objectForPrimaryKey(SCHEMA.VISITED, _id)
+        return visited
+    } catch (error) {
+        console.log("🚀 ~ file: visited.controller.ts ~ line 102 ~ getVisited ~ error", error)
     }
 }

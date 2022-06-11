@@ -1,5 +1,6 @@
 import { CommonActions, NavigationContainerRef, StackActions } from '@react-navigation/native'
 import React, { RefObject } from 'react'
+import { STRINGS } from '../common'
 import { NavigationServiceConfig } from '../type/type'
 
 const config: NavigationServiceConfig = {}
@@ -37,7 +38,7 @@ export const goBack = () => {
 }
 
 export const navigationAvailbe = () => {
-    return config?.navigator?.getCurrentRoute()?.name !== 'Login'
+    return config?.navigator?.getCurrentRoute()?.name !== STRINGS.ROUTE.AUTH.LOGIN
 }
 
 export const routeParam = (route: any, paramKey: string, defaultValue?: any) => {

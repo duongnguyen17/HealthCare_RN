@@ -1,4 +1,4 @@
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,12 +21,9 @@ import TriangleAnimated from '../../../components/TriangleAnimated';
 import { navigateTo } from '../../../navigator/NavigationServices';
 import { eventsAction } from '../../../reduxSaga/slices/eventsSlice';
 import { RootStateType } from '../../../type/type';
-import { findSomeDay } from '../../../utils/dateUtils';
-import { setStatusBarBackground } from '../../../utils/statusBarUtils';
 import ExtendDiary, { TypeExtend } from './components/ExtendDiary';
 
 const Diary = () => {
-  // var static_Y = useRef<number>(0).current;
   const allEvent: Array<HEvent> = useSelector(
     (state: RootStateType) => state.eventState.all,
   );
@@ -41,7 +38,7 @@ const Diary = () => {
   const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
   useEffect(() => {
     if (isFocused) {
-      setStatusBarBackground(COLORS.LIGHT_BLUE)
+      // setStatusBarBackground(COLORS.LIGHT_BLUE)
       dispatch(eventsAction.getAllEvent())
     }
   }, [isFocused]);
@@ -187,7 +184,7 @@ const Diary = () => {
             data={data}
             getItemLayout={getItemLayout}
           // onScroll={e => {
-          //   console.log(e.nativeEvent.contentOffset.y);
+          //   console.log(e.nativeEvent.contentOffset.y); 
           // }}
           />
         )}

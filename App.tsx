@@ -1,17 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Intro from './src/screens/Intro/Intro';
 import { Provider as PaperProvider } from 'react-native-paper';
-import GlobalState from './src/context/globalState';
 import MainNavigator from './src/navigator/MainNavigator';
 import { Loading } from './src/components/Loading';
 import { Provider } from 'react-redux';
 import store from './src/reduxSaga/store';
 import AuthNavigator from './src/navigator/AuthNavigator';
 import { HAlert } from './src/components/HAlert';
-import { Platform, UIManager } from 'react-native';
+import { Platform, StatusBar, UIManager } from 'react-native';
 import RealmManager from './src/realm';
-import { setStatusBarBackground } from './src/utils/statusBarUtils';
-import { COLORS } from './src/common';
 
 // để sử dụng LayoutAnimation
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -20,9 +17,13 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 
 const AppRoot = () => {
   let isLoggin = true;
+  const [isIntro, setIsIntro] = useState<boolean>(true)
+
+  if (isIntro) {
+    return <Intro setIsIntro={setIsIntro} />
+  }
   return (
     <React.Fragment>
-      <Intro />
       {isLoggin ? <MainNavigator /> : <AuthNavigator />}
       <Loading />
       <HAlert />
@@ -43,6 +44,7 @@ const App = () => {
   return (
     <PaperProvider>
       <Provider store={store}>
+        <StatusBar barStyle={"light-content"} />
         <AppRoot />
       </Provider>
     </PaperProvider>

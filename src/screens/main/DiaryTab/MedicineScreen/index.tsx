@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   Keyboard, StyleSheet, Text,
   TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   AlertType,
   COLORS,
@@ -23,7 +23,8 @@ import {
   routeParam
 } from '../../../../navigator/NavigationServices';
 import { medicinesAction } from '../../../../reduxSaga/slices/medicinesSlice';
-import { ScreenProps } from '../../../../type/type';
+import { RootStateType, ScreenProps } from '../../../../type/type';
+import { getHoursMinutes } from '../../../../utils/dateutils';
 import Tag from '../components/Tag';
 import TagWithIcon from '../components/TagWithIcon';
 
@@ -34,10 +35,9 @@ const DropKey = [
 ];
 
 const MedicineScreen = (props: ScreenProps) => {
-  const now = new Date();
-  const data = routeParam(props.route, 'data');
+  const _id = routeParam(props.route, '_id');
   const dispatch = useDispatch();
-  const medicine = routeParam(props.route, 'medicine');
+  const medicine = routeParam(props.route, 'medicine') ?? useSelector((state: RootStateType) => state.medicineState.tempMedicine)
 
   const [title, setTitle] = useState<string>(medicine?.title);
   // const [state, setState] = useState<boolean>(true);
@@ -48,7 +48,20 @@ const MedicineScreen = (props: ScreenProps) => {
   const [count, setCount] = useState<string>(
     medicine?.during.toString() ?? '0',
   );
-  const updateMedicine = routeParam(props.route, 'updateMedicine');
+
+  useEffect(() => {
+    if (_id != undefined) {
+      dispatch(medicinesAction.getMedicine({ _id: _id }))
+    }
+  }, [])
+  useEffect(() => {
+    if (medicine != null && medicine != undefined) {
+      setTitle(medicine?.title)
+      setReminds(medicine?.remind)
+      setCount(medicine?.during.toString())
+    }
+
+  }, [medicine])
   const onSubmit = () => {
     let remindTimeArr = reminds.map(e => e.time);
     let isDuplicate = remindTimeArr.some(
@@ -57,7 +70,7 @@ const MedicineScreen = (props: ScreenProps) => {
     if (isDuplicate) {
       showAlert(AlertType.WARN, STRINGS.MEDICINE_SCREEN.TIME_REMIND_DO_NOT_DUPLICATE);
     } else if (title == '' || title == undefined) {
-      showAlert(AlertType.WARN, STRINGS.MEDICINE_SCREEN.DO_NOT_);
+      showAlert(AlertType.WARN, STRINGS.MEDICINE_SCREEN.THE_NAME_OF_DRUG_CANNOT_BE_LEFT_BLANK);
     } else if (!!medicine?.visitedId) {
       //nếu là update
       dispatch(
@@ -73,15 +86,17 @@ const MedicineScreen = (props: ScreenProps) => {
       goBack();
     } else {
       //nếu là tạo mới
+      dispatch(medicinesAction.addTempMedicine({
+        medicine: {
+          _id: medicine?._id ?? Date.now(),
+          title,
+          during: calDuring(count, timeUnit),
+          remind: reminds,
+          start: null,
+          visitedId: null,
+        }
+      }))
       goBack();
-      updateMedicine({
-        _id: medicine?._id ?? Date.now(),
-        title,
-        during: calDuring(count, timeUnit),
-        remind: reminds,
-        start: null,
-        visitedId: null,
-      });
     }
   };
 
@@ -105,10 +120,11 @@ const MedicineScreen = (props: ScreenProps) => {
   };
 
   const addRemind = () => {
+    //thêm 1 nhắc nhở trống vào cuối mảng
     setReminds([
       ...reminds,
       {
-        time: '' + now.getHours() + ':' + now.getMinutes(),
+        time: getHoursMinutes(new Date()),
         descript: '',
         repeat: true,
         amount: '',
@@ -128,6 +144,15 @@ const MedicineScreen = (props: ScreenProps) => {
     temp.splice(index, 1);
     setReminds(temp);
   };
+  const renderRemindItem = ({ item, index }: { item: any, index: number }) => (
+    <RemindItem
+      item={item}
+      index={index}
+      updateRemind={updateRemind}
+      deleteRemind={deleteRemind}
+      isNew={item.isNew}
+    />
+  )
   // console.log(`reminds`, reminds);
   return (
     <TouchableWithoutFeedback
@@ -145,7 +170,7 @@ const MedicineScreen = (props: ScreenProps) => {
               onPress={() => {
                 navigateTo(STRINGS.ROUTE.DIARY.VISITED, {});
               }}>
-              <Text style={{ fontSize: FONT_SIZE.TITLE }}>{data.title}</Text>
+              <Text style={{ fontSize: FONT_SIZE.TITLE }}>{medicine?.title}</Text>
               <Text style={{ color: COLORS.WHITE, fontSize: FONT_SIZE.TINY }}>
                 {/* {new Date(data.date).toString().slice(4, 15)} */}
               </Text>
@@ -185,27 +210,13 @@ const MedicineScreen = (props: ScreenProps) => {
             <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
           </View> */}
           <FlatList
-            renderItem={({ item, index }) => (
-              <RemindItem
-                item={item}
-                index={index}
-                updateRemind={updateRemind}
-                deleteRemind={deleteRemind}
-                isNew={item.isNew}
-              />
-            )}
+            renderItem={renderRemindItem}
+            keyExtractor={
+              (item, index) => index.toString()
+            }
             data={reminds}
           />
-          <TouchableOpacity
-            style={{
-              alignSelf: 'center',
-              borderWidth: 1,
-              borderColor: COLORS.BLUE,
-              borderRadius: 5,
-              alignItems: 'center',
-              paddingVertical: 5,
-            }}
-            onPress={addRemind}>
+          <TouchableOpacity style={{ alignSelf: 'center', borderWidth: 1, borderColor: COLORS.BLUE, borderRadius: 5, alignItems: 'center', paddingVertical: 5, }} onPress={addRemind}>
             <Text style={{ paddingHorizontal: 20 }}>{STRINGS.MEDICINE_SCREEN.ADD_REMIND}</Text>
           </TouchableOpacity>
         </TagWithIcon>
