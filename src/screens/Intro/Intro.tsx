@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Box } from 'native-base';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -32,18 +31,16 @@ const Intro = ({ setIsIntro }: any) => {
     return null;
   } else if (!isNext) {
     return (
-      <Box style={{ flex: 1 }}>
-        <LinearGradient
-          colors={['#00aaff', '#66ccff', '#b3e6ff']}
-          style={styles.container}
-          start={{ x: 0.5, y: 0.25 }}
-          end={{ x: 0, y: 1.0 }}>
-          {/* <Image source={{uri: ''}} /> */}
-          <View style={styles.logoContainer}>
-            <Text>Logo này</Text>
-          </View>
-        </LinearGradient>
-      </Box>
+      <LinearGradient
+        colors={['#00aaff', '#66ccff', '#b3e6ff']}
+        style={styles.container}
+        start={{ x: 0.5, y: 0.25 }}
+        end={{ x: 0, y: 1.0 }}>
+        {/* <Image source={{uri: ''}} /> */}
+        <View style={styles.logoContainer}>
+          <Text>Logo này</Text>
+        </View>
+      </LinearGradient>
 
     );
   } else {
