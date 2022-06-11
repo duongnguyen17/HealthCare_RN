@@ -251,3 +251,14 @@ export const CHANNEL_NAME = {
 }
 
 export const TIMEOUT_NOTIFI = 30000
+
+export const ACTIVE_OPACITY = 0.6
+
+export const EVENT_ACTION = {
+  CREATE_NEW: "CREATE_NEW",
+  SHOW_INFOR: "SHOW_INFOR",
+}
+
+export const ROUTE_KEY_PARAM = {
+  VISITED_ACTION: "VISITED_ACTION",
+}

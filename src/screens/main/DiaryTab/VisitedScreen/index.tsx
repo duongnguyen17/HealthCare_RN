@@ -11,6 +11,7 @@ import {
   COLORS,
   FONT_SIZE,
   Medicine,
+  ROUTE_KEY_PARAM,
   SearchType,
   STRINGS, Visited
 } from '../../../../common';
@@ -29,23 +30,40 @@ import { RootStateType, ScreenProps } from '../../../../type/type';
 import Tag from '../components/Tag';
 import TagWithIcon from '../components/TagWithIcon';
 const VisitedScreen = (props: ScreenProps) => {
+  const _id = routeParam(props.route, '_id');
+
   const dispatch = useDispatch();
   const tempMedicine = useSelector((state: RootStateType) => state.medicineState.tempMedicine)
-  const visited: Visited = routeParam(props.route, 'visited');
-  const [title, setTitle] = useState<string>(visited?.title ?? '');
-  // const [state, setState] = useState<boolean>(true);
-  const [pre, setPre] = useState<number | null>(visited?.pre);
-  const [location, setLocation] = useState(visited?.location ?? '');
-  const [date, setDate] = useState(visited?.date ?? Date.now());
-  const [medicines, setMedicines] = useState<Array<Medicine>>(
-    visited?.medicines ?? [],
-  );
-  const [descript, setDescript] = useState<string>(visited?.descript ?? '');
+  const visited: Visited | null | undefined = useSelector((state: RootStateType) => state.visitedState.tempVisited)
+
+  const [title, setTitle] = useState<string>('');
+  const [pre, setPre] = useState<number | null>();
+  const [location, setLocation] = useState('');
+  const [date, setDate] = useState(Date.now());
+  const [medicines, setMedicines] = useState<Array<Medicine>>([]);
+  const [descript, setDescript] = useState<string>('');
   const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   useEffect(() => {
+    if (_id != undefined) {
+      dispatch(visitedsAction.getVisted({ _id: _id }))
+    }
+  }, [])
+
+  useEffect(() => {
+    if ((_id != null || _id != undefined) && visited != null && visited != undefined) {
+      setTitle(visited?.title)
+      setPre(visited?.pre)
+      setLocation(visited?.location)
+      setDate(visited?.date)
+      setDescript(visited?.descript)
+      setMedicines(visited?.medicines ?? [])
+    }
+  }, [visited])
+
+  useEffect(() => {
     if (tempMedicine != null && tempMedicine != undefined)
-      updateMedicine({...tempMedicine})
+      updateMedicine({ ...tempMedicine })
   }, [tempMedicine])
 
   const onSubmit = () => {
@@ -104,9 +122,11 @@ const VisitedScreen = (props: ScreenProps) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
   };
+  
   const gotoSearchScreen = (type: SearchType) => {
     navigateTo(STRINGS.ROUTE.SEARCH, { type: type });
   };
+
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
       // hiện cảnh báo: không được để trống title
@@ -117,7 +137,7 @@ const VisitedScreen = (props: ScreenProps) => {
         medicine,
       });
   };
-  // console.log(`medicines-visitedScreen`, medicines);
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -181,7 +201,6 @@ const VisitedScreen = (props: ScreenProps) => {
                   )}
                 </Text>
               </View>
-
               <HIcon font="MaterialIcons" name="arrow-forward-ios" size={18} />
             </TouchableOpacity>
           </TagWithIcon>

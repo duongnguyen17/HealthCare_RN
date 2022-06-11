@@ -92,3 +92,13 @@ export const searchVisited = async (keyword: String) => {
 
     }
 }
+
+export const getVisited = async (_id: number) => {
+    try {
+        const realm = await RealmManager.getRealm()
+        const visited = realm.objectForPrimaryKey(SCHEMA.VISITED, _id)
+        return visited
+    } catch (error) {
+        console.log("🚀 ~ file: visited.controller.ts ~ line 102 ~ getVisited ~ error", error)
+    }
+}

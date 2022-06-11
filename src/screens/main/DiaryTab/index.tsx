@@ -21,7 +21,6 @@ import TriangleAnimated from '../../../components/TriangleAnimated';
 import { navigateTo } from '../../../navigator/NavigationServices';
 import { eventsAction } from '../../../reduxSaga/slices/eventsSlice';
 import { RootStateType } from '../../../type/type';
-import { setStatusBarBackground } from '../../../utils/statusBarUtils';
 import ExtendDiary, { TypeExtend } from './components/ExtendDiary';
 
 const Diary = () => {
@@ -39,7 +38,7 @@ const Diary = () => {
   const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
   useEffect(() => {
     if (isFocused) {
-      setStatusBarBackground(COLORS.LIGHT_BLUE)
+      // setStatusBarBackground(COLORS.LIGHT_BLUE)
       dispatch(eventsAction.getAllEvent())
     }
   }, [isFocused]);

@@ -18,7 +18,7 @@ const RemindItem = ({
   const [isEdit, setIsEdit] = useState(isNew ?? false);
   const [time, setTime] = useState<Date>(item?.time ? now : new Date());
   const [repeat, setRepeat] = useState<boolean>(item?.repeat ?? true);
-  const [isShowTimePicker, setIsShowTimePicker] = useState<boolean>(true);
+  const [isShowTimePicker, setIsShowTimePicker] = useState<boolean>(false);
   const onSubmit = () => {
     updateRemind(
       {

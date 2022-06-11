@@ -2,7 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects'
 import { AlertType, Medicine } from '../../common'
 import { showAlert } from '../../components/HAlert'
 import { hideLoading, showLoading } from '../../components/Loading'
-import { addMedicine, deleteMedicine, getAllMedicine, updateMedicine, updateMedicines } from '../../realm/controllers/medicine.controller'
+import { addMedicine, deleteMedicine, getAllMedicine, getMedicine, updateMedicine, updateMedicines } from '../../realm/controllers/medicine.controller'
 import NotifiSchedule from '../../utils/Notifi'
 import { medicinesAction } from '../slices/medicinesSlice'
 
@@ -15,9 +15,10 @@ export default [
     takeLatest(medicinesAction.deleteMedicine.type, deleteMedicineSaga),
     takeLatest(medicinesAction.getAllMedicineOfVisited.type, getAllMedicineOfVisitedSaga),
     takeLatest(medicinesAction.updateAllMedicineOfVisited.type, updateAllMedicineOfVisitedSaga),
+    takeLatest(medicinesAction.getMedicine.type, getMedicineSaga)
 ]
 
-function* getAllMedicineSaga(action: any) {
+function* getAllMedicineSaga() {
     try {
         showLoading()
         //@ts-ignore
@@ -34,7 +35,6 @@ function* getAllMedicineSaga(action: any) {
 function* addMedicineSaga(action: any) {
     try {
         const medicine = action.payload
-        // console.log(`visited`, visited)
         showLoading()
         yield call(addMedicine, medicine)
         NotifiSchedule.genNotifi(medicine)
@@ -95,6 +95,21 @@ function* updateAllMedicineOfVisitedSaga(action: any) {
     } catch (error) {
         console.log("🚀 ~ file: visitedSaga.ts ~ line 96 ~ function*deleteVisitedSaga ~ error", error)
         showAlert(AlertType.FAIL, "cập nhật danh sách thuốc không thành công!")
+    } finally {
+        hideLoading()
+    }
+}
+
+function* getMedicineSaga(action: any) {
+    try {
+        showLoading()
+        const _id = action.payload._id as number
+        //@ts-ignore
+        let medicine = yield call(getMedicine, _id)
+        yield put(medicinesAction.getMedicineSuccess({ medicine }))
+    } catch (error) {
+        console.log("🚀 ~ file: medicinesSaga.ts ~ line 107 ~ function*getMedicineSaga ~ error", error)
+        showAlert(AlertType.FAIL, "Không lấy được thông tin thuốc!")
     } finally {
         hideLoading()
     }

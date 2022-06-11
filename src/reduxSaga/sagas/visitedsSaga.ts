@@ -2,7 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { AlertType } from "../../common";
 import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
-import { addVisited, deleteVisited, getAllVisited, updateVisited } from "../../realm/controllers/visited.controller";
+import { addVisited, deleteVisited, getAllVisited, updateVisited, getVisited } from "../../realm/controllers/visited.controller";
 import { visitedsAction } from "../slices/visitedsSlice";
 
 
@@ -11,7 +11,8 @@ export default [
     takeLatest(visitedsAction.getAllVisited.type, getAllVisitedSaga),
     takeLatest(visitedsAction.addVisited.type, addVisitedSaga),
     takeLatest(visitedsAction.updateVisited.type, updateVisitedSaga),
-    takeLatest(visitedsAction.deleteVisited.type, deleteVisitedSaga)
+    takeLatest(visitedsAction.deleteVisited.type, deleteVisitedSaga),
+    takeLatest(visitedsAction.getVisted.type, getVisitedSaga),
 ]
 
 function* getAllVisitedSaga(action: any) {
@@ -66,6 +67,21 @@ function* deleteVisitedSaga(action: any) {
     } catch (error) {
         console.log("🚀 ~ file: visitedSaga.ts ~ line 67 ~ function*deleteVisitedSaga ~ error", error)
         showAlert(AlertType.FAIL, "Không xoá được")
+    } finally {
+        hideLoading()
+    }
+}
+
+function* getVisitedSaga(action: any) {
+    try {
+        showLoading()
+        const _id = action.payload._id as number
+        //@ts-ignore
+        let visited = yield call(getVisited, _id)
+        yield put(visitedsAction.getVisitedSuccess({ visited }))
+    } catch (error) {
+        console.log("🚀 ~ file: visitedsSaga.ts ~ line 83 ~ function*getVisitedSaga ~ error", error)
+        showAlert(AlertType.FAIL, "Không lấy được thông tin lần khám!")
     } finally {
         hideLoading()
     }

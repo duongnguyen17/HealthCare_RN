@@ -111,3 +111,18 @@ export const searchMedicine = async (keyword: String) => {
         console.log("🚀 ~ file: medicine.controller.ts ~ line 110 ~ searchMedicine ~ error", error)
     }
 }
+
+/**
+ * get medicine detail
+ * @param _id id of medicine
+ */
+export const getMedicine = async (_id: number) => {
+    try {
+        const realm = await RealmManager.getRealm()
+        const medicine = realm.objectForPrimaryKey(SCHEMA.MEDICINE, _id)
+        console.log('medicine', medicine)
+        return medicine
+    } catch (error) {
+        console.log("🚀 ~ file: medicine.controller.ts ~ line 123 ~ getMedicine ~ error", error)
+    }
+}

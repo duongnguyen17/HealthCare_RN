@@ -1,5 +1,4 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
@@ -10,10 +9,9 @@ import Frame from '../../../components/Frame';
 import HairLine from '../../../components/HairLine';
 import { navigateTo } from '../../../navigator/NavigationServices';
 import { TabViewProps } from '../../../type/type';
-import { setStatusBarBackground } from '../../../utils/statusBarUtils';
 
 const OverView = ({ }: TabViewProps) => {
-  useFocusEffect(() => { setStatusBarBackground(COLORS.LIGHT_BLUE) })
+  // useFocusEffect(() => { setStatusBarBackground(COLORS.LIGHT_BLUE) })
   const [isReFresh, setIsReFresh] = useState(false);
   const onRefresh = () => {
     setIsReFresh(true);

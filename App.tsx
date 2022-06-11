@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Intro from './src/screens/Intro/Intro';
 import { Provider as PaperProvider } from 'react-native-paper';
 import MainNavigator from './src/navigator/MainNavigator';
@@ -17,9 +17,13 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 
 const AppRoot = () => {
   let isLoggin = true;
+  const [isIntro, setIsIntro] = useState<boolean>(true)
+
+  if (isIntro) {
+    return <Intro setIsIntro={setIsIntro} />
+  }
   return (
     <React.Fragment>
-      <Intro />
       {isLoggin ? <MainNavigator /> : <AuthNavigator />}
       <Loading />
       <HAlert />

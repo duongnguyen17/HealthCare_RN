@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, LegacyRef, RefObject} from 'react';
+import React, { useRef, useEffect, LegacyRef, RefObject } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -7,11 +7,11 @@ import {
   View,
   ViewProps,
 } from 'react-native';
-import {COLORS, EventType, HEvent} from '../../common';
-import {calDayWeek, isToday} from '../../utils/dateutils';
-import EventTag from './EventTag';
+import { COLORS, EventType, HEvent } from '../../common';
+import { calDayWeek, isToday } from '../../utils/dateutils';
+import { EventTag } from './EventTag';
 
-const HDayTag = ({data}: HDayTagProps) => {
+const HDayTag = ({ data }: HDayTagProps) => {
   // console.log(`data-HDayTag`, data);
   const container = useRef<any>(null);
   const m_isToday: boolean = isToday(data.date);
@@ -25,7 +25,7 @@ const HDayTag = ({data}: HDayTagProps) => {
       }}>
       <View style={styles.leftSubContainer}>
         <Animated.View>
-          <TouchableOpacity style={{alignItems: 'center'}}>
+          <TouchableOpacity style={{ alignItems: 'center' }}>
             <View>
               <Text>{calDayWeek(data?.date)}</Text>
             </View>
@@ -35,7 +35,7 @@ const HDayTag = ({data}: HDayTagProps) => {
                 padding: 5,
                 backgroundColor: m_isToday ? COLORS.LIGHT_BLUE : '',
               }}>
-              <Text style={{color: m_isToday ? '#fff' : '#000'}}>
+              <Text style={{ color: m_isToday ? '#fff' : '#000' }}>
                 {new Date(data?.date).getDate()}
               </Text>
             </View>
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 10,
   },
-  leftSubContainer: {flex: 1},
-  rigthSubContainer: {flex: 8},
+  leftSubContainer: { flex: 1 },
+  rigthSubContainer: { flex: 8 },
 });
 interface HDayTagProps {
   data: HEvent;

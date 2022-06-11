@@ -1,43 +1,46 @@
-import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { memo } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
+  ACTIVE_OPACITY,
   COLORS,
   EventType,
   FONT_SIZE,
   HEventMedicine,
   HEventVisited,
+  STRINGS
 } from '../../common';
+import { navigateTo } from '../../navigator/NavigationServices';
 import { getHoursMinutes } from '../../utils/dateutils';
-import {showLoading} from '../Loading';
-const EventTag = ({data}: TaskTagProps) => {
+export const EventTag = memo(({ data }: TaskTagProps) => {
+
+  const navigateToDetail = () => {
+    if (data.type == EventType.MEDICINE)
+      navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, { _id: data._id })
+    else
+      navigateTo(STRINGS.ROUTE.DIARY.VISITED, { _id: data._id })
+  }
+
   return (
     <TouchableOpacity
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        flex: 1,
-        marginBottom: 7,
-        borderRadius: 10,
-        // @ts-ignore
-        borderColor: COLORS.EVENT_TAG[data?.type].borderColor,
-        // @ts-ignore
-        backgroundColor: COLORS.EVENT_TAG[data?.type].backgroundColor,
-        borderWidth: 1,
-        padding: 7,
-        zIndex: 1,
-      }}
-      activeOpacity={0.6}
-      onPress={() => {
-       
-      }}>
-      <View style={{flex: 5}}>
+      style={StyleSheet.flatten([
+        styles.container,
+        {
+          // @ts-ignore
+          borderColor: COLORS.EVENT_TAG[data?.type].borderColor,
+          // @ts-ignore
+          backgroundColor: COLORS.EVENT_TAG[data?.type].backgroundColor,
+        }])}
+      activeOpacity={ACTIVE_OPACITY}
+      onPress={navigateToDetail}>
+      <View style={styles.container_time}>
         <Text
-          style={{
-            fontSize: FONT_SIZE.HEADER_TAG,
-            fontWeight: '500',
-            // @ts-ignore
-            color: COLORS.EVENT_TAG[data?.type].textColor,
-          }}>
+          style={StyleSheet.flatten([
+            styles.text_title,
+            {
+              // @ts-ignore
+              color: COLORS.EVENT_TAG[data?.type].textColor,
+            },
+          ])}>
           {data?.title}
         </Text>
         {/* {data.type == EventType.MEDICINE ? (
@@ -46,25 +49,29 @@ const EventTag = ({data}: TaskTagProps) => {
           </Text>
         ) : null} */}
         <Text
-          style={{
-            fontSize: FONT_SIZE.CONTENT,
-            // @ts-ignore
-            color: COLORS.EVENT_TAG[data?.type].textColor,
-          }}>
+          style={StyleSheet.flatten([
+            styles.text_descript,
+            {
+              // @ts-ignore
+              color: COLORS.EVENT_TAG[data?.type].textColor,
+            },
+          ])}>
           {data.type == EventType.MEDICINE ? data?.amount : data?.location}
         </Text>
         <Text
-          style={{
-            fontSize: FONT_SIZE.CONTENT,
-            // @ts-ignore
-            color: COLORS.EVENT_TAG[data?.type].textColor,
-          }}>
+          style={StyleSheet.flatten([
+            styles.text_descript,
+            {
+              // @ts-ignore
+              color: COLORS.EVENT_TAG[data?.type].textColor,
+            },
+          ])}>
           {data?.descript}
         </Text>
       </View>
-      <View style={{flex: 1, alignItems: 'center'}}>
+      <View style={styles.container_time}>
         {/* @ts-ignore */}
-        <Text style={{color: COLORS.EVENT_TAG[data?.type].textColor}}>
+        <Text style={{ color: COLORS.EVENT_TAG[data?.type].textColor }}>
           {data.type == EventType.MEDICINE
             ? getHoursMinutes(data?.time)
             : getHoursMinutes(data?.date)}
@@ -72,10 +79,34 @@ const EventTag = ({data}: TaskTagProps) => {
       </View>
     </TouchableOpacity>
   );
-};
+})
 
-export default EventTag;
-
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    marginBottom: 7,
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 7,
+    zIndex: 1,
+  },
+  container_time: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  container_text: {
+    flex: 5,
+  },
+  text_title: {
+    fontSize: FONT_SIZE.HEADER_TAG,
+    fontWeight: '500',
+  },
+  text_descript: {
+    fontSize: FONT_SIZE.CONTENT,
+  }
+})
 interface TaskTagProps {
   data: HEventMedicine | HEventVisited;
 }

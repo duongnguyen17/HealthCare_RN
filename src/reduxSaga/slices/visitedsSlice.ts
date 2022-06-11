@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit"
 import { VisitedsStateType } from "../../type/type"
 
 const initialState: VisitedsStateType = {
-    all: []
+    all: [],
+    tempVisited: null,
 }
 
 const visitedsSlice = createSlice({
@@ -40,6 +41,12 @@ const visitedsSlice = createSlice({
             allTemp[index].location = visited.location
             allTemp[index].date = visited.date
             state.all = allTemp
+        },
+        getVisted: (state, { payload }) => {
+
+        },
+        getVisitedSuccess: (state, { payload }) => {
+            state.tempVisited = payload.visited
         }
     }
 })

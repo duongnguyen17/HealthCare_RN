@@ -18,10 +18,11 @@ export interface AppContextType {
 // }
 export interface MedicinesStateType {
     all: Array<Medicine>,
-    tempMedicine: Medicine | null | undefined
+    tempMedicine: Medicine | null | undefined,
 }
 export interface VisitedsStateType {
-    all: Array<Visited>
+    all: Array<Visited>,
+    tempVisited: Visited | null | undefined,
 }
 export interface EventsStateType {
     all: Array<HEvent>,
