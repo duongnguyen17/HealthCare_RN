@@ -1,6 +1,7 @@
 import { Medicine } from "../../common";
 import { SCHEMA } from "../common";
 import RealmManager from '../'
+import NotifiSchedule from "../../utils/Notifi";
 
 /**get medicines in a month */
 export const getMedicineInMonth = async (date: Date) => {
@@ -70,27 +71,27 @@ export const updateMedicine = async (medicine: any) => {
         })
     } catch (error) {
         console.log("🚀 ~ file: medicine.controller.ts ~ line 56 ~ updateMedicine ~ error", error)
-
     }
 }
 
 export const updateMedicines = async (medicines: Array<Medicine>) => {
-    console.log(`medicines - updateMedicines - medicinesController`, medicines)
+    // console.log(`medicines - updateMedicines - medicinesController`, medicines)
     try {
         const realm = await RealmManager.getRealm()
         let allMedicine = realm.objects<Medicine>(SCHEMA.MEDICINE)
         realm.write(() => {
             medicines.forEach((e1) => {
-                console.log(`e1`, e1)
                 let temp = allMedicine.find((e2) => e2._id == e1._id)
                 if (temp !== undefined) {
                     temp.title = e1.title
                     temp.during = e1.during
                     temp.remind = e1.remind
+                    NotifiSchedule.update(e1)
                 }
                 else {
                     // console.log('object')
                     realm.create(SCHEMA.MEDICINE, e1)
+                    NotifiSchedule.genNotifi(e1)
                 }
             })
         })
@@ -108,5 +109,20 @@ export const searchMedicine = async (keyword: String) => {
         return searchResult
     } catch (error) {
         console.log("🚀 ~ file: medicine.controller.ts ~ line 110 ~ searchMedicine ~ error", error)
+    }
+}
+
+/**
+ * get medicine detail
+ * @param _id id of medicine
+ */
+export const getMedicine = async (_id: number) => {
+    try {
+        const realm = await RealmManager.getRealm()
+        const medicine = realm.objectForPrimaryKey(SCHEMA.MEDICINE, _id)
+        console.log('medicine', medicine)
+        return medicine
+    } catch (error) {
+        console.log("🚀 ~ file: medicine.controller.ts ~ line 123 ~ getMedicine ~ error", error)
     }
 }

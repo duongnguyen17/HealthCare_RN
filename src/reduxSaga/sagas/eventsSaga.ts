@@ -12,7 +12,6 @@ export default [
     takeLatest(eventsAction.getAllEvent.type, getAllEventSaga),
     takeLatest(eventsAction.getEventInMonth.type, getEventInMonthSaga),
     takeLatest(eventsAction.searchEvent.type, searchEventSaga)
-
 ]
 
 function* getAllEventSaga() {
@@ -23,10 +22,7 @@ function* getAllEventSaga() {
         //lấy tất cả visited để xếp vào list event
         //@ts-ignore
         let allVisited = yield call(getAllVisited)
-        // console.log(`allVisited-eventsaga`, allVisited)
         allVisited.forEach((element: any) => {
-            // console.log(`element`, element, { ...element, type: EventType.VISITED })
-
             let eTemp: HEventVisited = {
                 _id: element._id,
                 date: element.date,
@@ -35,7 +31,6 @@ function* getAllEventSaga() {
                 title: element.title,
                 type: EventType.VISITED,
             }
-
             let index = events.findIndex((event) => isEqualDay(event.date, element.date))
             if (index >= 0) {
                 events[index].event.push(eTemp)
@@ -44,6 +39,7 @@ function* getAllEventSaga() {
                 events.push({ date: element.date, event: [eTemp] })
             }
         })
+
         //lấy tất cả các thuốc uống để ren ra event
         //@ts-ignore
         let allMedicines = yield call(getAllMedicine)
@@ -91,8 +87,14 @@ function* getAllEventSaga() {
                     events.push({ date: eMedicine.date, event: [eMedicine] })
                 }
             })
+
+            // sắp xếp lại các event theo thứ tự thời gian
+            events.forEach((value, index) => {
+                //@ts-ignore
+                value.event.sort((a, b) => a.date - b.date)
+            })
         })
-        // console.log(`events`, events)
+
         yield put(eventsAction.getAllEventSuccess({ all: events }))
     } catch (error: any) {
         console.log("🚀 ~ file: eventsSaga.ts ~ line 99 ~ function*getAllEventSaga ~ error", error.message)
@@ -101,6 +103,20 @@ function* getAllEventSaga() {
         hideLoading()
     }
 }
+
+function getAllEventInMonth({ payload }: any) {
+    try {
+        showLoading()
+        
+    } catch (error) {
+        
+    }
+    finally{
+        hideLoading()
+    }
+}
+
+
 // const addEvent = (event: HEventMedicine | HEventVisited) => {
 
 // }
@@ -116,15 +132,12 @@ function* searchEventSaga({ payload }: any) {
         }
         switch (searchType) {
             case SearchType.MEDICINE:
-                //@ts-ignore
                 searchResult = yield call(_searchMedicine, keyword)
                 break;
             case SearchType.VISITED:
-                //@ts-ignore
                 searchResult = yield call(_searchVisited, keyword)
                 break;
             default:
-                //@ts-ignore
                 searchResult = yield call(_searchAll, keyword)
                 break;
         }

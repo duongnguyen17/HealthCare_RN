@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { LayoutAnimation, Platform, UIManager } from 'react-native';
 /**thay đổi giá trị sau 1 khoảng thời gian
  * @param value giá trị
- * @param delay dừng trong khoảng thời gian, mặc định là 500ms
+ * @param delay dừng trong khoảng thời gian, mặc định là 700ms
  */
 export function useDebounceValue<T>(value: T, delay: number = 700): T {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);

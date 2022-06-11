@@ -1,4 +1,3 @@
-import { useFocusEffect } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -6,7 +5,6 @@ import { TabBar, TabView } from 'react-native-tab-view';
 import { COLORS, DIMENS, STRINGS } from '../../../common';
 import ContainerView from '../../../components/ContainerView';
 import { ScreenProps } from '../../../type/type';
-import { setStatusBarBackground } from '../../../utils/statusBarUtils';
 import HeartBeat from './HeartBeat';
 import Moving from './Moving';
 
@@ -17,26 +15,26 @@ const Practice = ({ navigation }: ScreenProps) => {
     { key: STRINGS.PRACTICE_TAB.TITLE.MOVING, title: STRINGS.PRACTICE_TAB.TITLE.MOVING },
     { key: STRINGS.PRACTICE_TAB.TITLE.HEART_BEAT, title: STRINGS.PRACTICE_TAB.TITLE.HEART_BEAT },
   ]);
-  useFocusEffect(() => {
-    switch (index) {
-      case 0:
-        setStatusBarBackground(COLORS.LIGHT_BLUE)
-        break;
+  // useFocusEffect(() => {
+  //   switch (index) {
+  //     case 0:
+  //       setStatusBarBackground(COLORS.LIGHT_BLUE)
+  //       break;
 
-      default:
-        setStatusBarBackground(COLORS.PURPLE)
-        break;
-    }
-  })
+  //     default:
+  //       setStatusBarBackground(COLORS.PURPLE)
+  //       break;
+  //   }
+  // })
   useEffect(() => {
     switch (index) {
       case 0:
-        setStatusBarBackground(COLORS.LIGHT_BLUE)
+        // setStatusBarBackground(COLORS.LIGHT_BLUE)
         setBgColor([COLORS.LIGHT_BLUE, '#e6f2ff', '#ffffff'])
         break;
 
       default:
-        setStatusBarBackground(COLORS.PURPLE)
+        // setStatusBarBackground(COLORS.PURPLE)
         setBgColor([COLORS.PURPLE, '#e6f2ff', '#ffffff'])
         break;
     }
