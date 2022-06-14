@@ -14,14 +14,14 @@ const Practice = ({ navigation }: ScreenProps) => {
   const [index, setIndex] = useState(0);
   const [bgColor, setBgColor] = useState<Array<string>>([COLORS.LIGHT_BLUE, '#e6f2ff', '#ffffff'])
   const [routes] = useState([
-    { key: STRINGS.PRACTICE_TAB.TITLE.MOVING, title: STRINGS.PRACTICE_TAB.TITLE.MOVING },
-    { key: STRINGS.PRACTICE_TAB.TITLE.HEART_BEAT, title: STRINGS.PRACTICE_TAB.TITLE.HEART_BEAT },
+    { key: STRINGS.PRACTICE_TAB.TITLE.MOVING, title: STRINGS.PRACTICE_TAB.TITLE.JOGING },
+    { key: STRINGS.PRACTICE_TAB.TITLE.HEART_BEAT, title: STRINGS.PRACTICE_TAB.TITLE.CYCLING },
   ]);
 
   useEffect(() => {
     switch (index) {
       case 0:
-        setBgColor([COLORS.LIGHT_BLUE, '#e6f2ff', '#ffffff'])
+        setBgColor([COLORS.BLUE, '#e6f2ff', '#ffffff'])
         break;
 
       default:
