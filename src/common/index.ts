@@ -17,6 +17,7 @@ export const STRINGS = {
     CONTENT_DISPLAY: "Nội dung hiển thị",
   },
   REPORT_TAB: {
+    FOOT_STEP: "Bước chân",
     SEE_MORE: "Xem thêm",
     SOME_PRODUCTS_FOR_YOU: "Một số sản phẩm phù hợp cho bạn",
     SLEEP: "Ngủ",
@@ -50,6 +51,8 @@ export const STRINGS = {
     TITLE: {
       OVER_VIEW: 'Tổng quan',
       MOVING: 'Di chuyển',
+      JOGING: 'Đi bộ',
+      CYCLING: "Đạp xe",
       HEART_BEAT: 'Nhịp tim',
     },
   },
@@ -94,11 +97,12 @@ export const COLORS = {
   BLACK: '#000000',
   ORANGE: '#F9593A',
   GREEN: '#0bb895',
-  LIGHT_GREEN: '#0FD186',
-  BLUE: '#047AFF',
-  PURPLE: "#806BF8",
+  LIGHT_GREEN: '##00c474',
+  BLUE: '#007fff',
+  PURPLE: "#9032ff",
   WHITE: '#fff',
-  LIGHT_BLUE: '#3DBBED',
+  LIGHT_BLUE: '#2db6eb',
+  LIGHT_BLUE_1: '#e8f7fd',
   DARK_BLUE: '#182537',
   GRAY_DECOR: '#cccccc',
   GRAY_TEXT_1: '#cccccc',
@@ -261,4 +265,8 @@ export const EVENT_ACTION = {
 
 export const ROUTE_KEY_PARAM = {
   VISITED_ACTION: "VISITED_ACTION",
+}
+
+export const IMG_SOURCE = {
+  IMG_MAP: require('../../assets/images/img_map.png')
 }

@@ -59,9 +59,9 @@ const TabNavigator = () => {
           }
           return icon
         },
-        tabBarActiveTintColor: COLORS.PURPLE,
+        tabBarActiveTintColor: COLORS.BLUE,
         tabBarInactiveTintColor: COLORS.GRAY_DECOR,
-        tabBarStyle: { height: 56 },
+        tabBarStyle: { height: 56, backgroundColor:COLORS.LIGHT_BLUE_1 },
         tabBarLabelStyle: { fontSize: 14 },
       })}>
       <Tab.Screen component={Report} name={STRINGS.ROUTE.MAIN_TABS.REPORT} />
