@@ -270,3 +270,10 @@ export const ROUTE_KEY_PARAM = {
 export const IMG_SOURCE = {
   IMG_MAP: require('../../assets/images/img_map.png')
 }
+
+
+export const STORAGE_KEY = {
+  IS_LOGIN: 'IS_LOGIN',
+  TOKEN: 'TOKEN',
+  REFRESH_TOKEN: 'REFRESH_TOKEN',
+}

@@ -28,7 +28,17 @@ export interface EventsStateType {
     all: Array<HEvent>,
     searchResult: Array<HEvent>,
 }
+
+export interface AuthStateType {
+    isLogin: boolean,
+}
+
+export interface HealthStateType {
+    isAuthorize: boolean,
+}
 export interface RootStateType {
+    authState: AuthStateType,
+    healthState: HealthStateType,
     medicineState: MedicinesStateType,
     visitedState: VisitedsStateType,
     eventState: EventsStateType
@@ -67,3 +77,12 @@ export interface NavigationServiceConfig {
     navigator?: NavigationContainerRef<{}>
 }
 
+export interface ApiResponse {
+    error?: object,
+    data?: any
+}
+
+export interface ProcessResponseType {
+    error?: object,
+    data?: any
+}

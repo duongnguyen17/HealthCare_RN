@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,30 +7,59 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 
-import {ScreenProps} from '../../type/type';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { ScreenProps } from '../../type/type';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import {COLORS, FONT_SIZE, STRINGS} from '../../common';
+import { COLORS, DIMENS, FONT_SIZE, STRINGS } from '../../common';
 import HButton from '../../components/HButton';
 import Frame from '../../components/Frame';
 import { navigateTo } from '../../navigator/NavigationServices';
+import LinearGradient from 'react-native-linear-gradient';
+import { validatePhone, validatePassword } from '../../utils/validate'
+import { useDispatch } from 'react-redux';
+import { authAction } from '../../reduxSaga/slices/authSlice';
 
-const LoginScreen = ({navigation}: ScreenProps) => {
-  const [phonenumber, setPhonenumber] = useState<string>('');
+
+
+const LoginScreen = ({ navigation }: ScreenProps) => {
+
+  const dispatch = useDispatch()
+
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [submitCheck, setSubmitCheck] = useState(false);
-  const disableSave = phonenumber === '' || password === '';
+  const disableSave = phoneNumber === '' || password === '';
   const passwordRef = useRef<any>(null);
-  const onLogin = () => {};
+
+  const onLogin = () => {
+    dispatch(authAction.login({ phoneNumber: phoneNumber, password: password, type: 'phone' }))
+  };
+
+  useEffect(() => {
+    setSubmitCheck(validatePhone(phoneNumber) && validatePassword(password))
+  }, [
+    phoneNumber, password
+  ])
+
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}
-      keyboardShouldPersistTaps="handled">
+    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+      <LinearGradient
+        style={{
+          height: DIMENS.SCREEN_HEIGHT,
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 0,
+        }}
+        colors={[COLORS.LIGHT_BLUE, '#e6f2ff', '#ffffff']}
+        start={{ x: 0.5, y: 0.25 }}
+        end={{ x: 0, y: 1.0 }}
+      />
       <View style={styles.container}>
         <View style={styles.logoView}>
           <Text>Logo, slogan</Text>
@@ -38,15 +67,16 @@ const LoginScreen = ({navigation}: ScreenProps) => {
         <Frame style={styles.contentView}>
           <View style={styles.backgroundMain}>
             {/* <Text style={styles.login}>Đăng nhập</Text> */}
-
+            {/* @ts-ignore */}
             <TextInput
               label="Số điện thoại của bạn"
-              value={phonenumber}
-              onChangeText={setPhonenumber}
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
               mode="outlined"
+              keyboardType='phone-pad'
               style={styles.phoneInput}
             />
-
+            {/* @ts-ignore */}
             <TextInput
               label="Mật khẩu"
               value={password}
@@ -63,124 +93,66 @@ const LoginScreen = ({navigation}: ScreenProps) => {
             />
             <Text
               style={styles.forgetPass}
-              onPress={() => navigateTo(STRINGS.SCREEN.AUTH.FORGOT_PASSWORD)}>
+              onPress={() => navigateTo(STRINGS.ROUTE.AUTH.FORGOT_PASSWORD)}>
               Quên mật khẩu?
             </Text>
             <HButton
+              style={{ marginHorizontal: 40 }}
               title="Đăng nhập"
               textStyle={styles.textLogin}
               type={!disableSave && submitCheck ? 'normal' : 'disabled'}
               disabled={!disableSave && submitCheck ? false : true}
               onPress={onLogin}
             />
-            <View style={{width: '100%', alignItems: 'center'}}>
-              <View style={styles.divider}></View>
+            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-around', flexDirection: "row" }}>
+              <View style={styles.divider} />
               <Text style={styles.or}>hoặc</Text>
+              <View style={styles.divider} />
+
             </View>
             <View style={styles.thirdloginView}>
-              <TouchableOpacity onPress={() => {}}>
+              {/* <TouchableOpacity onPress={() => { }}>
                 <Image
                   source={require('../../../assets/images/facebook_icon.png')}
                   style={styles.logoIcon}
                 />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}}>
+              </TouchableOpacity> */}
+              <TouchableOpacity onPress={() => { }}>
                 <Image
                   source={require('../../../assets/images/google_icon.png')}
                   style={styles.logoIcon}
                 />
               </TouchableOpacity>
-              {Platform.OS === 'ios' && (
-                <TouchableOpacity onPress={() => {}}>
+              {/* {Platform.OS === 'ios' && (
+                <TouchableOpacity onPress={() => { }}>
                   <Image
                     source={require('../../../assets/images/apple_icon.png')}
                     style={styles.logoIcon}
                   />
                 </TouchableOpacity>
-              )}
-              <TouchableOpacity onPress={() => {}}>
+              )} */}
+              {/* <TouchableOpacity onPress={() => { }}>
                 <Image
                   source={require('../../../assets/images/zalo_icon.png')}
                   style={styles.logoIcon}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
-            <View style={styles.line} />
-            <Text style={styles.noAccText}>
-              Bạn chưa có tài khoản?{' '}
-              <Text
-                style={styles.signUpText}
-                onPress={() => navigateTo(STRINGS.ROUTE.AUTH.REGISTER)}>
-                Đăng ký
-              </Text>
-            </Text>
           </View>
         </Frame>
+        <View style={{ position: 'absolute', bottom: 4 }}>
+          <View style={styles.line} />
+          <Text style={styles.noAccText}>
+            Bạn chưa có tài khoản?{' '}
+            <Text
+              style={styles.signUpText}
+              onPress={() => navigateTo(STRINGS.ROUTE.AUTH.REGISTER)}>
+              Đăng ký
+            </Text>
+          </Text>
+        </View>
       </View>
     </KeyboardAwareScrollView>
-
-    // <SafeAreaView style={styles.container}>
-    //   <View style={styles.logoContainer}>
-    //     <View style={styles.logo}>
-    //       <Text>Logo, slogan</Text>
-    //     </View>
-    //   </View>
-    //   <View style={styles.form}>
-    //     <TextInput
-    //       mode={'outlined'}
-    //       keyboardType={'phone-pad'}
-    //       label="Phonenumber"
-    //       value={phonenumber}
-    //       onChangeText={text => {
-    //         setPhonenumber(text);
-    //       }}
-    //     />
-    //     <TextInput
-    //       mode={'outlined'}
-    //       label="Password"
-    //       value={password}
-    //       secureTextEntry={isShowPassword}
-    //       onChangeText={text => {
-    //         setPassword(text);
-    //       }}
-    //       right={
-    //         <TextInput.Icon
-    //           name={isShowPassword ? 'eye-outline' : 'eye-off-outline'}
-    //           onPress={() => {
-    //             setIsShowPassword(!isShowPassword);
-    //           }}
-    //         />
-    //       }
-    //     />
-    //   </View>
-    //   <Button
-    //     title="Login"
-    //     color="blue"
-    //     onPress={() => {
-    //       console.log(`phone, pass:`, phonenumber, password);
-    //     }}
-    //   />
-    //   <View style={styles.thirdPartyLoginContainer}>
-    //     <TouchableOpacity style={styles.thirdPartyLogin}>
-    //       <View style={styles.logoThirPart} />
-    //     </TouchableOpacity>
-    //     <TouchableOpacity>
-    //       <View style={styles.logoThirPart} />
-    //     </TouchableOpacity>
-    //   </View>
-    //   <View style={styles.footer}>
-    //     <Text>
-    //       Have no account?{' '}
-    //       <Text
-    //         style={{color: 'blue'}}
-    //         onPress={() => {
-    //           navigate(SCREEN.AUTH.REGISTER);
-    //         }}>
-    //         Signup
-    //       </Text>
-    //     </Text>
-    //   </View>
-    // </SafeAreaView>
   );
 };
 
@@ -188,10 +160,8 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-around',
-    flex: 2,
+    flex: 1,
     alignItems: 'center',
-    marginHorizontal: 16,
   },
 
   logoView: {
@@ -200,10 +170,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '50%',
     height: 100,
+    marginTop: '16%'
   },
   contentView: {
-    marginHorizontal: 30,
-    height: '60%',
+    marginHorizontal: 60,
+    height: 400,
   },
   backgroundMain: {
     // backgroundColor: '#fff',
@@ -220,6 +191,7 @@ const styles = StyleSheet.create({
   },
   forgetPass: {
     alignSelf: 'flex-end',
+    marginEnd: 40,
     paddingTop: 10,
     paddingBottom: 16,
     color: COLORS.PRIMARY_COLOR,
@@ -233,25 +205,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: '#ACACAC',
     fontSize: 14,
-    backgroundColor: '#fff',
     paddingHorizontal: 8,
   },
   thirdloginView: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     width: '100%',
     paddingHorizontal: 28,
   },
   line: {
-    width: '150%',
-    height: 0.5,
-    backgroundColor: '#ACACAC',
+    width: '100%',
+    height: 1,
+    backgroundColor: COLORS.BLACK,
     marginTop: 32,
     marginBottom: 9,
   },
   noAccText: {
     fontSize: 14,
-    color: '#5F6368',
+    color: COLORS.BLACK,
   },
   signUpText: {
     color: COLORS.PRIMARY_COLOR,
@@ -279,11 +250,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   divider: {
-    width: '100%',
-    borderTopColor: '#ACACAC',
+    width: '30%',
+    borderTopColor: COLORS.GRAY_TEXT_2,
     borderTopWidth: 0.5,
-    position: 'absolute',
-    top: 30,
   },
   phoneInput: {
     marginTop: 24,

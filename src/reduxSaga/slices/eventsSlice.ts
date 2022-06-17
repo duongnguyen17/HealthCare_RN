@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { HEvent } from "../../common"
-import { EventsStateType } from "../../type/type"
+import { createSlice } from "@reduxjs/toolkit";
+import { HEvent } from "../../common";
+import { EventsStateType } from "../../type/type";
 
 
 const initialState: EventsStateType = {

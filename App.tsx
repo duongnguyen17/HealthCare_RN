@@ -1,14 +1,18 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Intro from './src/screens/Intro/Intro';
-import { Provider as PaperProvider } from 'react-native-paper';
-import MainNavigator from './src/navigator/MainNavigator';
-import { Loading } from './src/components/Loading';
-import { Provider } from 'react-redux';
-import store from './src/reduxSaga/store';
-import AuthNavigator from './src/navigator/AuthNavigator';
-import { HAlert } from './src/components/HAlert';
+import React, { useEffect, useRef, useState } from 'react';
 import { Platform, StatusBar, UIManager } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { STORAGE_KEY } from './src/common';
+import { HAlert } from './src/components/HAlert';
+import { Loading } from './src/components/Loading';
+import AuthNavigator from './src/navigator/AuthNavigator';
+import MainNavigator from './src/navigator/MainNavigator';
 import RealmManager from './src/realm';
+import { authAction } from './src/reduxSaga/slices/authSlice';
+import store from './src/reduxSaga/store';
+import Intro from './src/screens/Intro/Intro';
+import { RootStateType } from './src/type/type';
+import Storage from './src/utils/Storage';
 
 // để sử dụng LayoutAnimation
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
@@ -16,15 +20,22 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const AppRoot = () => {
-  let isLoggin = true;
+  const dispatch = useDispatch()
+  let isLogin = useSelector((state: RootStateType) => state.authState.isLogin)
+
   const [isIntro, setIsIntro] = useState<boolean>(true)
+  useEffect(() => {
+    if (isLogin == false) {
+      dispatch(authAction.verifyToken())
+    }
+  }, [])
 
   if (isIntro) {
     return <Intro setIsIntro={setIsIntro} />
   }
   return (
     <React.Fragment>
-      {isLoggin ? <MainNavigator /> : <AuthNavigator />}
+      {isLogin ? <MainNavigator /> : <AuthNavigator />}
       <Loading />
       <HAlert />
     </React.Fragment>
