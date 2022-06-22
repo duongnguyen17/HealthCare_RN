@@ -38,7 +38,6 @@ const Diary = () => {
   const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
   useEffect(() => {
     if (isFocused) {
-      // setStatusBarBackground(COLORS.LIGHT_BLUE)
       dispatch(eventsAction.getAllEvent())
     }
   }, [isFocused]);
@@ -159,7 +158,7 @@ const Diary = () => {
         eventType={eventType}
         setEventType={setEventType}
       />
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: COLORS.WHITE }}>
         {data.length == 0 ? (
           <Text
             style={{
@@ -228,7 +227,7 @@ export interface DateData {
 
 interface EventVisit { }
 interface EventMedicine {
-  title: 'Panadon';
+  title: string;
   type: EventType;
   visited: VisitedType;
   time: string;

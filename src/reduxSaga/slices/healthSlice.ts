@@ -1,8 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { HealthStateType } from "../../type/type";
 
-const initialState: any = {
-    isAuthorize: false,
-
+const initialState: HealthStateType = {
+    isAuthorized: false,
+    goalSteps: 4000,
+    today: undefined,
+    overview: null,
+    steps: undefined,
+    sleepAnalysis: undefined,
+    heartbeat: undefined,
+    distances: undefined,
+    calories: undefined,
 }
 
 const healthSlice = createSlice({
@@ -11,11 +19,17 @@ const healthSlice = createSlice({
     reducers: {
         onAuthorize: () => { },
         onAuthorizeSuccess: (state, { payload }) => {
-            state.isAuthorize = payload.isAuthorize
+            state.isAuthorized = payload.isAuthorized
         },
         checkAuthorize: () => { },
         checkAuthSuccess: (state, { payload }) => {
-            state.isAuthorize = payload.isAuthorize
+            state.isAuthorized = payload.isAuthorized
+        },
+        getOverviewToday: () => {
+
+        },
+        getOverviewTodaySuccess: (state, { payload }) => {
+            state.today = payload.today
         },
     }
 })

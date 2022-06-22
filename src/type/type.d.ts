@@ -1,7 +1,8 @@
 import { NavigationProp, RouteProp } from "@react-navigation/core";
 import { NavigationContainerRef } from "@react-navigation/native";
 import React from "react";
-import { Animated, ButtonProps, GestureResponderEvent, PressableProps, TextInputProps, TextStyle, ViewProps, ViewStyle } from "react-native";
+import { GestureResponderEvent, PressableProps, TextInputProps, TextStyle, ViewProps, ViewStyle } from "react-native";
+import { CalorieResponse, DistanceResponse, HeartRateResponse, SleepSampleResponse, StepsResponse } from "react-native-google-fit";
 import { HEvent, Medicine, Visited } from "../common";
 
 export interface AuthReducerType {
@@ -31,17 +32,52 @@ export interface EventsStateType {
 
 export interface AuthStateType {
     isLogin: boolean,
+    error: string,
 }
 
+export interface UserStateType {
+    profile: UserProfileType
+}
+
+export interface UserProfileType {
+    username: string,
+    avatar: string,
+}
+
+export interface DeviceStateType {
+    deviceConnecting?: Device | null,
+    listDeviceConnected?: Array<Device>,
+}
+
+export interface Device {
+    id: string,
+    name: string,
+}
 export interface HealthStateType {
-    isAuthorize: boolean,
+    isAuthorized: boolean,
+    goalSteps?: number,
+    today?: {
+        processSteps?: number,
+        steps: Array<StepsResponse>,
+        sleepAnalysis: Array<SleepSampleResponse>,
+        heartbeat: Array<HeartRateResponse>,
+        distances: Array<DistanceResponse>,
+        calories: Array<CalorieResponse>,
+    },
+    overview?: any,
+    steps?: StepsResponse,
+    sleepAnalysis?: SleepSampleResponse,
+    heartbeat?: HeartRateResponse,
+    distances?: DistanceResponse,
+    calories?: CalorieResponse,
 }
 export interface RootStateType {
     authState: AuthStateType,
     healthState: HealthStateType,
     medicineState: MedicinesStateType,
     visitedState: VisitedsStateType,
-    eventState: EventsStateType
+    eventState: EventsStateType,
+    userState: UserStateType,
 }
 export interface ScreenProps extends ViewProps {
     navigation?: NavigationProp<any, any>,
@@ -78,7 +114,8 @@ export interface NavigationServiceConfig {
 }
 
 export interface ApiResponse {
-    error?: object,
+    message?: string,
+    code?: number,
     data?: any
 }
 

@@ -4,6 +4,7 @@ import { AuthStateType } from "../../type/type";
 
 const initialState: AuthStateType = {
     isLogin: false,
+    error: '',
 }
 
 const authSlice = createSlice({

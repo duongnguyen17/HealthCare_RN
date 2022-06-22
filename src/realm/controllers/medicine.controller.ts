@@ -91,7 +91,7 @@ export const updateMedicines = async (medicines: Array<Medicine>) => {
                 else {
                     // console.log('object')
                     realm.create(SCHEMA.MEDICINE, e1)
-                    NotifiSchedule.genNotifi(e1)
+                    NotifiSchedule.genNotifiMedicine(e1)
                 }
             })
         })

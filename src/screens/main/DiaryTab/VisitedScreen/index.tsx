@@ -2,7 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import React, { useEffect, useState } from 'react';
 import {
   FlatList, Keyboard, KeyboardAvoidingView,
-  Platform, Text,
+  Platform, StyleSheet, Text,
   TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,9 +10,7 @@ import {
   AlertType,
   COLORS,
   FONT_SIZE,
-  Medicine,
-  ROUTE_KEY_PARAM,
-  SearchType,
+  Medicine, SearchType,
   STRINGS, Visited
 } from '../../../../common';
 import { showAlert } from '../../../../components/HAlert';
@@ -43,6 +41,7 @@ const VisitedScreen = (props: ScreenProps) => {
   const [medicines, setMedicines] = useState<Array<Medicine>>([]);
   const [descript, setDescript] = useState<string>('');
   const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [modeCalendar, setModeCalendar] = useState('date')
 
   useEffect(() => {
     if (_id != undefined) {
@@ -118,18 +117,24 @@ const VisitedScreen = (props: ScreenProps) => {
     dispatch(medicinesAction.addTempMedicine({ medicine: null }))
   };
 
-  const onChange = (event: any, selectedDate: any) => {
+  const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+    setModeCalendar("time")
   };
-  
+  const onChangeTime = (event: any, selectedTime: any) => {
+    const currentTime = selectedTime || date;
+    setDate(new Date(date).setTime(new Date(currentTime).getTime()));
+    setDatePickerVisible(false);
+    setModeCalendar("date")
+  };
+
   const gotoSearchScreen = (type: SearchType) => {
     navigateTo(STRINGS.ROUTE.SEARCH, { type: type });
   };
 
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
-      // hiện cảnh báo: không được để trống title
       showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
     } else
       navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
@@ -241,16 +246,18 @@ const VisitedScreen = (props: ScreenProps) => {
               <Text style={{ marginLeft: 50 }}>
                 {new Date(date).toString().slice(0, 10)}
               </Text>
+              <Text style={styles.text_time}>{new Date(date).toString().slice(16, 21)}</Text>
             </TouchableOpacity>
           </TagWithIcon>
           {datePickerVisible && (
             <DateTimePicker
               // style={{backgroundColor: '#fff'}}
               //@ts-ignore
-              value={date}
-              mode={'date'}
-              display="spinner"
-              onChange={onChange}
+              value={new Date(date)}
+              //@ts-ignore
+              mode={modeCalendar}
+              display="default"
+              onChange={modeCalendar == "date" ? onChangeDate : onChangeTime}
             />
           )}
           <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
@@ -296,3 +303,11 @@ const VisitedScreen = (props: ScreenProps) => {
   );
 };
 export default VisitedScreen;
+
+
+const styles = StyleSheet.create({
+  text_time: {
+    fontSize: FONT_SIZE.CONTENT,
+    marginLeft: 6,
+  },
+})

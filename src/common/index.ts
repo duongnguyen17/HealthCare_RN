@@ -84,6 +84,7 @@ export const STRINGS = {
 }
 
 export const COLORS = {
+  BACKGROUND: '#ffffff',
   PRIMARY_COLOR: '#F36744',
   BORDER_BOTTOM_COLOR: '#ABABAB',
   PLACEHOLDER_TEXT_COLOR: '#ABABAB',
@@ -276,4 +277,7 @@ export const STORAGE_KEY = {
   IS_LOGIN: 'IS_LOGIN',
   TOKEN: 'TOKEN',
   REFRESH_TOKEN: 'REFRESH_TOKEN',
+  USE_GOOGLEFIT: 'USE_GOOGLEFIT',
 }
+
+export const IMG_DEFAULT_AVATAR = require('../../assets/images/img_default_avatar.png')

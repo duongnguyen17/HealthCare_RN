@@ -8,4 +8,6 @@ const processResponse = (promise: Promise<ApiResponse>) => {
 
 export const login = (params: { phoneNumber: string, password: string }) => processResponse(HAxios.post(Urls.LOGIN, params))
 
-export const verifyToken = (params: { token: string, refreshToken: string }) => processResponse(HAxios.post(Urls.VERIFY_TOKEN, params))
+export const verifyToken = (params: { refreshToken: string }) => processResponse(HAxios.post(Urls.VERIFY_TOKEN, params))
+
+export const getProfile = () => processResponse(HAxios.get(Urls.GET_INFOR))

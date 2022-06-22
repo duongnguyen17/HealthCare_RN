@@ -3,6 +3,7 @@ import { AlertType } from "../../common";
 import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
 import { addVisited, deleteVisited, getAllVisited, updateVisited, getVisited } from "../../realm/controllers/visited.controller";
+import NotifiSchedule from "../../utils/Notifi";
 import { visitedsAction } from "../slices/visitedsSlice";
 
 
@@ -34,7 +35,7 @@ function* addVisitedSaga(action: any) {
         // console.log(`visited`, visited)
         showLoading()
         yield call(addVisited, visited)
-
+        NotifiSchedule.genNotifiVisited(visited)
         //tạm thời thì sau khi thêm thì add luôn víited kia vào víitedState
         yield put(visitedsAction.addVisitedSuccess({ visited }))
     } catch (error) {

@@ -1,5 +1,5 @@
 import PushNotification, { PushNotificationScheduleObject } from "react-native-push-notification";
-import { AlertType, CHANNEL_ID, Medicine, TIMEOUT_NOTIFI } from "../common";
+import { AlertType, CHANNEL_ID, Medicine, TIMEOUT_NOTIFI, Visited } from "../common";
 import { showAlert } from "../components/HAlert";
 import { addDays, setHoursMinutes } from "./dateutils";
 
@@ -20,10 +20,11 @@ const NotifiSchedule = {
     removeAllDeliveredNotifications: function () {
         PushNotification.removeAllDeliveredNotifications()
     },
-    genNotifi,
+    genNotifiMedicine,
+    genNotifiVisited,
 }
 
-function genNotifi(medicine: Medicine) {
+function genNotifiMedicine(medicine: Medicine) {
     let reminds = medicine.remind
     let now = Date.now()
     if (reminds.length == 0 || addDays(medicine.start, medicine.during).getTime() - now < 0) {
@@ -55,5 +56,28 @@ function genNotifi(medicine: Medicine) {
         })
     }
 }
+
+function genNotifiVisited(visited: Visited) {
+    let now = Date.now()
+    if (new Date(visited.date).getTime() - now < 0) {
+        console.log("Không cần tạo nhắc nhở")
+        showAlert(AlertType.WARN, "Không có nhắc nhở nào được tạo")
+        return
+    } else {
+        let notifiObject: PushNotificationScheduleObject = {
+            repeatTime: 1,
+            allowWhileIdle: false,
+            message: visited.title,
+            date: new Date(visited.date),
+            channelId: CHANNEL_ID.MEDICINE,
+            timeoutAfter: TIMEOUT_NOTIFI,
+            playSound: true,
+            vibrate: true,
+            vibration: 300,
+        }
+        NotifiSchedule.create(notifiObject)
+    }
+}
+
 
 export default NotifiSchedule

@@ -37,7 +37,7 @@ function* addMedicineSaga(action: any) {
         const medicine = action.payload
         showLoading()
         yield call(addMedicine, medicine)
-        NotifiSchedule.genNotifi(medicine)
+        NotifiSchedule.genNotifiMedicine(medicine)
         //tạm thời thì sau khi thêm thì add luôn víited kia vào visitedState
         yield put(medicinesAction.addMedicineSuccess({ medicine }))
     } catch (error) {

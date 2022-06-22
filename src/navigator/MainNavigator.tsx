@@ -25,7 +25,7 @@ const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName={STRINGS.ROUTE.MAIN_TABS.REPORT}
+      initialRouteName={STRINGS.ROUTE.MAIN_TABS.DIARY}
       screenOptions={({ route }) => ({
         headerShown: false,
 

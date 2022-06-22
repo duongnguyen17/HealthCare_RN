@@ -1,5 +1,4 @@
-import { Results } from "realm";
-import { put, takeLatest } from "redux-saga/effects";
+import { put, takeLatest, call } from "redux-saga/effects";
 import { AlertType, STORAGE_KEY } from "../../common";
 import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
@@ -27,7 +26,7 @@ function* loginSaga(action: any) {
                 let data = null
                 let error = null
 
-                const response: ProcessResponseType = yield login({ phoneNumber: params.phone!, password: params.password! })
+                const response: ProcessResponseType = yield login({ phoneNumber: params.phoneNumber!, password: params.password! })
                 data = response.data
                 error = response.error
 
@@ -82,10 +81,13 @@ function* verifyTokenSaga(action: any) {
         const token = yield Storage.getItem(STORAGE_KEY.TOKEN)
         //@ts-ignore
         const refreshToken = yield Storage.getItem(STORAGE_KEY.REFRESH_TOKEN)
-        //@ts-ignore
-        const result = yield verifyToken({ token, refreshToken })
-        if (result?.data?.logined) {
-            yield put(authAction.verifyTokenSuccess({ isLogin: true }))
+        if ((token != null || token != undefined) && (refreshToken != null || refreshToken != undefined)) {
+            HAxios.defaults.headers.common['Authorization'] = token
+            //@ts-ignore
+            const result = yield call(verifyToken, { refreshToken })
+            if (result?.data?.logined) {
+                yield put(authAction.verifyTokenSuccess({ isLogin: true }))
+            }
         }
         else yield put(authAction.verifyTokenSuccess({ isLogin: false }))
 
@@ -100,13 +102,13 @@ function* verifyTokenSaga(action: any) {
 
 
 const _saveAuthInformation = async (data: any) => {
-    const BearerToken = `Bearer ${data.access_token}`
+    const BearerToken = `Bearer ${data.token}`
     HAxios.defaults.headers.common['Authorization'] = BearerToken
 
     // save token in sinfo
     await Storage.setItem(STORAGE_KEY.IS_LOGIN, true)
     await Storage.setItem(STORAGE_KEY.TOKEN, BearerToken)
-    await Storage.setItem(STORAGE_KEY.REFRESH_TOKEN, data.refresh_token)
+    await Storage.setItem(STORAGE_KEY.REFRESH_TOKEN, data.refreshToken)
 }
 
 

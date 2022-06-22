@@ -26,7 +26,7 @@ HAxios.interceptors.response.use(
         return response
     },
     (error) => {
-        console.log("🚀 ~ file: HAxios.ts ~ line 27 ~ error", error?.response?.status)
+        console.log("🚀 ~ file: HAxios.ts ~ line 27 ~ error", error.message)
         return error?.response
     }
 );

@@ -153,7 +153,7 @@ const MedicineScreen = (props: ScreenProps) => {
       isNew={item.isNew}
     />
   )
-  // console.log(`reminds`, reminds);
+  
   return (
     <TouchableWithoutFeedback
       onPress={() => {
