@@ -1,12 +1,19 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { STRINGS } from "../../../common";
+import { navigateTo } from "../../../navigator/NavigationServices";
 import { TabViewProps } from "../../../type/type";
 import PracticeItem from "./components/PracticeItem";
 
 const Moving = (props: TabViewProps) => {
+
+  const gotoRunningScreen = () => {
+    navigateTo(STRINGS.ROUTE.RUNNING)
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <PracticeItem />
+      <PracticeItem onPress={gotoRunningScreen} />
     </SafeAreaView>
   )
 }

@@ -16,10 +16,12 @@ import Profile from '../screens/main/ProfileTab';
 import Report from '../screens/main/ReportTab/index';
 import MedicineScreen from '../screens/main/DiaryTab/MedicineScreen';
 import ReportDetail from '../screens/ReportDetail'
+import RunningScreen from '../screens/RunningScreen';
 import SearchScreen from '../screens/SearchScreen';
 import VisitedScreen from '../screens/main/DiaryTab/VisitedScreen';
 import { setNavigator } from './NavigationServices';
 import Storage from '../utils/Storage';
+import ProfileScreen from '../screens/ProfileScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
@@ -60,8 +62,8 @@ const TabNavigator = () => {
           return icon
         },
         tabBarActiveTintColor: COLORS.BLUE,
-        tabBarInactiveTintColor: COLORS.GRAY_DECOR,
-        tabBarStyle: { height: 56, backgroundColor:COLORS.LIGHT_BLUE_1 },
+        tabBarInactiveTintColor: COLORS.GRAY_TEXT_2,
+        tabBarStyle: { height: 56, backgroundColor: COLORS.LIGHT_BLUE_1 },
         tabBarLabelStyle: { fontSize: 14 },
       })}>
       <Tab.Screen component={Report} name={STRINGS.ROUTE.MAIN_TABS.REPORT} />
@@ -110,14 +112,14 @@ const MainNavigator = () => {
             title: STRINGS.REPORT_TAB.HEART_RATE,
             headerLeft: () => (
               <TouchableOpacity
-                style={{ backgroundColor: 'gray', height: '100%' }}
+                style={{ height: '100%' }}
                 onPress={() => {
                   navigation.goBack();
                 }}>
                 <MaterialIcons
                   name="arrow-back-ios"
                   size={23}
-                  color={COLORS.GRAY_DECOR}
+                  color={COLORS.BLACK}
                 />
               </TouchableOpacity>
             ),
@@ -141,6 +143,33 @@ const MainNavigator = () => {
           component={VisitedScreen}
           name={STRINGS.ROUTE.DIARY.VISITED}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={RunningScreen}
+          name={STRINGS.ROUTE.RUNNING}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={ProfileScreen}
+          name={STRINGS.ROUTE.PROFILE}
+          options={({ navigation }) => ({
+            title: STRINGS.PROFILE_SCREEN.PROFILE,
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ height: '100%' }}
+                onPress={() => {
+                  navigation.goBack();
+                }}>
+                <MaterialIcons
+                  name="arrow-back-ios"
+                  size={23}
+                  color={COLORS.BLACK}
+                />
+              </TouchableOpacity>
+            ),
+            headerTitleStyle: { fontSize: FONT_SIZE.BIG_HEADER },
+            headerTitleAlign: 'center',
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,14 +1,14 @@
 import React from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import HIcon, { HIconProps } from '../../../../components/HIcon';
-import Tag, {TagProps} from './Tag';
+import Tag, { TagProps } from './Tag';
 const TagWithIcon = ({
   children,
   styles,
   iconName,
   iconFont,
   iconColor,
-  iconSize = 28,
+  iconSize = 24,
 }: TagWithIconProps) => (
   <Tag styles={styles}>
     <View
@@ -16,7 +16,7 @@ const TagWithIcon = ({
         flexDirection: 'row',
         alignItems: 'center',
       }}>
-      <View style={{flex: 1, alignItems: 'center'}}>
+      <View style={{ flex: 1, alignItems: 'center' }}>
         {iconName && iconFont && (
           <HIcon
             name={iconName}
@@ -26,7 +26,7 @@ const TagWithIcon = ({
           />
         )}
       </View>
-      <View style={{flex: 6}}>{children}</View>
+      <View style={{ flex: 8 }}>{children}</View>
     </View>
   </Tag>
 );

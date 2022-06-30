@@ -54,7 +54,7 @@ function* getOverviewTodaySaga() {
         let today = yield call(_getIndexPeriod, opt)
         let processSteps = today?.steps[2]?.steps[0]?.value / 40
         today.processSteps = processSteps
-        // console.log('today', JSON.stringify(today))
+        console.log('today', today)
         yield put(healthAction.getOverviewTodaySuccess({ today }))
     } catch (error) {
         console.log('getOverviewTodaySaga', error)
@@ -73,8 +73,11 @@ const _getIndexPeriod = async (opt: StartAndEndDate & { basalCalculation?: boole
         let calories = await HGoogleFit.getDailyCalorieSamples(opt)
         //@ts-ignore
         let steps = await HGoogleFit.getDailyStepCountSamples(opt)
-        //@ts-ignore
-        return { distances, calories, steps }
+        // //@ts-ignore
+        // let sleep = await HGoogleFit.getSleepSamples(opt)
+        //@ts -ignore
+        let heartbeat = await HGoogleFit.getHeartRateSamples(opt)
+        return { distances, calories, steps, heartbeat }
     } catch (error) {
         console.log('_getDailyIndex ERROR', error)
     }

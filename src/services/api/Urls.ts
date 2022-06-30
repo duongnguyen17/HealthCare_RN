@@ -12,8 +12,8 @@ const URLS = {
     REFRESH_TOKEN: `${ROUTE.AUTH}/refresh_token`,
     GET_INFOR: `${ROUTE.USER}`,
     CHANGE_INFOR: `${ROUTE.USER}/changeInfor`,
-    VERIFY_TOKEN: `${ROUTE.USER}/verify_token`
-
+    VERIFY_TOKEN: `${ROUTE.USER}/verify_token`,
+    UPDATE_PROFILE: `${ROUTE.USER}/changeInfor`,
 }
 
 export default URLS

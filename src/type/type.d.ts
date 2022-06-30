@@ -30,18 +30,28 @@ export interface EventsStateType {
     searchResult: Array<HEvent>,
 }
 
+export interface SearchStateType {
+    searchResult: Array<Medicine | Visited>
+}
+
 export interface AuthStateType {
+    _id: string,
     isLogin: boolean,
     error: string,
 }
 
 export interface UserStateType {
-    profile: UserProfileType
+    _id?: string,
+    customInfor: CustomInforType
 }
 
-export interface UserProfileType {
-    username: string,
-    avatar: string,
+export interface CustomInforType {
+    username?: string,
+    avatar?: string,
+    sex?: number,
+    dob?: string,
+    height?: number,
+    weight?: number,
 }
 
 export interface DeviceStateType {
@@ -59,7 +69,7 @@ export interface HealthStateType {
     today?: {
         processSteps?: number,
         steps: Array<StepsResponse>,
-        sleepAnalysis: Array<SleepSampleResponse>,
+        sleep: Array<SleepSampleResponse>,
         heartbeat: Array<HeartRateResponse>,
         distances: Array<DistanceResponse>,
         calories: Array<CalorieResponse>,
@@ -120,6 +130,7 @@ export interface ApiResponse {
 }
 
 export interface ProcessResponseType {
-    error?: object,
-    data?: any
+    code: number,
+    message: string,
+    data: any,
 }

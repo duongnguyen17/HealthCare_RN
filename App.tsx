@@ -38,15 +38,15 @@ const AppRoot = () => {
 
   //   }
   // }
-
   if (isIntro) {
     return <Intro setIsIntro={setIsIntro} />
   }
   return (
     <React.Fragment>
-      {isLogin ? <MainNavigator /> : <AuthNavigator />}
       <Loading />
       <HAlert />
+      {isLogin ? <MainNavigator /> : <AuthNavigator />}
+
     </React.Fragment>
   );
 };

@@ -22,6 +22,7 @@ const OverView = ({ }: TabViewProps) => {
   const dispatch = useDispatch()
   const focused = useIsFocused()
   const { isAuthorized, today } = useSelector((state: RootStateType) => state.healthState)
+  const _id = useSelector((state: RootStateType) => state.authState._id)
   const [modalVisible, setModalVisible] = useState(false)
   const [isReFresh, setIsReFresh] = useState(false);
 
@@ -36,10 +37,10 @@ const OverView = ({ }: TabViewProps) => {
   }, [isAuthorized, focused])
 
   const checkGGFit = async () => {
-    const storage = await Storage.getItem(STORAGE_KEY.USE_GOOGLEFIT)
+    const storage = await Storage.getItem(STORAGE_KEY.USE_GOOGLEFIT + _id)
     if (storage != 1) {
       if (!isAuthorized) { setModalVisible(true) } else {
-        await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT, 1)
+        await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT + _id, 1)
       }
     } else {
       if (!isAuthorized) dispatch(healthAction.onAuthorize())
@@ -54,7 +55,7 @@ const OverView = ({ }: TabViewProps) => {
   const dataRe = [{}];
 
   const googlefitAuth = async () => {
-    await HGoogleFit.authorize()
+    dispatch(healthAction.onAuthorize())
     setModalVisible(false)
   }
 
@@ -96,17 +97,16 @@ const OverView = ({ }: TabViewProps) => {
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
 
-            <Text style={styles.textTitle}>{STRINGS.REPORT_TAB.FOOT_STEP}</Text>
+            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.FOOT_STEP}</Text>
 
-            <View style={{ marginTop: 20, width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20 }}>
+            <View style={{ marginTop: 20, width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
               <View style={{ width: 140, height: 140, justifyContent: 'center', alignItems: 'center' }}>
                 <AnimatedCircularProgress
                   style={{ position: 'absolute' }}
                   rotation={0}
                   size={120}
                   width={10}
-                  //@ts-ignore
-                  fill={today?.processSteps}
+                  fill={today?.processSteps ?? 0}
                   tintColor={COLORS.BLUE}
                   // onAnimationComplete={() => console.log('onAnimationComplete')}
                   backgroundColor={COLORS.LIGHT_BLUE_1} />
@@ -114,14 +114,14 @@ const OverView = ({ }: TabViewProps) => {
                 <Text style={{ fontWeight: '400', fontSize: 30, color: COLORS.BLACK }}>{today?.steps[2]?.steps[0]?.value}</Text>
               </View>
               <View>
-                <Text style={{ fontWeight: '400', color: COLORS.BLACK }}>
+                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: FONT_SIZE.CONTENT }}>
                   Khoảng cách bước đi
                 </Text>
                 <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 20 }}>{today?.distances[0]?.distance.toFixed(2)} <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 14 }}>m</Text></Text>
-                <Text style={{ fontWeight: '400', color: COLORS.BLACK }}>
+                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: FONT_SIZE.CONTENT }}>
                   Mức tiêu thụ của bước đi
                 </Text>
-                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 20 }}>{today?.calories[0]?.calorie} <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 14 }}>Kcal</Text></Text>
+                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 20 }}>{today?.calories[0]?.calorie.toFixed(3)} <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 14 }}>Kcal</Text></Text>
               </View>
             </View>
           </View>
@@ -147,27 +147,42 @@ const OverView = ({ }: TabViewProps) => {
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.textTitle}>{STRINGS.REPORT_TAB.SLEEP}</Text>
+            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.SLEEP}</Text>
+            <View style={styles.content_frame}>
+              {today?.sleep == undefined || today.sleep.length == 0 ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+            </View>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.textTitle}>{STRINGS.REPORT_TAB.HEART_RATE}</Text>
+            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.HEART_RATE}</Text>
+            <View style={styles.content_frame}>
+              {today?.heartbeat == undefined || today?.heartbeat.length == 0 ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+            </View>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.textTitle}>{STRINGS.REPORT_TAB.PRACTICE_HISTORY}</Text>
+            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.PRACTICE_HISTORY}</Text>
+            <View style={styles.content_frame}>
+              {today?.sleep == undefined ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+            </View>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.textTitle}>SpO2</Text>
+            <Text style={styles.title_frame}>SpO2</Text>
+            <View style={styles.content_frame}>
+              {today?.sleep == undefined ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+            </View>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.textTitle}>{STRINGS.REPORT_TAB.WEIGHT_HEIGHT}</Text>
+            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.WEIGHT_HEIGHT}</Text>
+            <View style={styles.content_frame}>
+              {today?.sleep == undefined ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+            </View>
           </View>
         </Frame>
       </ScrollView>
@@ -212,9 +227,10 @@ const styles = StyleSheet.create({
     fontSize: 55,
     color: 'orange',
   },
-  textTitle: {
+  title_frame: {
     fontWeight: '600',
     color: 'black',
+    marginBottom: 10,
   },
   view_modal: {
     paddingVertical: 24,
@@ -239,5 +255,12 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
     fontWeight: '500',
     fontSize: FONT_SIZE.CONTENT,
-  }
+  },
+  content_frame: {
+
+
+  }, text_nodata: {
+    alignSelf: 'center',
+    color: COLORS.GRAY_TEXT_2,
+  },
 });

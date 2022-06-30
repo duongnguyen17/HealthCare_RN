@@ -184,6 +184,32 @@ export const HGoogleFit = {
         } catch (error) {
             console.log("🚀 ~ file: HGoogleFit.ts ~ line 185 ~ error", error)
         }
+    },
+    /**
+    * Get the sleep sessions over a specified date range.
+    * @param {Object} options getSleepData accepts an options object containing required startDate: ISO8601Timestamp and endDate: ISO8601Timestamp.
+    */
+    getSleepSamples: async (
+        options: Partial<StartAndEndDate>
+    ) => {
+
+        try {
+            const res = await GoogleFit.getSleepSamples(options)
+            console.log('getSleepSamples', res)
+            return res
+        } catch (error) {
+            console.log("🚀 ~ file: HGoogleFit.ts ~ line 201 ~ error", error)
+        }
+    },
+    getHeartRateSamples: async (options: StartAndEndDate & Partial<BucketOptions>) => {
+        try {
+            let res = await GoogleFit.getHeartRateSamples(options)
+            console.log('getHeartRateSamples', res)
+            return res
+        } catch (error) {
+            console.log("🚀 ~ file: HGoogleFit.ts ~ line 210 ~ getHeartRateSamples: ~ error", error)
+        }
     }
+
 
 }

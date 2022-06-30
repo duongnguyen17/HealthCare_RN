@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { Picker } from '@react-native-picker/picker';
+import React, { useCallback, useEffect, useState } from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   FlatList,
-  Keyboard, StyleSheet, Text,
+  Keyboard, ScrollView, StyleSheet, Text,
   TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +15,7 @@ import {
   STRINGS,
   TimeUnit
 } from '../../../../common';
+import ContainerView from '../../../../components/ContainerView';
 import { showAlert } from '../../../../components/HAlert';
 import HDropDownPicker from '../../../../components/HDropDownPicker';
 import HeaderCommon from '../../../../components/HHeader/HHeaderCommon';
@@ -44,10 +47,12 @@ const MedicineScreen = (props: ScreenProps) => {
   const [reminds, setReminds] = useState<Array<Remind | any>>(
     medicine?.remind ?? [],
   );
+  const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false)
   const [timeUnit, setTimeUnit] = useState<TimeUnit>(TimeUnit.DAY);
   const [count, setCount] = useState<string>(
     medicine?.during.toString() ?? '0',
   );
+  const [startDate, setStartDate] = useState<any>(new Date())
 
   useEffect(() => {
     if (_id != undefined) {
@@ -144,119 +149,181 @@ const MedicineScreen = (props: ScreenProps) => {
     temp.splice(index, 1);
     setReminds(temp);
   };
-  const renderRemindItem = ({ item, index }: { item: any, index: number }) => (
-    <RemindItem
-      item={item}
-      index={index}
-      updateRemind={updateRemind}
-      deleteRemind={deleteRemind}
-      isNew={item.isNew}
-    />
-  )
-  
-  return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}>
-      <View style={styles.container}>
-        <HeaderCommon
-          onPressLeftIcon={() => {
-            goBack();
-          }}
-          renderTitle={() => (
-            <TouchableOpacity
-              style={{ alignItems: 'center' }}
-              onPress={() => {
-                navigateTo(STRINGS.ROUTE.DIARY.VISITED, {});
-              }}>
-              <Text style={{ fontSize: FONT_SIZE.TITLE }}>{medicine?.title}</Text>
-              <Text style={{ color: COLORS.WHITE, fontSize: FONT_SIZE.TINY }}>
-                {/* {new Date(data.date).toString().slice(4, 15)} */}
-              </Text>
-            </TouchableOpacity>
-          )}
-          renderRight={() => (
-            <TouchableOpacity
-              onPress={onSubmit}
-              style={{
-                backgroundColor: COLORS.BLUE,
-                borderRadius: 20,
-              }}>
-              <Text
-                style={{
-                  marginHorizontal: 10,
-                  marginVertical: 5,
-                  fontSize: FONT_SIZE.CONTENT,
-                  color: COLORS.WHITE,
-                }}>
-                Lưu
-              </Text>
-            </TouchableOpacity>
-          )}
-        />
-        <Tag>
-          <TextInput
-            style={{ fontSize: 30 }}
-            value={title}
-            placeholder={STRINGS.MEDICINE_SCREEN.MEDICINE_NAME}
-            autoFocus
-            multiline
-            onChangeText={setTitle}
-          />
-        </Tag>
-        <TagWithIcon iconName="reminder" iconFont="MaterialCommunityIcons">
-          {/* <View style={{}}>
-            <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
-          </View> */}
-          <FlatList
-            renderItem={renderRemindItem}
-            keyExtractor={
-              (item, index) => index.toString()
-            }
-            data={reminds}
-          />
-          <TouchableOpacity style={{ alignSelf: 'center', borderWidth: 1, borderColor: COLORS.BLUE, borderRadius: 5, alignItems: 'center', paddingVertical: 5, }} onPress={addRemind}>
-            <Text style={{ paddingHorizontal: 20 }}>{STRINGS.MEDICINE_SCREEN.ADD_REMIND}</Text>
-          </TouchableOpacity>
-        </TagWithIcon>
-        {/* </View> */}
-        <TagWithIcon>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {/* <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Uống trong</Text> */}
-            <View
-              style={{
-                // borderBottomWidth: 1,
-                width: 80,
-                alignItems: 'center',
-                // marginLeft: 20,
-              }}>
-              <TextInput
-                placeholder={STRINGS.MEDICINE_SCREEN.LAST}
-                style={{ width: '100%' }}
-                value={count}
-                onChangeText={setCount}
-                keyboardType="number-pad"
-              />
-            </View>
 
-            <View style={{ marginLeft: 8 }}>
-              <HDropDownPicker
-                scrollable={false}
-                data={DropKey}
-                selected={timeUnit}
-                setSelected={setTimeUnit}
+  const PickDay = useCallback(() => (
+    <Picker
+      selectedValue={count}
+      onValueChange={(itemValue, itemIndex) =>
+        setCount(itemValue)
+      }>
+      <Picker.Item label="0" value="0" />
+      <Picker.Item label="1" value="1" />
+      <Picker.Item label="2" value="2" />
+      <Picker.Item label="3" value="3" />
+      <Picker.Item label="4" value="4" />
+      <Picker.Item label="5" value="5" />
+      <Picker.Item label="6" value="6" />
+      <Picker.Item label="7" value="7" />
+      <Picker.Item label="8" value="8" />
+      <Picker.Item label="9" value="9" />
+      <Picker.Item label="10" value="10" />
+      <Picker.Item label="11" value="11" />
+      <Picker.Item label="12" value="12" />
+    </Picker>
+  ), [count])
+
+  const PickUnit = useCallback(() => (
+    <Picker
+      selectedValue={timeUnit}
+      onValueChange={(itemValue, itemIndex) =>
+        setTimeUnit(itemValue)
+      }>
+      <Picker.Item label="Ngày" value={TimeUnit.DAY} />
+      <Picker.Item label="Tuần" value={TimeUnit.WEEK} />
+      <Picker.Item label="Tháng" value={TimeUnit.MONTH} />
+    </Picker>
+  ), [timeUnit])
+
+  const changeStartDate = (event: any, selectedDate: any) => {
+    setStartDate(selectedDate ?? startDate)
+    setDatePickerVisible(false);
+  }
+  const DatePicker = useCallback(() => (
+    <View >
+      <TouchableOpacity
+        onPress={() => {
+          setDatePickerVisible(!datePickerVisible);
+        }}
+        style={{ flexDirection: 'row' }}>
+        <Text>Ngày bắt đầu</Text>
+        <Text style={{ marginLeft: 50 }}>
+          {new Date(startDate).toString().slice(0, 10)}
+        </Text>
+
+      </TouchableOpacity>
+
+      {
+        datePickerVisible && (
+          <DateTimePicker
+            //@ts-ignore
+            value={startDate}
+
+            display="default"
+            onChange={changeStartDate}
+          />
+        )
+      }
+    </View>
+  ), [startDate, datePickerVisible])
+
+  return (
+    <ContainerView>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}>
+        <View style={styles.container}>
+          <HeaderCommon
+            onPressLeftIcon={() => {
+              goBack();
+            }}
+            renderTitle={() => (
+              <Text style={{ fontSize: FONT_SIZE.BIG_HEADER, color: COLORS.BLACK, fontWeight: 'bold' }}>Thuốc</Text>
+            )}
+            renderRight={() => (
+              <TouchableOpacity
+                onPress={onSubmit}
+                style={{
+                  backgroundColor: COLORS.BLUE,
+                  borderRadius: 8,
+                }}>
+                <Text
+                  style={{
+                    marginHorizontal: 10,
+                    marginVertical: 5,
+                    fontWeight: '700',
+                    fontSize: FONT_SIZE.CONTENT,
+                    color: COLORS.WHITE,
+                  }}>
+                  Lưu
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+          <ScrollView>
+            <Tag>
+              <TextInput
+                style={{ fontSize: 30 }}
+                value={title}
+                placeholder={STRINGS.MEDICINE_SCREEN.MEDICINE_NAME}
+                multiline
+                onChangeText={setTitle}
               />
-            </View>
-          </View>
-        </TagWithIcon>
-      </View>
-    </TouchableWithoutFeedback>
+            </Tag>
+            <TagWithIcon iconName="infocirlceo" iconFont="AntDesign">
+
+              <Text style={{ fontSize: FONT_SIZE.HEADER_TAG }}>Thông tin thuốc</Text>
+              <TouchableOpacity
+                onPress={() => {
+
+                }}>
+                <Text style={{ paddingVertical: 10, alignSelf: 'center', color: COLORS.BLUE }}>
+                  Thêm hình ảnh
+                </Text>
+              </TouchableOpacity>
+              <View style={{ borderColor: COLORS.GRAY_DECOR, borderWidth: 1, marginTop: 10 }}>
+                <TextInput multiline={true} style={{ fontSize: 14 }} placeholder={"Ghi chú"} />
+              </View>
+            </TagWithIcon>
+            <TagWithIcon iconName="infocirlceo" iconFont="AntDesign">
+
+              <Text style={{ fontSize: FONT_SIZE.HEADER_TAG }}>Lần khám liên quan</Text>
+              <TouchableOpacity
+                onPress={() => {
+
+                }}>
+                <View style={{ borderColor: COLORS.GRAY_DECOR, borderWidth: 1, marginTop: 10 }}>
+
+                </View>
+              </TouchableOpacity>
+            </TagWithIcon>
+            <TagWithIcon iconName="reminder" iconFont="MaterialCommunityIcons">
+
+              <Text style={{ fontSize: FONT_SIZE.HEADER_TAG }}>Nhắc nhở</Text>
+
+              {reminds?.map((value, index) => <RemindItem
+                key={index}
+                item={value}
+                index={index}
+                updateRemind={updateRemind}
+                deleteRemind={deleteRemind}
+                isNew={value.isNew}
+              />)}
+              <TouchableOpacity onPress={addRemind}>
+                <Text style={{ paddingHorizontal: 20, alignSelf: 'center', paddingVertical: 5, color: COLORS.BLUE }}>{STRINGS.MEDICINE_SCREEN.ADD_REMIND}</Text>
+              </TouchableOpacity>
+            </TagWithIcon>
+            <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
+              <DatePicker />
+            </TagWithIcon>
+            <TagWithIcon>
+              <Text style={{ fontSize: FONT_SIZE.HEADER_TAG }}>Nhắc nhở</Text>
+              <PickDay />
+              <PickUnit />
+            </TagWithIcon>
+          </ScrollView>
+        </View>
+      </TouchableWithoutFeedback >
+    </ContainerView>
   );
 };
 export default MedicineScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  textTime: {
+    fontSize: FONT_SIZE.CONTENT,
+    marginLeft: 6,
   },
 });

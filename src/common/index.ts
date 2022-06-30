@@ -32,7 +32,7 @@ export const STRINGS = {
     MONTH: 'tháng',
     TIME_REMIND_DO_NOT_DUPLICATE: 'Thời gian nhắc nhở không được trùng nhau',
     THE_NAME_OF_DRUG_CANNOT_BE_LEFT_BLANK: 'Không được để trống tên thuốc',
-    MEDICINE_NAME: "Tên thuốc ...",
+    MEDICINE_NAME: "Tên thuốc ...*",
     ADD_REMIND: "Thêm nhắc nhở",
     LAST: "Uống trong",
   },
@@ -56,6 +56,9 @@ export const STRINGS = {
       HEART_BEAT: 'Nhịp tim',
     },
   },
+  PROFILE_SCREEN: {
+    PROFILE: "Hồ sơ"
+  },
   ROUTE: {
     MAIN_TABS: {
       PRACTICE: 'Practice',
@@ -67,6 +70,8 @@ export const STRINGS = {
     TAB_NAVIGATOR: 'TabNavigator',
     SEARCH: 'Search',
     REPORT_DETAIL: "ReportDetail",
+    RUNNING: "Running",
+    PROFILE: "PROFILE",
     AUTH: {
       LOGIN: 'Login',
       REGISTER: 'Register',
@@ -105,9 +110,9 @@ export const COLORS = {
   LIGHT_BLUE: '#2db6eb',
   LIGHT_BLUE_1: '#e8f7fd',
   DARK_BLUE: '#182537',
-  GRAY_DECOR: '#cccccc',
-  GRAY_TEXT_1: '#cccccc',
-  GRAY_TEXT_2: '#999999',
+  GRAY_DECOR: '#e6e6e6',
+  GRAY_TEXT_1: '#b3b3b3',
+  GRAY_TEXT_2: '#808080',
   EVENT_TAG: {
     Medicine: {
       backgroundColor: '#fff',
@@ -239,7 +244,8 @@ export const DIMENS = {
   SCREEN_HEIGHT: height,
   STATUS_BAR_HEIGHT: statusBarHeight,
   HEADER_STATUS_BAR_HEIGHT: 50,
-  HEADER_HEIGHT: 50
+  HEADER_HEIGHT: 50,
+  BUTTON_RBSHEET_HEIGHT: 48,
 }
 
 export const TIMING = {
@@ -281,3 +287,10 @@ export const STORAGE_KEY = {
 }
 
 export const IMG_DEFAULT_AVATAR = require('../../assets/images/img_default_avatar.png')
+
+export const TOUCH_OPACITY = 0.7
+
+export enum Sex {
+  Male,
+  FeMail,
+}

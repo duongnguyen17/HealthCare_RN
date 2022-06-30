@@ -136,6 +136,7 @@ const RemindItem = ({
             editable={isEdit}
             autoFocus
             style={{
+              paddingVertical: 0,
               borderBottomWidth: 1,
               width: '75%',
               borderBottomColor: '#cccccc',
@@ -156,6 +157,7 @@ const RemindItem = ({
             editable={isEdit}
             multiline
             style={{
+              paddingVertical: 0,
               borderBottomWidth: 1,
               width: '75%',
               borderBottomColor: '#cccccc',

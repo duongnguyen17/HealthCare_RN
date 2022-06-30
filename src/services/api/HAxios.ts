@@ -3,13 +3,12 @@ import { BASE_URL } from "./Urls";
 
 const HAxios = axios.create({
     baseURL: BASE_URL,
-    timeout: 3000,
+    timeout: 30000,
     headers: {
         'Content-type': 'application/json',
         'Access-Control-Allow-Headers': 'sentry-trace'
     }
 })
-
 
 HAxios.interceptors.request.use(
     async (config: any) => {

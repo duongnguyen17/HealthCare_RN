@@ -161,7 +161,7 @@ function* getEventInMonthSaga() {
  * @returns Mảng các thuốc
 */
 const _searchMedicine = async (keyword: String) => {
-    console.log("searchMedicine")
+    // console.log("searchMedicine")
     try {
         let result = await searchMedicine(keyword);
         let events: Array<HEvent> = []
@@ -220,7 +220,7 @@ const _searchMedicine = async (keyword: String) => {
  * @returns Mảng các sự kiện khám
 */
 const _searchVisited = async (keyword: String) => {
-    console.log("searchVisited")
+    // console.log("searchVisited")
     try {
         let result = await searchVisited(keyword)
         let events: Array<HEvent> = []
@@ -254,7 +254,6 @@ const _searchVisited = async (keyword: String) => {
 
 /**Tìm kiếm tất cả dựa theo từ khoá */
 const _searchAll = async (keyword: String) => {
-    console.log("searchAll")
     try {
         let events: Array<HEvent> = []
         let visiteds = await searchVisited(keyword)
