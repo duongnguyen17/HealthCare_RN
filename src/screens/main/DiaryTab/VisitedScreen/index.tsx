@@ -1,17 +1,19 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Keyboard, ScrollView, StyleSheet, Text,
+  Keyboard, Platform, ScrollView, StyleSheet, Text,
   TextInput, TouchableOpacity, TouchableWithoutFeedback, View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   AlertType,
   COLORS,
+  DIMENS,
   FONT_SIZE,
-  Medicine, SearchType,
+  Medicine, PicNote, SearchType,
   STRINGS, Visited
 } from '../../../../common';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import ContainerView from '../../../../components/ContainerView';
 import HairLine from '../../../../components/HairLine';
 import { showAlert } from '../../../../components/HAlert';
@@ -28,22 +30,38 @@ import { visitedsAction } from '../../../../reduxSaga/slices/visitedsSlice';
 import { RootStateType, ScreenProps } from '../../../../type/type';
 import Tag from '../components/Tag';
 import TagWithIcon from '../components/TagWithIcon';
+import { Asset, launchImageLibrary } from 'react-native-image-picker';
+import { getPicture, getPictures } from '../../../../utils/picture';
+import ImageView from '../../../../components/ImageView';
+import { arrayUnique } from '../../../../utils/arrayUtils';
+enum ImgType {
+  Prescription,
+  XRay,
+  Test
+}
+
 const VisitedScreen = (props: ScreenProps) => {
   const _id = routeParam(props.route, '_id');
-
+  const RBSheetImagePicker = useRef<any>()
   const dispatch = useDispatch();
   const tempMedicine = useSelector((state: RootStateType) => state.medicineState.tempMedicine)
   const visited: Visited | null | undefined = useSelector((state: RootStateType) => state.visitedState.tempVisited)
+  const imgType = useRef(ImgType.Prescription)
 
   const [title, setTitle] = useState<string>('');
   const [pre, setPre] = useState<number | null>();
-  const [location, setLocation] = useState('');
+  const [location, setLocation] = useState("");
   const [date, setDate] = useState(Date.now());
   const [medicines, setMedicines] = useState<Array<Medicine>>([]);
+  const [prescription, setPrescription] = useState<PicNote>()
+  const [xRay, setXRay] = useState<PicNote>()
+  const [test, setTest] = useState<PicNote>()
   const [descript, setDescript] = useState<string>('');
+
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [modeCalendar, setModeCalendar] = useState('date')
-  const [xRayImages, setXRayImage] = useState([])
+  const [timePickerVisible, setTimePickerVisible] = useState(false);
+
+
   useEffect(() => {
     if (_id != undefined) {
       dispatch(visitedsAction.getVisted({ _id: _id }))
@@ -54,7 +72,7 @@ const VisitedScreen = (props: ScreenProps) => {
     if ((_id != null || _id != undefined) && visited != null && visited != undefined) {
       setTitle(visited?.title)
       setPre(visited?.pre)
-      setLocation(visited?.location)
+      setLocation(visited?.location?.name ?? "")
       setDate(visited?.date)
       setDescript(visited?.descript)
       setMedicines(visited?.medicines ?? [])
@@ -121,13 +139,13 @@ const VisitedScreen = (props: ScreenProps) => {
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
-    setModeCalendar("time")
+    setDatePickerVisible(false)
+    setTimePickerVisible(true)
   };
   const onChangeTime = (event: any, selectedTime: any) => {
     const currentTime = selectedTime || date;
     setDate(new Date(date).setTime(new Date(currentTime).getTime()));
-    setDatePickerVisible(false);
-    setModeCalendar("date")
+    setTimePickerVisible(false);
   };
 
   const gotoSearchScreen = () => {
@@ -143,6 +161,107 @@ const VisitedScreen = (props: ScreenProps) => {
         medicine,
       });
   };
+
+  const DatePicker = useCallback(() => (
+    <View >
+      <TouchableOpacity
+        onPress={() => {
+          setDatePickerVisible(!datePickerVisible);
+        }}
+        style={{ flexDirection: 'row' }}>
+        <Text>Ngày khám</Text>
+        <Text style={{ marginLeft: 50 }}>
+          {new Date(date).toString().slice(0, 10)}
+        </Text>
+        <Text style={styles.textTime}>{new Date(date).toString().slice(16, 21)}</Text>
+      </TouchableOpacity>
+
+      {
+        datePickerVisible && (
+          <DateTimePicker
+            //@ts-ignore
+            value={new Date(date)}
+            //@ts-ignore
+            mode={"datetime"}
+            display="default"
+            onChange={onChangeDate}
+          />
+        )
+      }
+      {
+        timePickerVisible && (
+          <DateTimePicker
+            //@ts-ignore
+            value={new Date(date)}
+            //@ts-ignore
+            mode={"time"}
+            display="default"
+            onChange={onChangeTime}
+          />
+        )
+      }
+    </View>
+  ), [datePickerVisible, timePickerVisible])
+
+  const takePic = () => {
+    RBSheetImagePicker.current.close()
+  }
+
+  const getUri = (photo: Asset[]): Array<string | undefined> => {
+    const arrayUri = photo.map((value, index) => (Platform.OS === 'ios' ? value.uri?.replace('file://', '') : value.uri))
+    return arrayUri
+  }
+
+  const getPic = async () => {
+    RBSheetImagePicker.current.close()
+    const photo = await getPictures()
+    if (photo != null && photo != undefined) {
+      const arrayUri = getUri(photo)
+      switch (imgType.current) {
+        case ImgType.Prescription:
+          setPrescription({ ...prescription, pictures: arrayUnique(arrayUri.concat(prescription?.pictures ?? [])) })
+          break;
+        case ImgType.XRay:
+          setXRay({ ...xRay, pictures: arrayUnique(arrayUri.concat(xRay?.pictures ?? [])) })
+          break;
+        case ImgType.Test:
+          setTest({ ...test, pictures: arrayUnique(arrayUri.concat(test?.pictures ?? [])) })
+          break;
+        default:
+          console.log('chưa truyền kiểu')
+          break;
+      }
+    }
+  }
+
+  const deletePic = (index: number) => {
+    let arrayUrls
+    switch (imgType.current) {
+      case ImgType.Prescription:
+        arrayUrls = prescription?.pictures
+        arrayUrls?.splice(index, 1)
+        setPrescription({ ...prescription, pictures: arrayUrls })
+        break;
+      case ImgType.XRay:
+        arrayUrls = xRay?.pictures
+        arrayUrls?.splice(index, 1)
+        setXRay({ ...xRay, pictures: arrayUrls })
+        break;
+      case ImgType.Test:
+        arrayUrls = test?.pictures
+        arrayUrls?.splice(index, 1)
+        setTest({ ...test, pictures: arrayUrls })
+        break;
+      default:
+        console.log('chưa truyền kiểu')
+        break;
+    }
+  }
+
+  const opneRBSHeet = (type: ImgType) => {
+    imgType.current = type
+    RBSheetImagePicker.current.open()
+  }
 
   return (
     <ContainerView>
@@ -161,7 +280,9 @@ const VisitedScreen = (props: ScreenProps) => {
             )}
             renderTitle={(() => <Text style={styles.textTitle}>Lần Khám</Text>)}
           />
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+          >
             <Tag>
               <TextInput
                 style={{ fontSize: 30 }}
@@ -186,7 +307,7 @@ const VisitedScreen = (props: ScreenProps) => {
                   <Text>
                     {pre ?? (
                       <Text style={{ color: COLORS.GRAY_DECOR }}>
-                        {STRINGS.VISITED_SCREEN.DO_NOT_HAVE}
+                        Không có
                       </Text>
                     )}
                   </Text>
@@ -208,31 +329,14 @@ const VisitedScreen = (props: ScreenProps) => {
                   placeholder={STRINGS.VISITED_SCREEN.LOCATION}
                   style={{ flex: 1 }}
                 />
+                <TouchableOpacity>
+                  <HIcon font="MaterialIcons" name="arrow-forward-ios" size={18} />
+                </TouchableOpacity>
               </View>
             </TagWithIcon>
             <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
-              <TouchableOpacity
-                onPress={() => {
-                  setDatePickerVisible(!datePickerVisible);
-                }}
-                style={{ flexDirection: 'row' }}>
-                <Text>{STRINGS.VISITED_SCREEN.EX_DAY}</Text>
-                <Text style={{ marginLeft: 50 }}>
-                  {new Date(date).toString().slice(0, 10)}
-                </Text>
-                <Text style={styles.textTime}>{new Date(date).toString().slice(16, 21)}</Text>
-              </TouchableOpacity>
+              <DatePicker />
             </TagWithIcon>
-            {datePickerVisible && (
-              <DateTimePicker
-                //@ts-ignore
-                value={new Date(date)}
-                //@ts-ignore
-                mode={modeCalendar}
-                display="default"
-                onChange={modeCalendar == "date" ? onChangeDate : onChangeTime}
-              />
-            )}
             <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
               {medicines.map((value, index) => <MedicineItem
                 key={index}
@@ -250,9 +354,10 @@ const VisitedScreen = (props: ScreenProps) => {
                 </Text>
               </TouchableOpacity>
               <HairLine style={{ width: '60%', marginVertical: 10 }} />
+              <ImageView uris={prescription?.pictures ?? []} deletePic={deletePic} />
               <TouchableOpacity
                 onPress={() => {
-                  gotoMedicineScreen();
+                  opneRBSHeet(ImgType.Prescription);
                 }}>
                 <Text style={{ paddingHorizontal: 20, alignSelf: 'center', color: COLORS.BLUE }}>
                   Thêm hình ảnh đơn thuốc
@@ -264,9 +369,10 @@ const VisitedScreen = (props: ScreenProps) => {
             </TagWithIcon>
             <TagWithIcon iconName="x-ray" iconFont="FontAwesome5">
               <Text>Chuẩn đoán hình ảnh</Text>
+              <ImageView uris={xRay?.pictures ?? []} deletePic={deletePic} />
               <TouchableOpacity
                 onPress={() => {
-                  gotoMedicineScreen();
+                  opneRBSHeet(ImgType.XRay);
                 }}>
                 <Text style={{ paddingVertical: 10, alignSelf: 'center', color: COLORS.BLUE }}>
                   Thêm hình ảnh
@@ -278,9 +384,10 @@ const VisitedScreen = (props: ScreenProps) => {
             </TagWithIcon>
             <TagWithIcon iconName="test-tube" iconFont="Fontisto">
               <Text>Kết quả xét nghiệm</Text>
+              <ImageView uris={test?.pictures ?? []} deletePic={deletePic} />
               <TouchableOpacity
                 onPress={() => {
-                  gotoMedicineScreen();
+                  opneRBSHeet(ImgType.Test);
                 }}>
                 <Text style={{ paddingVertical: 10, alignSelf: 'center', color: COLORS.BLUE }}>
                   Thêm hình ảnh
@@ -301,6 +408,15 @@ const VisitedScreen = (props: ScreenProps) => {
           </ScrollView>
         </View>
       </TouchableWithoutFeedback >
+      <RBSheet ref={RBSheetImagePicker} height={2 * DIMENS.BUTTON_RBSHEET_HEIGHT}>
+        <TouchableOpacity style={styles.option_container} onPress={takePic}>
+          <Text style={styles.title_option}>Chụp ảnh</Text>
+        </TouchableOpacity>
+        <HairLine style={styles.hairline_option} />
+        <TouchableOpacity style={styles.option_container} onPress={getPic}>
+          <Text style={styles.title_option}>Thư viện</Text>
+        </TouchableOpacity>
+      </RBSheet>
     </ContainerView >
   );
 };
@@ -327,5 +443,17 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.BIG_HEADER,
     color: COLORS.BLACK,
     fontWeight: 'bold',
+  },
+  option_container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }, title_option: {
+    color: COLORS.BLACK,
+    fontSize: FONT_SIZE.HEADER_TAG
+  },
+  hairline_option: {
+    width: '90%',
+    backgroundColor: COLORS.GRAY_DECOR,
   },
 })

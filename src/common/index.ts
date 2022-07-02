@@ -40,7 +40,7 @@ export const STRINGS = {
     TITLE: 'Lần khám',
     LAST_VISITED: 'Lần Khám trước',
     THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK: 'Không được để trống tên lần khám',
-    VISITED_NAME: "Tên lần khám ...",
+    VISITED_NAME: "Tên lần khám ...*",
     LOCATION: "Địa điểm",
     EX_DAY: "Ngày khám",
     ADD_MEDICINE: "Thêm thuốc",
@@ -204,12 +204,23 @@ export interface Visited {
   _id: number,
   title: string,
   pre: number,//id of pre visited
-  location: string,
+  location: Location,
   descript: string,
   date: number,
-  medicines?: Array<Medicine>
+  medicines?: Array<Medicine>,
+  prescription?: PicNote,
+  xRay?: PicNote,
+  test?: PicNote,
 }
 
+export interface PicNote {
+  pictures?: Array<string | undefined>,
+  note?: string,
+}
+export interface Location {
+  _id?: number,
+  name?: string,
+}
 export interface HEvent {
   date: Date,
   event: Array<HEventMedicine | HEventVisited>

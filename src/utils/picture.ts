@@ -19,6 +19,21 @@ export const getPicture = async () => {
 
 }
 
+export const getPictures = async () => {
+    try {
+        const res = await launchImageLibrary({ mediaType: 'photo', selectionLimit: 10 }); //multi pic
+        if (res.assets != undefined) {
+            return res.assets
+        }
+        else {
+            showAlert(AlertType.FAIL, "Không thể lấy ảnh")
+            return null
+        }
+    } catch (error) {
+        console.log("🚀 ~ file: picture.ts ~ line 33 ~ getPictures ~ error", error)
+    }
+}
+
 export const createFormData = (photo: Asset, body = {}) => {
     const data = new FormData();
 
