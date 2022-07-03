@@ -15,7 +15,8 @@ export default [
     takeLatest(medicinesAction.deleteMedicine.type, deleteMedicineSaga),
     takeLatest(medicinesAction.getAllMedicineOfVisited.type, getAllMedicineOfVisitedSaga),
     takeLatest(medicinesAction.updateAllMedicineOfVisited.type, updateAllMedicineOfVisitedSaga),
-    takeLatest(medicinesAction.getMedicine.type, getMedicineSaga)
+    takeLatest(medicinesAction.getMedicine.type, getMedicineSaga),
+    takeLatest(medicinesAction.getMedicines.type, getMedicinesSaga),
 ]
 
 function* getAllMedicineSaga() {
@@ -115,3 +116,27 @@ function* getMedicineSaga(action: any) {
     }
 }
 
+function* getMedicinesSaga(action: any) {
+    try {
+        const arrayId = action.payload.medicineIds
+        //@ts-ignore
+        let medicines = yield call(_getMedicines, arrayId)
+        yield put(medicinesAction.getMedicinesSuccess({ medicines }))
+    } catch (error) {
+    }
+}
+
+
+const _getMedicines = async (arrayId: Array<number>) => {
+    try {
+        let medicines = await Promise.all(
+            arrayId.map(async (value) => {
+                const medicine = await getMedicine(value)
+                return medicine
+            })
+        )
+        return medicines
+    } catch (error) {
+        throw (error)
+    }
+}

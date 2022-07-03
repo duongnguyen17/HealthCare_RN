@@ -1,13 +1,16 @@
 import React from 'react';
-import {GestureResponderEvent, Text, TouchableOpacity, View} from 'react-native';
-import {COLORS, FONT_SIZE, Medicine} from '../../common';
+import { GestureResponderEvent, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS, FONT_SIZE, Medicine } from '../../common';
 import HIcon from '../HIcon';
-const MedicineItem = ({medicine, gotoMedicine}: MedicineItemProps) => {
+const MedicineItem = ({ medicine, gotoMedicine }: MedicineItemProps) => {
+  const gotoMedicineScreen = () => {
+    gotoMedicine(medicine._id)
+  }
   // console.log(`medicine-item`, medicine);
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={gotoMedicine}
+      onPress={gotoMedicineScreen}
       style={{
         marginVertical: 10,
         marginHorizontal: 3,
@@ -22,7 +25,7 @@ const MedicineItem = ({medicine, gotoMedicine}: MedicineItemProps) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <Text
             style={{
               fontSize: FONT_SIZE.CONTENT,
@@ -40,5 +43,5 @@ export default MedicineItem;
 
 interface MedicineItemProps {
   medicine: Medicine;
-  gotoMedicine?: (event: GestureResponderEvent) => void;
+  gotoMedicine: (_id: number) => void;
 }

@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { Asset, launchImageLibrary } from "react-native-image-picker";
+import { Asset, launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { AlertType } from "../common";
 import { showAlert } from "../components/HAlert";
 
@@ -31,6 +31,17 @@ export const getPictures = async () => {
         }
     } catch (error) {
         console.log("🚀 ~ file: picture.ts ~ line 33 ~ getPictures ~ error", error)
+    }
+}
+
+export const takePicture = async () => {
+    try {
+        const res = await launchCamera({ saveToPhotos: true, mediaType: 'photo' });
+        if (res.assets != undefined) {
+            return res.assets
+        }
+    } catch (error) {
+        console.log("🚀 ~ file: picture.ts ~ line 44 ~ takePicture ~ error", error)
     }
 }
 

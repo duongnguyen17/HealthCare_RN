@@ -9,6 +9,7 @@ export const STRINGS = {
     TITLE: "Tìm kiếm",
     NO_RESULT: "Không tìm thấy kết quả phù hợp",
     INPUT_SEARCH_KEY_WORD: 'Nhập từ khoá tìm kiếm',
+    NO_DATA: 'Danh sách trống',
   },
   DIARY_TAB: {
     TODAY_HAS_NO_EVENT: 'Hôm nay không có sự kiện nào',
@@ -79,6 +80,7 @@ export const STRINGS = {
       VERIFY_OTP: 'VerifyOTP',
       REGISTER_FINISH: 'RegisterFinish',
     },
+    LIST_MEDICINE_SCREEN: 'LIST_MEDICINE_SCREEN',
   },
   NOTIFICATION_ACTION: {
     OK: "OK",
@@ -186,14 +188,17 @@ export enum TimeUnit {
 }
 export interface Medicine {
   _id: number,
-  visitedId: number,
   title: string,
-  // isDone: boolean,
-  remind: Array<Remind>,
-  start: number,
-  during: number
+  infor: PicNote,
+  shcedules: Array<Schedule>,
 }
 
+export interface Schedule {
+  visitedId: number,
+  reminds: Remind,
+  start: number,
+  during: number,
+}
 export interface Remind {
   time: string,
   descript?: string,
@@ -207,7 +212,7 @@ export interface Visited {
   location: Location,
   descript: string,
   date: number,
-  medicines?: Array<Medicine>,
+  medicines?: Array<number>,
   prescription?: PicNote,
   xRay?: PicNote,
   test?: PicNote,

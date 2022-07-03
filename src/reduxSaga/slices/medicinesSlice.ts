@@ -5,6 +5,7 @@ import { MedicinesStateType } from "../../type/type"
 const initialState: MedicinesStateType = {
     all: [],
     tempMedicine: null,
+    tempMedicines: [],
 }
 
 const medicinesSlice = createSlice({
@@ -62,7 +63,11 @@ const medicinesSlice = createSlice({
         },
         getMedicineSuccess: (state, { payload }) => {
             state.tempMedicine = payload.medicine
-        }
+        },
+        getMedicines: (state, { payload }) => { },
+        getMedicinesSuccess: (state, { payload }) => {
+            state.tempMedicines = payload.medicines
+        },
     }
 })
 

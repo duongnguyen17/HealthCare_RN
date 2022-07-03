@@ -20,6 +20,7 @@ export interface AppContextType {
 export interface MedicinesStateType {
     all: Array<Medicine>,
     tempMedicine: Medicine | null | undefined,
+    tempMedicines: Array<Medicine | undefined | null>
 }
 export interface VisitedsStateType {
     all: Array<Visited>,

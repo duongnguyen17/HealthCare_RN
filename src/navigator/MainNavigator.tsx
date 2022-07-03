@@ -14,14 +14,15 @@ import Practice from '../screens/main/PracticeTab';
 import Diary from '../screens/main/DiaryTab';
 import Profile from '../screens/main/ProfileTab';
 import Report from '../screens/main/ReportTab/index';
-import MedicineScreen from '../screens/main/DiaryTab/MedicineScreen';
+import MedicineScreen from '../screens/MedicineScreen';
 import ReportDetail from '../screens/ReportDetail'
 import RunningScreen from '../screens/RunningScreen';
 import SearchScreen from '../screens/SearchScreen';
-import VisitedScreen from '../screens/main/DiaryTab/VisitedScreen';
+import VisitedScreen from '../screens/VisitedScreen';
 import { setNavigator } from './NavigationServices';
 import Storage from '../utils/Storage';
 import ProfileScreen from '../screens/ProfileScreen';
+import ListMedicineScreen from '../screens/ListMedicineScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
@@ -170,6 +171,12 @@ const MainNavigator = () => {
             headerTitleStyle: { fontSize: FONT_SIZE.BIG_HEADER },
             headerTitleAlign: 'center',
           })}
+        />
+        <Stack.Screen
+          component={ListMedicineScreen}
+          name={STRINGS.ROUTE.LIST_MEDICINE_SCREEN}
+          options={{ headerShown: false }}
+
         />
       </Stack.Navigator>
     </NavigationContainer>

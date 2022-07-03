@@ -12,28 +12,29 @@ import {
   FONT_SIZE,
   Medicine, PicNote, SearchType,
   STRINGS, Visited
-} from '../../../../common';
+} from '../../common';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import ContainerView from '../../../../components/ContainerView';
-import HairLine from '../../../../components/HairLine';
-import { showAlert } from '../../../../components/HAlert';
-import HHeaderCommon from '../../../../components/HHeader/HHeaderCommon';
-import HIcon from '../../../../components/HIcon';
-import MedicineItem from '../../../../components/MedicineItem';
+import ContainerView from '../../components/ContainerView';
+import HairLine from '../../components/HairLine';
+import { showAlert } from '../../components/HAlert';
+import HHeaderCommon from '../../components/HHeader/HHeaderCommon';
+import HIcon from '../../components/HIcon';
+import MedicineItem from '../../components/MedicineItem';
 import {
   goBack,
   navigateTo,
   routeParam
-} from '../../../../navigator/NavigationServices';
-import { medicinesAction } from '../../../../reduxSaga/slices/medicinesSlice';
-import { visitedsAction } from '../../../../reduxSaga/slices/visitedsSlice';
-import { RootStateType, ScreenProps } from '../../../../type/type';
-import Tag from '../components/Tag';
-import TagWithIcon from '../components/TagWithIcon';
+} from '../../navigator/NavigationServices';
+import { medicinesAction } from '../../reduxSaga/slices/medicinesSlice';
+import { visitedsAction } from '../../reduxSaga/slices/visitedsSlice';
+import { RootStateType, ScreenProps } from '../../type/type';
+import Tag from '../main/DiaryTab/components/Tag';
+import TagWithIcon from '../main/DiaryTab/components/TagWithIcon';
 import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import { getPicture, getPictures } from '../../../../utils/picture';
-import ImageView from '../../../../components/ImageView';
-import { arrayUnique } from '../../../../utils/arrayUtils';
+import { getPicture, getPictures, takePicture } from '../../utils/picture';
+import ImageView from '../../components/ImageView';
+import { arrayUnique } from '../../utils/arrayUtils';
+import ListMedicine from './components/ListMedicine';
 enum ImgType {
   Prescription,
   XRay,
@@ -52,7 +53,7 @@ const VisitedScreen = (props: ScreenProps) => {
   const [pre, setPre] = useState<number | null>();
   const [location, setLocation] = useState("");
   const [date, setDate] = useState(Date.now());
-  const [medicines, setMedicines] = useState<Array<Medicine>>([]);
+  const [medicines, setMedicines] = useState<Array<number>>([]);
   const [prescription, setPrescription] = useState<PicNote>()
   const [xRay, setXRay] = useState<PicNote>()
   const [test, setTest] = useState<PicNote>()
@@ -85,55 +86,56 @@ const VisitedScreen = (props: ScreenProps) => {
   }, [tempMedicine])
 
   const onSubmit = () => {
-    if (title == '' || title == undefined) {
-      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
-    } else {
-      let visitedId = visited?._id ?? Date.now();
-      let tempVisited = {
-        _id: visitedId,
-        title,
-        pre,
-        location,
-        descript,
-        date,
-      };
-      if (!visited) {
-        dispatch(visitedsAction.addVisited(tempVisited));
-      } else {
-        dispatch(visitedsAction.updateVisited(tempVisited));
-      }
-      if (medicines.length != 0) {
-        let medicinesTemp = [...medicines];
-        medicinesTemp.forEach(e => {
-          if (e.visitedId !== visitedId) {
-            e.visitedId = visitedId;
-            e.start = date;
-          }
-        });
-        dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
-      }
-      goBack();
-    }
+    // if (title == '' || title == undefined) {
+    //   showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
+    // } else {
+    //   let visitedId = visited?._id ?? Date.now();
+    //   let tempVisited = {
+    //     _id: visitedId,
+    //     title,
+    //     pre,
+    //     location,
+    //     descript,
+    //     date,
+
+    //   };
+    //   if (!visited) {
+    //     dispatch(visitedsAction.addVisited(tempVisited));
+    //   } else {
+    //     dispatch(visitedsAction.updateVisited(tempVisited));
+    //   }
+    //   if (medicines.length != 0) {
+    //     let medicinesTemp = [...medicines];
+    //     medicinesTemp.forEach(e => {
+    //       if (e.visitedId !== visitedId) {
+    //         e.visitedId = visitedId;
+    //         e.start = date;
+    //       }
+    //     });
+    //     dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
+    //   }
+    //   goBack();
+    // }
   };
 
   const updateMedicine = (medicine: Medicine) => {
-    let have = false;
-    medicines.forEach((element: Medicine) => {
-      if (element._id == medicine._id) {
-        element.during = medicine.during;
-        element.remind = medicine.remind;
-        element.start = medicine.start;
-        element.title = medicine.title;
-        element.visitedId = medicine.visitedId;
-        have = true;
-      }
-    });
-    if (have) {
-      setMedicines([...medicines]);
-    } else {
-      setMedicines([...medicines, medicine]);
-    }
-    dispatch(medicinesAction.addTempMedicine({ medicine: null }))
+    // let have = false;
+    // medicines.forEach((element: Medicine) => {
+    //   if (element._id == medicine._id) {
+    //     element.during = medicine.during;
+    //     element.remind = medicine.remind;
+    //     element.start = medicine.start;
+    //     element.title = medicine.title;
+    //     element.visitedId = medicine.visitedId;
+    //     have = true;
+    //   }
+    // });
+    // if (have) {
+    //   setMedicines([...medicines]);
+    // } else {
+    //   setMedicines([...medicines, medicine]);
+    // }
+    // dispatch(medicinesAction.addTempMedicine({ medicine: null }))
   };
 
   const onChangeDate = (event: any, selectedDate: any) => {
@@ -203,8 +205,26 @@ const VisitedScreen = (props: ScreenProps) => {
     </View>
   ), [datePickerVisible, timePickerVisible])
 
-  const takePic = () => {
+  const takePic = async () => {
     RBSheetImagePicker.current.close()
+    const photo = await takePicture()
+    if (photo != null && photo != undefined) {
+      const arrayUri = getUri(photo)
+      switch (imgType.current) {
+        case ImgType.Prescription:
+          setPrescription({ ...prescription, pictures: arrayUnique(arrayUri.concat(prescription?.pictures ?? [])) })
+          break;
+        case ImgType.XRay:
+          setXRay({ ...xRay, pictures: arrayUnique(arrayUri.concat(xRay?.pictures ?? [])) })
+          break;
+        case ImgType.Test:
+          setTest({ ...test, pictures: arrayUnique(arrayUri.concat(test?.pictures ?? [])) })
+          break;
+        default:
+          console.log('chưa truyền kiểu')
+          break;
+      }
+    }
   }
 
   const getUri = (photo: Asset[]): Array<string | undefined> => {
@@ -338,21 +358,7 @@ const VisitedScreen = (props: ScreenProps) => {
               <DatePicker />
             </TagWithIcon>
             <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
-              {medicines.map((value, index) => <MedicineItem
-                key={index}
-                medicine={value}
-                gotoMedicine={() => {
-                  gotoMedicineScreen(value);
-                }}
-              />)}
-              <TouchableOpacity
-                onPress={() => {
-                  gotoMedicineScreen();
-                }}>
-                <Text style={{ paddingHorizontal: 20, alignSelf: 'center', color: COLORS.BLUE }}>
-                  {STRINGS.VISITED_SCREEN.ADD_MEDICINE}
-                </Text>
-              </TouchableOpacity>
+              <ListMedicine medicineIds={visited?.medicines} />
               <HairLine style={{ width: '60%', marginVertical: 10 }} />
               <ImageView uris={prescription?.pictures ?? []} deletePic={deletePic} />
               <TouchableOpacity
