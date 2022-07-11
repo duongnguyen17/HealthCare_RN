@@ -5,6 +5,7 @@ import authSaga from "./authSaga";
 import deviceSaga from "./deviceSaga";
 import eventsSaga from "./eventsSaga";
 import healthSaga from "./healthSaga";
+import locationSaga from "./locationSaga";
 import medicinesSaga from "./medicinesSaga";
 import searchSaga from "./searchSaga";
 import userSaga from "./userSaga";
@@ -22,6 +23,7 @@ export default function* rootSaga() {
     ...userSaga,
     ...deviceSaga,
     ...searchSaga,
+    ...locationSaga,
   ])
 }
 

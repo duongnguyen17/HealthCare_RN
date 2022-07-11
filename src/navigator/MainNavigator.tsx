@@ -6,7 +6,7 @@ import {
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { COLORS, FONT_SIZE, STRINGS } from '../common';
 
 //import screen
@@ -23,6 +23,8 @@ import { setNavigator } from './NavigationServices';
 import Storage from '../utils/Storage';
 import ProfileScreen from '../screens/ProfileScreen';
 import ListMedicineScreen from '../screens/ListMedicineScreen';
+import ListVisitedScreen from '../screens/ListVisitedScreen';
+import ListLocationScreen from '../screens/ListLocationScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TabNavigator = () => {
@@ -31,7 +33,24 @@ const TabNavigator = () => {
       initialRouteName={STRINGS.ROUTE.MAIN_TABS.DIARY}
       screenOptions={({ route }) => ({
         headerShown: false,
-
+        tabBarLabel: ({ focused, color }) => {
+          let title: any
+          switch (route.name) {
+            case STRINGS.ROUTE.MAIN_TABS.PRACTICE:
+              title = <Text style={[styles.labelTabBar, { color: color }]}>Luyện tập</Text>
+              break;
+            case STRINGS.ROUTE.MAIN_TABS.DIARY:
+              title = <Text style={[styles.labelTabBar, { color: color }]}>Ghi chú</Text>
+              break;
+            case STRINGS.ROUTE.MAIN_TABS.PROFILE:
+              title = <Text style={[styles.labelTabBar, { color: color }]}>Cá nhân</Text>
+              break;
+            default:
+              title = <Text style={[styles.labelTabBar, { color: color }]}>Thống kê</Text>
+              break;
+          }
+          return title
+        },
         tabBarIcon: ({ focused, color }) => {
           let icon: any
           switch (route.name) {
@@ -176,10 +195,25 @@ const MainNavigator = () => {
           component={ListMedicineScreen}
           name={STRINGS.ROUTE.LIST_MEDICINE_SCREEN}
           options={{ headerShown: false }}
-
+        />
+        <Stack.Screen
+          component={ListVisitedScreen}
+          name={STRINGS.ROUTE.LIST_VISITED_SCREEN}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={ListLocationScreen}
+          name={STRINGS.ROUTE.LIST_LOCATION_SCREEN}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 export default MainNavigator;
+
+const styles = StyleSheet.create({
+  labelTabBar: {
+    fontSize: FONT_SIZE.CONTENT
+  }
+})

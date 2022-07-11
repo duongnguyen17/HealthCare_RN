@@ -36,7 +36,7 @@ export const addMedicine = async (medicine: any) => {
         })
 
     } catch (error) {
-        console.log("🚀 ~ file: medicine.controller.ts ~ line 22 ~ addMedicine ~ error", error)
+    console.log("🚀 ~ file: medicine.controller.ts ~ line 39 ~ addMedicine ~ error", error)
     }
 }
 

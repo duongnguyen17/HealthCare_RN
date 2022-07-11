@@ -36,16 +36,17 @@ import TagWithIcon from '../main/DiaryTab/components/TagWithIcon';
 const MedicineScreen = (props: ScreenProps) => {
     const _id = routeParam(props.route, '_id');
     const visitedId = routeParam(props.route, 'visitedId');
+
     const dispatch = useDispatch();
     const medicine = routeParam(props.route, 'medicine') ?? useSelector((state: RootStateType) => state.medicineState.tempMedicine)
 
     const [title, setTitle] = useState<string>("");
-    const [infor, setInfor] = useState<PicNote>()
+    const [infor, setInfor] = useState<PicNote>({})
     const [reminds, setReminds] = useState<Array<Remind | any>>([]);
     const [timeUnit, setTimeUnit] = useState<TimeUnit>(TimeUnit.DAY);
     const [count, setCount] = useState<string>('0');
     const [startDate, setStartDate] = useState<any>(new Date())
-    const [shcedules, setSchedules] = useState<Array<Schedule>>([])
+    const [schedules, setSchedules] = useState<Array<Schedule>>([])
 
     const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false)
 
@@ -58,10 +59,7 @@ const MedicineScreen = (props: ScreenProps) => {
     useEffect(() => {
         if (medicine != null && medicine != undefined) {
             setTitle(medicine?.title)
-            setReminds(medicine?.remind)
-            setCount(medicine?.during.toString())
         }
-
     }, [medicine])
 
     const onSubmit = () => {
@@ -88,14 +86,12 @@ const MedicineScreen = (props: ScreenProps) => {
             goBack();
         } else {
             //nếu là tạo mới
-            dispatch(medicinesAction.addTempMedicine({
+            dispatch(medicinesAction.addMedicine({
                 medicine: {
-                    _id: medicine?._id ?? Date.now(),
+                    _id: Date.now(),
                     title,
-                    during: calDuring(count, timeUnit),
-                    remind: reminds,
-                    start: null,
-                    visitedId: null,
+                    infor,
+                    schedules,
                 }
             }))
             goBack();
@@ -146,6 +142,13 @@ const MedicineScreen = (props: ScreenProps) => {
         temp.splice(index, 1);
         setReminds(temp);
     };
+
+    const addNote = (text: string) => {
+        setInfor({
+            ...infor,
+            note: text
+        })
+    }
 
     const PickDay = useCallback(() => (
         <Picker
@@ -248,20 +251,36 @@ const MedicineScreen = (props: ScreenProps) => {
 
     }, [reminds, timeUnit, count, datePickerVisible])
 
-    const Schedules = useCallback(() => (
-        (_id !== undefined || (_id == undefined && visitedId == undefined)) ? null :
+
+    const Schedules = useCallback(() =>
+        (_id !== undefined) ?
             <TagWithIcon iconName="infocirlceo" iconFont="AntDesign">
-                <Text style={{ fontSize: FONT_SIZE.HEADER_TAG }}>Lần khám liên quan</Text>
+                <Text style={{ fontSize: FONT_SIZE.HEADER_TAG }}>Các lịch uống thuốc</Text>
                 <TouchableOpacity
                     onPress={() => {
 
                     }}>
-                    <View style={{ borderColor: COLORS.GRAY_DECOR, borderWidth: 1, marginTop: 10 }}>
+                    <View style={{ marginTop: 10 }}>
 
                     </View>
                 </TouchableOpacity>
-            </TagWithIcon>
-    ), [shcedules.length])
+            </TagWithIcon> : null
+        , [schedules.length])
+
+    const Visiteds = useCallback(() => (
+        (_id !== undefined) ?
+            <TagWithIcon iconName="infocirlceo" iconFont="AntDesign">
+                <Text style={{ fontSize: FONT_SIZE.HEADER_TAG }}>Các lần khám sử dụng</Text>
+                <TouchableOpacity
+                    onPress={() => {
+
+                    }}>
+                    <View style={{ marginTop: 10 }}>
+
+                    </View>
+                </TouchableOpacity>
+            </TagWithIcon> : null
+    ), [schedules.length])
 
     return (
         <ContainerView>
@@ -319,10 +338,11 @@ const MedicineScreen = (props: ScreenProps) => {
                                 </Text>
                             </TouchableOpacity>
                             <View style={{ borderColor: COLORS.GRAY_DECOR, borderWidth: 1, marginTop: 10 }}>
-                                <TextInput multiline={true} style={{ fontSize: 14 }} placeholder={"Ghi chú"} />
+                                <TextInput multiline={true} style={{ fontSize: 14 }} placeholder={"Ghi chú"} onChangeText={addNote} />
                             </View>
                         </TagWithIcon>
                         <AddSchedule />
+                        <Visiteds />
                         <Schedules />
                     </ScrollView>
                 </View>

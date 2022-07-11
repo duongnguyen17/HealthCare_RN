@@ -6381,6 +6381,11 @@ react-native-animatable@1.3.3, react-native-animatable@^1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-app-link@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-app-link/-/react-native-app-link-1.0.1.tgz#4a17c01df0230a5e49c117baa5037c5689cee1c6"
+  integrity sha512-usPcJMZMVvRs/lBSy/UU+ooB+h2YhMXGA47xvWVltyOQerQu4hKSWG+qG2BRKcpHmTkmFynDSf5cLWztXwAA1w==
+
 react-native-circular-progress@^1.3.7:
   version "1.3.7"
   resolved "https://registry.npmjs.org/react-native-circular-progress/-/react-native-circular-progress-1.3.7.tgz"
@@ -8298,3 +8303,8 @@ yargs@^16.1.1:
     string-width "^4.2.0"
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
+
+zepp-health-care-hasley@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/zepp-health-care-hasley/-/zepp-health-care-hasley-1.0.1.tgz#e705b58218c20874a4ec8a43561aa48588f10580"
+  integrity sha512-8QklQv06o54S09nqpKtTM2MieWK/ivxx9GF4ZkWnKjdySobO3GPGrCpQQJszZxGNSmXKLiDGX3DqWYUfNkdbTA==

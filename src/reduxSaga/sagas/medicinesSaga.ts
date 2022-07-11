@@ -6,8 +6,6 @@ import { addMedicine, deleteMedicine, getAllMedicine, getMedicine, updateMedicin
 import NotifiSchedule from '../../utils/Notifi'
 import { medicinesAction } from '../slices/medicinesSlice'
 
-
-
 export default [
     takeLatest(medicinesAction.getAllMedicine.type, getAllMedicineSaga),
     takeLatest(medicinesAction.addMedicine.type, addMedicineSaga),
@@ -35,10 +33,10 @@ function* getAllMedicineSaga() {
 }
 function* addMedicineSaga(action: any) {
     try {
-        const medicine = action.payload
+        const { medicine } = action.payload
         showLoading()
         yield call(addMedicine, medicine)
-        NotifiSchedule.genNotifiMedicine(medicine)
+        // NotifiSchedule.genNotifiMedicine(medicine)
         //tạm thời thì sau khi thêm thì add luôn víited kia vào visitedState
         yield put(medicinesAction.addMedicineSuccess({ medicine }))
     } catch (error) {
@@ -116,12 +114,17 @@ function* getMedicineSaga(action: any) {
     }
 }
 
-function* getMedicinesSaga(action: any) {
+function* getMedicinesSaga({ payload }: any) {
     try {
-        const arrayId = action.payload.medicineIds
-        //@ts-ignore
-        let medicines = yield call(_getMedicines, arrayId)
-        yield put(medicinesAction.getMedicinesSuccess({ medicines }))
+        const arrayId = payload
+        if (arrayId.length == 0) {
+            yield put(medicinesAction.getMedicinesSuccess({ medicines: [] }))
+        }
+        else {
+            //@ts-ignore
+            let medicines = yield call(_getMedicines, arrayId)
+            yield put(medicinesAction.getMedicinesSuccess({ medicines }))
+        }
     } catch (error) {
     }
 }

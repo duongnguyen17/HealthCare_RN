@@ -3,7 +3,7 @@ import { NavigationContainerRef } from "@react-navigation/native";
 import React from "react";
 import { GestureResponderEvent, PressableProps, TextInputProps, TextStyle, ViewProps, ViewStyle } from "react-native";
 import { CalorieResponse, DistanceResponse, HeartRateResponse, SleepSampleResponse, StepsResponse } from "react-native-google-fit";
-import { HEvent, Medicine, Visited } from "../common";
+import { HEvent, Location, Medicine, Visited } from "../common";
 
 export interface AuthReducerType {
     isLoggIned: boolean,
@@ -20,7 +20,7 @@ export interface AppContextType {
 export interface MedicinesStateType {
     all: Array<Medicine>,
     tempMedicine: Medicine | null | undefined,
-    tempMedicines: Array<Medicine | undefined | null>
+    tempMedicines: Array<Medicine>
 }
 export interface VisitedsStateType {
     all: Array<Visited>,
@@ -60,6 +60,10 @@ export interface DeviceStateType {
     listDeviceConnected?: Array<Device>,
 }
 
+export interface LocationStateType {
+    all: Array<Location>
+    temp: Location | undefined
+}
 export interface Device {
     id: string,
     name: string,
@@ -89,6 +93,8 @@ export interface RootStateType {
     visitedState: VisitedsStateType,
     eventState: EventsStateType,
     userState: UserStateType,
+    searchState: SearchStateType,
+    locationState:LocationStateType,
 }
 export interface ScreenProps extends ViewProps {
     navigation?: NavigationProp<any, any>,

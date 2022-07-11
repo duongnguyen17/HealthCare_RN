@@ -81,6 +81,8 @@ export const STRINGS = {
       REGISTER_FINISH: 'RegisterFinish',
     },
     LIST_MEDICINE_SCREEN: 'LIST_MEDICINE_SCREEN',
+    LIST_VISITED_SCREEN: 'LIST_VISITED_SCREEN',
+    LIST_LOCATION_SCREEN: 'LIST_LOCATION_SCREEN',
   },
   NOTIFICATION_ACTION: {
     OK: "OK",
@@ -165,7 +167,7 @@ export enum SearchType {
   MEDICINE = 'Medicine',
   // DATE = 'Date',
   VISITED = 'Visited',
-  // LOCATION = 'Location',
+  LOCATION = 'Location',
   ALL = 'All',
 }
 
@@ -209,7 +211,7 @@ export interface Visited {
   _id: number,
   title: string,
   pre: number,//id of pre visited
-  location: Location,
+  location: number,
   descript: string,
   date: number,
   medicines?: Array<number>,

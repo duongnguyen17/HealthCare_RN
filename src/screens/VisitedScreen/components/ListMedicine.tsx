@@ -8,7 +8,7 @@ import { medicinesAction } from '../../../reduxSaga/slices/medicinesSlice';
 import { RootStateType } from '../../../type/type';
 
 
-export default memo(({ medicineIds }: { medicineIds: Array<number> | undefined }) => {
+export default ({ medicineIds, addMedicine }: { medicineIds: Array<number>, addMedicine: any }) => {
     const tempMedicines = useSelector((state: RootStateType) => state.medicineState.tempMedicines)
     const dispatch = useDispatch()
 
@@ -22,8 +22,9 @@ export default memo(({ medicineIds }: { medicineIds: Array<number> | undefined }
         });
     };
 
+
     const gotoListMedicineScreen = () => {
-        navigateTo(STRINGS.ROUTE.LIST_MEDICINE_SCREEN)
+        navigateTo(STRINGS.ROUTE.LIST_MEDICINE_SCREEN, { addMedicine })
     }
 
     return (
@@ -39,4 +40,4 @@ export default memo(({ medicineIds }: { medicineIds: Array<number> | undefined }
             </TouchableOpacity>
         </View>
     )
-})
+}

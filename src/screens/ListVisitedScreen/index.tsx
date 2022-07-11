@@ -8,15 +8,14 @@ import HeaderCommon from '../../components/HHeader/HHeaderCommon';
 import HIcon from '../../components/HIcon';
 import MedicineTag from '../../components/MedicineTag';
 import { useDebounceValue } from '../../customHooks';
-import { navigateTo, routeParam } from '../../navigator/NavigationServices';
+import { navigateTo } from '../../navigator/NavigationServices';
 import { searchAction } from '../../reduxSaga/slices/searchSlice';
 import { RootStateType, ScreenProps } from '../../type/type';
 
-const ListMedicineScreen = (props: ScreenProps) => {
+const ListVisitedScreen = (props: ScreenProps) => {
     const searchResult = useSelector(
         (state: RootStateType) => state.searchState.searchResult,
     );
-    const onPressItem = routeParam(props.route, "addMedicine")
     const dispatch = useDispatch();
     const [textInput, setTextInput] = useState('');
     const keyword = useDebounceValue<string>(textInput);
@@ -26,10 +25,10 @@ const ListMedicineScreen = (props: ScreenProps) => {
     }, [keyword]);
 
     const renderItem = ({ item }: any) => {
-        return (<MedicineTag data={item} onPressItem={onPressItem} />)
+        return (<MedicineTag data={item} />)
     };
 
-    const search = (keyword: String, type = SearchType.MEDICINE) => {
+    const search = (keyword: String, type = SearchType.VISITED) => {
         dispatch(searchAction.search({ keyword, searchType: type }));
     };
 
@@ -52,7 +51,7 @@ const ListMedicineScreen = (props: ScreenProps) => {
     }
         , [textInput])
 
-    const RenderList = useCallback(() => searchResult?.length == 0 ? (
+    const RenderList = useCallback(() => searchResult.length == 0 ? (
         <Text
             style={{
                 color: COLORS.GRAY_TEXT_1,
@@ -65,10 +64,6 @@ const ListMedicineScreen = (props: ScreenProps) => {
     ) : (
         <FlatList data={searchResult} renderItem={renderItem} />
     ), [searchResult])
-
-    const gotoMedicineScreen = () => {
-        navigateTo(STRINGS.ROUTE.DIARY.MEDICINE)
-    }
 
     return (
         <ContainerView>
@@ -89,23 +84,18 @@ const ListMedicineScreen = (props: ScreenProps) => {
                         </View>
                     </View>
                 )}
+
             />
             <View
                 style={styles.containerList}>
                 <RenderList />
             </View>
-            <HButton
-                style={styles.button}
-                title="Tạo thuốc mới"
-                textStyle={styles.textBtnLogin}
-                type={'normal'}
-                onPress={gotoMedicineScreen}
-            />
         </ContainerView>
     );
 };
 
-export default ListMedicineScreen
+export default ListVisitedScreen
+
 const styles = StyleSheet.create({
     editTextContainer: {
         flex: 1,

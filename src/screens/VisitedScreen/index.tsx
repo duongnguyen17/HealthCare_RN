@@ -23,6 +23,7 @@ import MedicineItem from '../../components/MedicineItem';
 import {
   goBack,
   navigateTo,
+  navigationAvailbe,
   routeParam
 } from '../../navigator/NavigationServices';
 import { medicinesAction } from '../../reduxSaga/slices/medicinesSlice';
@@ -35,6 +36,7 @@ import { getPicture, getPictures, takePicture } from '../../utils/picture';
 import ImageView from '../../components/ImageView';
 import { arrayUnique } from '../../utils/arrayUtils';
 import ListMedicine from './components/ListMedicine';
+import { LocationItem } from './components/LocationItem';
 enum ImgType {
   Prescription,
   XRay,
@@ -42,7 +44,7 @@ enum ImgType {
 }
 
 const VisitedScreen = (props: ScreenProps) => {
-  const _id = routeParam(props.route, '_id');
+  const _id = routeParam(props.route, '_id', Date.now());
   const RBSheetImagePicker = useRef<any>()
   const dispatch = useDispatch();
   const tempMedicine = useSelector((state: RootStateType) => state.medicineState.tempMedicine)
@@ -51,7 +53,7 @@ const VisitedScreen = (props: ScreenProps) => {
 
   const [title, setTitle] = useState<string>('');
   const [pre, setPre] = useState<number | null>();
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState<number | undefined>();
   const [date, setDate] = useState(Date.now());
   const [medicines, setMedicines] = useState<Array<number>>([]);
   const [prescription, setPrescription] = useState<PicNote>()
@@ -70,7 +72,7 @@ const VisitedScreen = (props: ScreenProps) => {
   }, [])
 
   useEffect(() => {
-    if ((_id != null || _id != undefined) && visited != null && visited != undefined) {
+    if (_id != undefined && visited != null && visited != undefined) {
       setTitle(visited?.title)
       setPre(visited?.pre)
       setLocation(visited?.location?.name ?? "")
@@ -86,36 +88,35 @@ const VisitedScreen = (props: ScreenProps) => {
   }, [tempMedicine])
 
   const onSubmit = () => {
-    // if (title == '' || title == undefined) {
-    //   showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
-    // } else {
-    //   let visitedId = visited?._id ?? Date.now();
-    //   let tempVisited = {
-    //     _id: visitedId,
-    //     title,
-    //     pre,
-    //     location,
-    //     descript,
-    //     date,
+    if (title == '' || title == undefined) {
+      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
+    } else {
+      let tempVisited = {
+        _id: _id,
+        title,
+        pre,
+        location,
+        descript,
+        date,
 
-    //   };
-    //   if (!visited) {
-    //     dispatch(visitedsAction.addVisited(tempVisited));
-    //   } else {
-    //     dispatch(visitedsAction.updateVisited(tempVisited));
-    //   }
-    //   if (medicines.length != 0) {
-    //     let medicinesTemp = [...medicines];
-    //     medicinesTemp.forEach(e => {
-    //       if (e.visitedId !== visitedId) {
-    //         e.visitedId = visitedId;
-    //         e.start = date;
-    //       }
-    //     });
-    //     dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
-    //   }
-    //   goBack();
-    // }
+      };
+      if (!visited) {
+        dispatch(visitedsAction.addVisited(tempVisited));
+      } else {
+        dispatch(visitedsAction.updateVisited(tempVisited));
+      }
+      if (medicines.length != 0) {
+        let medicinesTemp = [...medicines];
+        medicinesTemp.forEach(e => {
+          if (e.visitedId !== visitedId) {
+            e.visitedId = visitedId;
+            e.start = date;
+          }
+        });
+        dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
+      }
+      goBack();
+    }
   };
 
   const updateMedicine = (medicine: Medicine) => {
@@ -150,9 +151,13 @@ const VisitedScreen = (props: ScreenProps) => {
     setTimePickerVisible(false);
   };
 
-  const gotoSearchScreen = () => {
-    navigateTo(STRINGS.ROUTE.SEARCH, { type: SearchType.VISITED });
+  const gotoListVisitedScreen = () => {
+    navigateTo(STRINGS.ROUTE.LIST_VISITED_SCREEN);
   };
+
+  const gotoListLocationScreen = () => {
+    navigateTo(STRINGS.ROUTE.LIST_LOCATION_SCREEN)
+  }
 
   const gotoMedicineScreen = (medicine: Medicine | null = null) => {
     if (title == '' || title == undefined) {
@@ -283,6 +288,18 @@ const VisitedScreen = (props: ScreenProps) => {
     RBSheetImagePicker.current.open()
   }
 
+  const changeLocation = (_id: number) => {
+    setLocation(_id)
+    goBack()
+  }
+
+  const addMedicine = (_id: number) => {
+    if (!medicines.includes(_id)) {
+      setMedicines([_id, ...medicines])
+    }
+    goBack()
+  }
+
   return (
     <ContainerView>
       < TouchableWithoutFeedback onPress={Keyboard.dismiss} >
@@ -316,7 +333,7 @@ const VisitedScreen = (props: ScreenProps) => {
             <TagWithIcon iconName="event-note" iconFont="MaterialIcons">
               <TouchableOpacity
                 style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-                onPress={gotoSearchScreen}>
+                onPress={gotoListVisitedScreen}>
                 <Text>{STRINGS.VISITED_SCREEN.LAST_VISITED}</Text>
                 <View
                   style={{
@@ -336,29 +353,13 @@ const VisitedScreen = (props: ScreenProps) => {
               </TouchableOpacity>
             </TagWithIcon>
             <TagWithIcon iconName="map-marker" iconFont="FontAwesome">
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <TextInput
-                  value={location}
-                  multiline
-                  onChangeText={setLocation}
-                  placeholder={STRINGS.VISITED_SCREEN.LOCATION}
-                  style={{ flex: 1 }}
-                />
-                <TouchableOpacity>
-                  <HIcon font="MaterialIcons" name="arrow-forward-ios" size={18} />
-                </TouchableOpacity>
-              </View>
+              <LocationItem _id={location} onPress={changeLocation} />
             </TagWithIcon>
             <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
               <DatePicker />
             </TagWithIcon>
             <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
-              <ListMedicine medicineIds={visited?.medicines} />
+              <ListMedicine medicineIds={medicines} addMedicine={addMedicine} />
               <HairLine style={{ width: '60%', marginVertical: 10 }} />
               <ImageView uris={prescription?.pictures ?? []} deletePic={deletePic} />
               <TouchableOpacity

@@ -1,35 +1,40 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS, DIMENS, FONT_SIZE, SearchType, STRINGS } from '../../common';
 import ContainerView from '../../components/ContainerView';
+import HairLine from '../../components/HairLine';
 import HButton from '../../components/HButton';
 import HeaderCommon from '../../components/HHeader/HHeaderCommon';
 import HIcon from '../../components/HIcon';
+import LocationTag from '../../components/LocationTag';
 import MedicineTag from '../../components/MedicineTag';
 import { useDebounceValue } from '../../customHooks';
 import { navigateTo, routeParam } from '../../navigator/NavigationServices';
+import { locationAction } from '../../reduxSaga/slices/locationSlice';
 import { searchAction } from '../../reduxSaga/slices/searchSlice';
 import { RootStateType, ScreenProps } from '../../type/type';
 
-const ListMedicineScreen = (props: ScreenProps) => {
+export default (props: ScreenProps) => {
     const searchResult = useSelector(
         (state: RootStateType) => state.searchState.searchResult,
     );
-    const onPressItem = routeParam(props.route, "addMedicine")
+    const onPress = routeParam(props.route, "onPress")
+    const RBSheetName = useRef<any>()
     const dispatch = useDispatch();
     const [textInput, setTextInput] = useState('');
     const keyword = useDebounceValue<string>(textInput);
+    const [name, setName] = useState("")
 
     useEffect(() => {
         search(keyword);
     }, [keyword]);
 
-    const renderItem = ({ item }: any) => {
-        return (<MedicineTag data={item} onPressItem={onPressItem} />)
-    };
+    const renderItem = ({ item }: any) => <LocationTag data={item} onPressItem={onPress} />
 
-    const search = (keyword: String, type = SearchType.MEDICINE) => {
+
+    const search = (keyword: String, type = SearchType.LOCATION) => {
         dispatch(searchAction.search({ keyword, searchType: type }));
     };
 
@@ -66,8 +71,15 @@ const ListMedicineScreen = (props: ScreenProps) => {
         <FlatList data={searchResult} renderItem={renderItem} />
     ), [searchResult])
 
-    const gotoMedicineScreen = () => {
-        navigateTo(STRINGS.ROUTE.DIARY.MEDICINE)
+    const create = () => {
+        RBSheetName.current.open()
+    }
+
+    const save = () => {
+        if (name.trim() != "") {
+            dispatch(locationAction.addLocation({ _id: Date.now(), name: name }))
+        }
+        RBSheetName.current.close()
     }
 
     return (
@@ -89,6 +101,7 @@ const ListMedicineScreen = (props: ScreenProps) => {
                         </View>
                     </View>
                 )}
+
             />
             <View
                 style={styles.containerList}>
@@ -96,16 +109,34 @@ const ListMedicineScreen = (props: ScreenProps) => {
             </View>
             <HButton
                 style={styles.button}
-                title="Tạo thuốc mới"
+                title="Tạo địa điểm mới"
                 textStyle={styles.textBtnLogin}
                 type={'normal'}
-                onPress={gotoMedicineScreen}
+                onPress={create}
             />
+            <RBSheet ref={RBSheetName} height={3 * DIMENS.BUTTON_RBSHEET_HEIGHT}>
+                <View style={{ flex: 1 }}>
+                    <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                        <Text>Thêm địa điểm</Text>
+                    </View>
+                    <View style={{ flex: 1, justifyContent: 'center' }}>
+                        <TextInput autoFocus value={name} onChangeText={setName} style={{ borderWidth: 1, borderRadius: 6, marginHorizontal: 16, borderColor: COLORS.GRAY_DECOR, height: 36, paddingVertical: 2, paddingHorizontal: 8 }} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <HairLine style={{ marginTop: 10 }} />
+                        <TouchableOpacity style={{ flex: 1, justifyContent: 'center', backgroundColor: COLORS.GRAY_DECOR, alignItems: 'center' }}
+                            onPress={save}
+                        >
+                            <Text>Lưu</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </RBSheet>
         </ContainerView>
     );
 };
 
-export default ListMedicineScreen
+
 const styles = StyleSheet.create({
     editTextContainer: {
         flex: 1,
