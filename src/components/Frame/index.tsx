@@ -24,18 +24,15 @@ export interface FrameProps extends TouchableOpacityProps, ViewProps {
 const styles = StyleSheet.create({
   container: {
     minHeight: 50,
-    marginHorizontal: 8,
-    // alignItems: 'center',
-    marginVertical: 10,
     shadowColor: '#000000',
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowRadius: 5,
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 1,
     },
     shadowOpacity: 0.3,
-    elevation: 5
+    elevation: 3
   }
 })

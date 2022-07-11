@@ -6,8 +6,6 @@ import { addMedicine, deleteMedicine, getAllMedicine, getMedicine, updateMedicin
 import NotifiSchedule from '../../utils/Notifi'
 import { medicinesAction } from '../slices/medicinesSlice'
 
-
-
 export default [
     takeLatest(medicinesAction.getAllMedicine.type, getAllMedicineSaga),
     takeLatest(medicinesAction.addMedicine.type, addMedicineSaga),
@@ -15,7 +13,8 @@ export default [
     takeLatest(medicinesAction.deleteMedicine.type, deleteMedicineSaga),
     takeLatest(medicinesAction.getAllMedicineOfVisited.type, getAllMedicineOfVisitedSaga),
     takeLatest(medicinesAction.updateAllMedicineOfVisited.type, updateAllMedicineOfVisitedSaga),
-    takeLatest(medicinesAction.getMedicine.type, getMedicineSaga)
+    takeLatest(medicinesAction.getMedicine.type, getMedicineSaga),
+    takeLatest(medicinesAction.getMedicines.type, getMedicinesSaga),
 ]
 
 function* getAllMedicineSaga() {
@@ -34,10 +33,10 @@ function* getAllMedicineSaga() {
 }
 function* addMedicineSaga(action: any) {
     try {
-        const medicine = action.payload
+        const { medicine } = action.payload
         showLoading()
         yield call(addMedicine, medicine)
-        NotifiSchedule.genNotifi(medicine)
+        // NotifiSchedule.genNotifiMedicine(medicine)
         //tạm thời thì sau khi thêm thì add luôn víited kia vào visitedState
         yield put(medicinesAction.addMedicineSuccess({ medicine }))
     } catch (error) {
@@ -115,3 +114,32 @@ function* getMedicineSaga(action: any) {
     }
 }
 
+function* getMedicinesSaga({ payload }: any) {
+    try {
+        const arrayId = payload
+        if (arrayId.length == 0) {
+            yield put(medicinesAction.getMedicinesSuccess({ medicines: [] }))
+        }
+        else {
+            //@ts-ignore
+            let medicines = yield call(_getMedicines, arrayId)
+            yield put(medicinesAction.getMedicinesSuccess({ medicines }))
+        }
+    } catch (error) {
+    }
+}
+
+
+const _getMedicines = async (arrayId: Array<number>) => {
+    try {
+        let medicines = await Promise.all(
+            arrayId.map(async (value) => {
+                const medicine = await getMedicine(value)
+                return medicine
+            })
+        )
+        return medicines
+    } catch (error) {
+        throw (error)
+    }
+}

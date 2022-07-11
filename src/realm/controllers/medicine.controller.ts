@@ -36,7 +36,7 @@ export const addMedicine = async (medicine: any) => {
         })
 
     } catch (error) {
-        console.log("🚀 ~ file: medicine.controller.ts ~ line 22 ~ addMedicine ~ error", error)
+    console.log("🚀 ~ file: medicine.controller.ts ~ line 39 ~ addMedicine ~ error", error)
     }
 }
 
@@ -91,7 +91,7 @@ export const updateMedicines = async (medicines: Array<Medicine>) => {
                 else {
                     // console.log('object')
                     realm.create(SCHEMA.MEDICINE, e1)
-                    NotifiSchedule.genNotifi(e1)
+                    NotifiSchedule.genNotifiMedicine(e1)
                 }
             })
         })

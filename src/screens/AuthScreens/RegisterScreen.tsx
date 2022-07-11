@@ -1,87 +1,72 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {TextInput} from 'react-native-paper';
-import {STRINGS} from '../../common';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TextPropTypes, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { TextInput } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { COLORS, DIMENS, FONT_SIZE, STRINGS } from '../../common';
+import HairLine from '../../components/HairLine';
 import HButton from '../../components/HButton';
-import {ScreenProps} from '../../type/type';
-import {COLORS, FONT_SIZE} from '../../common';
-import { navigateTo } from '../../navigator/NavigationServices';
+import { goBack, replace } from '../../navigator/NavigationServices';
+import { authAction } from '../../reduxSaga/slices/authSlice';
+import { ScreenProps } from '../../type/type';
+import { validatePassword, validatePhone } from '../../utils/validate';
 
-const RegisterScreen = ({navigation}: ScreenProps) => {
-  const [phonenumber, setPhonenumber] = useState<string>('');
-  const [disabled, setDisabled] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const confirmForgotPassword = () => {
-    // if (validatePhone(userPhone))
-    navigateTo(STRINGS.ROUTE.AUTH.VERIFY_OTP, {
-      phonenumber: phonenumber,
-    });
-  };
+const RegisterScreen = ({ navigation }: ScreenProps) => {
+  const dispatch = useDispatch()
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [submitCheck, setSubmitCheck] = useState(false);
+
+  useEffect(() => {
+    setSubmitCheck(validatePhone(phoneNumber) && validatePassword(password) && checkPassword())
+  }, [confirmPassword, password, phoneNumber])
+
+  const checkPassword = (): boolean => {
+    return password === confirmPassword
+  }
+
+  const onRegist = () => {
+    dispatch(authAction.signup({ phoneNumber, password }))
+  }
+
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled">
-      <View
-        style={{
-          marginHorizontal: 16,
-          flex: 1,
-          justifyContent: 'space-between',
-        }}>
-        <View style={{marginTop: 52}}>
-          <Text style={styles.forgetPass}>
-            Nhập số điện thoại để đổi mật khẩu
+    <KeyboardAwareScrollView>
+      <View style={styles.container}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text style={styles.text_title_app}>
+            Health Care
           </Text>
-          <View style={{flex: 1, flexDirection: 'row', marginTop: 25}}>
-            {/* <PhoneInput
-                            error={checkPhone}
-                            onChangeFormattedText={setCode}
-                            inputType={true}
-                            phone={userPhone}
-                            onChangeText={handlePhone}
-                        /> */}
-
-            <TextInput
-              label={'Số điện thoại'}
-              value={phonenumber}
-              onChangeText={setPhonenumber}
-              mode={'outlined'}
-              keyboardType="number-pad"
-              style={styles.textInput}
-              theme={{colors: {primary: isError ? COLORS.ORANGE : COLORS.LIGHT_BLUE}}}
-              onSubmitEditing={confirmForgotPassword}
-              autoFocus={true}
-            />
-          </View>
-          <View style={styles.error}>
-            {isError && (
-              <Text
-                style={{fontSize: 16, fontFamily: 'Lato', color: COLORS.ORANGE}}>
-                Nhập số điện thoại hợp lệ
-              </Text>
-            )}
-          </View>
+          <Text style={styles.text_register}>
+            Register
+          </Text>
+          <Text style={styles.text_title_detail}>
+            Please enter detail to register
+          </Text>
         </View>
-        <View style={{alignItems: 'center'}}>
-          <Text style={{color: COLORS.TEXT_COLOR_BLUR}}>
-            Tôi đồng ý với{' '}
-            <Text
-              onPress={() => {
-                // navigate(SCREENS.ACCOUNT.TERMS_OF_SERVICE)
-              }}
-              style={{color: COLORS.LIGHT_BLUE}}>
-              Điều khoản và dịch vụ
-            </Text>{' '}
-            của Fschool
-          </Text>
+        <View style={{ paddingTop: 10, flex: 2 }}>
+          <TextInput label='Phone number' keyboardType={'phone-pad'} value={phoneNumber} onChangeText={setPhoneNumber} style={styles.text_input} />
+          <TextInput label='Password' value={password} onChangeText={setPassword} style={styles.text_input} />
+          <TextInput label='Confirm Password' value={confirmPassword} onChangeText={setConfirmPassword} style={styles.text_input} />
           <HButton
-            style={{marginVertical: 12}}
-            title="Tiếp tục"
-            textStyle={styles.textLogin}
-            type={disabled ? 'disabled' : 'normal'}
-            disabled={disabled}
-            onPress={confirmForgotPassword}
+            style={styles.button}
+            title="Đăng kí"
+            textStyle={styles.text_btn_register}
+            type={submitCheck ? 'normal' : 'disabled'}
+            disabled={submitCheck ? false : true}
+            onPress={onRegist}
           />
+          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+            <HairLine style={{ width: '90%' }} />
+            <Text style={styles.text_have_acc}>
+              Bạn đã có tài khoản?{' '}
+              <Text
+                style={styles.text_login}
+                onPress={() => { goBack() }}>
+                Đăng nhập
+              </Text>
+            </Text>
+          </View>
         </View>
       </View>
     </KeyboardAwareScrollView>
@@ -90,23 +75,45 @@ const RegisterScreen = ({navigation}: ScreenProps) => {
 export default RegisterScreen;
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: 'white',
+    height: DIMENS.SCREEN_HEIGHT,
+    width: DIMENS.SCREEN_WIDTH,
+    backgroundColor: COLORS.WHITE,
+    paddingHorizontal: 10
   },
-  forgetPass: {
-    alignSelf: 'center',
+  text_title_app: {
+    color: COLORS.LIGHT_BLUE,
+    fontWeight: 'bold',
+    fontSize: 42,
+  },
+  text_register: {
+    marginTop: 20,
+    color: COLORS.LIGHT_BLUE,
+    fontWeight: 'bold',
+    fontSize: 26
+  },
+  text_title_detail: {
+    color: COLORS.GRAY_TEXT_2,
+    fontSize: FONT_SIZE.TITLE
+  },
+  text_input: {
+    backgroundColor: COLORS.WHITE,
+    marginTop: 10
+  },
+  text_login: {
     fontSize: FONT_SIZE.CONTENT,
-    fontWeight: '200',
+    fontWeight: 'bold',
+    color: COLORS.BLUE,
   },
-  textLogin: {
+  button: {
+    marginTop: 50,
+    marginHorizontal: 40
+  },
+  text_btn_register: {
+    fontSize: 16,
+  },
+  text_have_acc: {
     fontSize: FONT_SIZE.CONTENT,
-    fontWeight: '400',
+    marginTop: 8,
+    color: COLORS.BLACK,
   },
-  textInput: {
-    flex: 5,
-    fontSize: FONT_SIZE.CONTENT,
-  },
-  error: {
-    marginTop: 7,
-  },
-});
+})

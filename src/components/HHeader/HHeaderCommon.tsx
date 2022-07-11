@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import HHeader from '.';
 import { COLORS, DIMENS, FONT_SIZE, ICON_SIZE } from '../../common';
 import { goBack } from '../../navigator/NavigationServices';
@@ -16,7 +16,7 @@ const HeaderCommon = ({
 
   const m_onPressLeftIcon = onPressLeftIcon ?? goBack;
   return (
-    <HHeader hasLinear={hasLinear} style={[{ minHeight: DIMENS.HEADER_STATUS_BAR_HEIGHT, backgroundColor: COLORS.WHITE }, style]}>
+    <HHeader hasLinear={hasLinear} style={[styles.container, style]}>
       <View
         style={{
           flexDirection: 'row',
@@ -30,7 +30,6 @@ const HeaderCommon = ({
               onPress={m_onPressLeftIcon}
               style={{
                 paddingStart: 16,
-                paddingEnd: 8,
                 height: '100%',
                 justifyContent: 'center',
                 alignItems: 'center'
@@ -45,7 +44,7 @@ const HeaderCommon = ({
             renderLeft()
           )}
         </View>
-        <View>
+        <View style={{ flex: 1, alignItems: 'center' }}>
           {!renderTitle ? (
             <Text style={{ fontSize: FONT_SIZE.HEADER, alignSelf: 'center' }}>
               {title}
@@ -54,12 +53,25 @@ const HeaderCommon = ({
             renderTitle()
           )}
         </View>
-        <View style={{ marginEnd: 8 }}>{!renderRight ? <View /> : renderRight()}</View>
+        <View style={{ marginHorizontal: 8 }}>{!renderRight ? <View /> : renderRight()}</View>
       </View>
     </HHeader>
   );
 };
 export default HeaderCommon;
+
+const styles = StyleSheet.create({
+  container: {
+    minHeight: DIMENS.HEADER_STATUS_BAR_HEIGHT,
+    backgroundColor: COLORS.WHITE,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.3,
+    elevation: 3
+  },
+})
 interface HeaderOfAddScreenProps {
   onPressLeftIcon?: () => void;
   title?: string;

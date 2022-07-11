@@ -11,6 +11,7 @@ import {
 } from '../../common';
 import { navigateTo } from '../../navigator/NavigationServices';
 import { getHoursMinutes } from '../../utils/dateutils';
+
 export const EventTag = memo(({ data }: TaskTagProps) => {
 
   const navigateToDetail = () => {
@@ -32,7 +33,7 @@ export const EventTag = memo(({ data }: TaskTagProps) => {
         }])}
       activeOpacity={ACTIVE_OPACITY}
       onPress={navigateToDetail}>
-      <View style={styles.container_time}>
+      <View style={styles.container_content}>
         <Text
           style={StyleSheet.flatten([
             styles.text_title,
@@ -93,8 +94,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   container_time: {
-    flex: 1,
-    alignItems: 'center',
+    // flex: 1,
+    // alignItems: 'center',
   },
   container_text: {
     flex: 5,
@@ -105,6 +106,9 @@ const styles = StyleSheet.create({
   },
   text_descript: {
     fontSize: FONT_SIZE.CONTENT,
+  },
+  container_content: {
+    flex: 1
   }
 })
 interface TaskTagProps {

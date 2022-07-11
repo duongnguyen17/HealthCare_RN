@@ -1,8 +1,9 @@
 import { NavigationProp, RouteProp } from "@react-navigation/core";
 import { NavigationContainerRef } from "@react-navigation/native";
 import React from "react";
-import { Animated, ButtonProps, GestureResponderEvent, PressableProps, TextInputProps, TextStyle, ViewProps, ViewStyle } from "react-native";
-import { HEvent, Medicine, Visited } from "../common";
+import { GestureResponderEvent, PressableProps, TextInputProps, TextStyle, ViewProps, ViewStyle } from "react-native";
+import { CalorieResponse, DistanceResponse, HeartRateResponse, SleepSampleResponse, StepsResponse } from "react-native-google-fit";
+import { HEvent, Location, Medicine, Visited } from "../common";
 
 export interface AuthReducerType {
     isLoggIned: boolean,
@@ -19,6 +20,7 @@ export interface AppContextType {
 export interface MedicinesStateType {
     all: Array<Medicine>,
     tempMedicine: Medicine | null | undefined,
+    tempMedicines: Array<Medicine>
 }
 export interface VisitedsStateType {
     all: Array<Visited>,
@@ -28,10 +30,71 @@ export interface EventsStateType {
     all: Array<HEvent>,
     searchResult: Array<HEvent>,
 }
+
+export interface SearchStateType {
+    searchResult: Array<Medicine | Visited>
+}
+
+export interface AuthStateType {
+    _id: string,
+    isLogin: boolean,
+    error: string,
+}
+
+export interface UserStateType {
+    _id?: string,
+    customInfor: CustomInforType
+}
+
+export interface CustomInforType {
+    username?: string,
+    avatar?: string,
+    sex?: number,
+    dob?: string,
+    height?: number,
+    weight?: number,
+}
+
+export interface DeviceStateType {
+    deviceConnecting?: Device | null,
+    listDeviceConnected?: Array<Device>,
+}
+
+export interface LocationStateType {
+    all: Array<Location>
+    temp: Location | undefined
+}
+export interface Device {
+    id: string,
+    name: string,
+}
+export interface HealthStateType {
+    isAuthorized: boolean,
+    goalSteps?: number,
+    today?: {
+        processSteps?: number,
+        steps: Array<StepsResponse>,
+        sleep: Array<SleepSampleResponse>,
+        heartbeat: Array<HeartRateResponse>,
+        distances: Array<DistanceResponse>,
+        calories: Array<CalorieResponse>,
+    },
+    overview?: any,
+    steps?: StepsResponse,
+    sleepAnalysis?: SleepSampleResponse,
+    heartbeat?: HeartRateResponse,
+    distances?: DistanceResponse,
+    calories?: CalorieResponse,
+}
 export interface RootStateType {
+    authState: AuthStateType,
+    healthState: HealthStateType,
     medicineState: MedicinesStateType,
     visitedState: VisitedsStateType,
-    eventState: EventsStateType
+    eventState: EventsStateType,
+    userState: UserStateType,
+    searchState: SearchStateType,
+    locationState:LocationStateType,
 }
 export interface ScreenProps extends ViewProps {
     navigation?: NavigationProp<any, any>,
@@ -67,3 +130,14 @@ export interface NavigationServiceConfig {
     navigator?: NavigationContainerRef<{}>
 }
 
+export interface ApiResponse {
+    message?: string,
+    code?: number,
+    data?: any
+}
+
+export interface ProcessResponseType {
+    code: number,
+    message: string,
+    data: any,
+}

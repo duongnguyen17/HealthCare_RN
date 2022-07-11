@@ -9,6 +9,7 @@ export const STRINGS = {
     TITLE: "Tìm kiếm",
     NO_RESULT: "Không tìm thấy kết quả phù hợp",
     INPUT_SEARCH_KEY_WORD: 'Nhập từ khoá tìm kiếm',
+    NO_DATA: 'Danh sách trống',
   },
   DIARY_TAB: {
     TODAY_HAS_NO_EVENT: 'Hôm nay không có sự kiện nào',
@@ -32,7 +33,7 @@ export const STRINGS = {
     MONTH: 'tháng',
     TIME_REMIND_DO_NOT_DUPLICATE: 'Thời gian nhắc nhở không được trùng nhau',
     THE_NAME_OF_DRUG_CANNOT_BE_LEFT_BLANK: 'Không được để trống tên thuốc',
-    MEDICINE_NAME: "Tên thuốc ...",
+    MEDICINE_NAME: "Tên thuốc ...*",
     ADD_REMIND: "Thêm nhắc nhở",
     LAST: "Uống trong",
   },
@@ -40,7 +41,7 @@ export const STRINGS = {
     TITLE: 'Lần khám',
     LAST_VISITED: 'Lần Khám trước',
     THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK: 'Không được để trống tên lần khám',
-    VISITED_NAME: "Tên lần khám ...",
+    VISITED_NAME: "Tên lần khám ...*",
     LOCATION: "Địa điểm",
     EX_DAY: "Ngày khám",
     ADD_MEDICINE: "Thêm thuốc",
@@ -56,6 +57,9 @@ export const STRINGS = {
       HEART_BEAT: 'Nhịp tim',
     },
   },
+  PROFILE_SCREEN: {
+    PROFILE: "Hồ sơ"
+  },
   ROUTE: {
     MAIN_TABS: {
       PRACTICE: 'Practice',
@@ -67,6 +71,8 @@ export const STRINGS = {
     TAB_NAVIGATOR: 'TabNavigator',
     SEARCH: 'Search',
     REPORT_DETAIL: "ReportDetail",
+    RUNNING: "Running",
+    PROFILE: "PROFILE",
     AUTH: {
       LOGIN: 'Login',
       REGISTER: 'Register',
@@ -74,6 +80,9 @@ export const STRINGS = {
       VERIFY_OTP: 'VerifyOTP',
       REGISTER_FINISH: 'RegisterFinish',
     },
+    LIST_MEDICINE_SCREEN: 'LIST_MEDICINE_SCREEN',
+    LIST_VISITED_SCREEN: 'LIST_VISITED_SCREEN',
+    LIST_LOCATION_SCREEN: 'LIST_LOCATION_SCREEN',
   },
   NOTIFICATION_ACTION: {
     OK: "OK",
@@ -84,6 +93,7 @@ export const STRINGS = {
 }
 
 export const COLORS = {
+  BACKGROUND: '#ffffff',
   PRIMARY_COLOR: '#F36744',
   BORDER_BOTTOM_COLOR: '#ABABAB',
   PLACEHOLDER_TEXT_COLOR: '#ABABAB',
@@ -104,9 +114,9 @@ export const COLORS = {
   LIGHT_BLUE: '#2db6eb',
   LIGHT_BLUE_1: '#e8f7fd',
   DARK_BLUE: '#182537',
-  GRAY_DECOR: '#cccccc',
-  GRAY_TEXT_1: '#cccccc',
-  GRAY_TEXT_2: '#999999',
+  GRAY_DECOR: '#e6e6e6',
+  GRAY_TEXT_1: '#b3b3b3',
+  GRAY_TEXT_2: '#808080',
   EVENT_TAG: {
     Medicine: {
       backgroundColor: '#fff',
@@ -157,7 +167,7 @@ export enum SearchType {
   MEDICINE = 'Medicine',
   // DATE = 'Date',
   VISITED = 'Visited',
-  // LOCATION = 'Location',
+  LOCATION = 'Location',
   ALL = 'All',
 }
 
@@ -180,14 +190,17 @@ export enum TimeUnit {
 }
 export interface Medicine {
   _id: number,
-  visitedId: number,
   title: string,
-  // isDone: boolean,
-  remind: Array<Remind>,
-  start: number,
-  during: number
+  infor: PicNote,
+  shcedules: Array<Schedule>,
 }
 
+export interface Schedule {
+  visitedId: number,
+  reminds: Remind,
+  start: number,
+  during: number,
+}
 export interface Remind {
   time: string,
   descript?: string,
@@ -198,12 +211,23 @@ export interface Visited {
   _id: number,
   title: string,
   pre: number,//id of pre visited
-  location: string,
+  location: number,
   descript: string,
   date: number,
-  medicines?: Array<Medicine>
+  medicines?: Array<number>,
+  prescription?: PicNote,
+  xRay?: PicNote,
+  test?: PicNote,
 }
 
+export interface PicNote {
+  pictures?: Array<string | undefined>,
+  note?: string,
+}
+export interface Location {
+  _id?: number,
+  name?: string,
+}
 export interface HEvent {
   date: Date,
   event: Array<HEventMedicine | HEventVisited>
@@ -238,7 +262,8 @@ export const DIMENS = {
   SCREEN_HEIGHT: height,
   STATUS_BAR_HEIGHT: statusBarHeight,
   HEADER_STATUS_BAR_HEIGHT: 50,
-  HEADER_HEIGHT: 50
+  HEADER_HEIGHT: 50,
+  BUTTON_RBSHEET_HEIGHT: 48,
 }
 
 export const TIMING = {
@@ -269,4 +294,21 @@ export const ROUTE_KEY_PARAM = {
 
 export const IMG_SOURCE = {
   IMG_MAP: require('../../assets/images/img_map.png')
+}
+
+
+export const STORAGE_KEY = {
+  IS_LOGIN: 'IS_LOGIN',
+  TOKEN: 'TOKEN',
+  REFRESH_TOKEN: 'REFRESH_TOKEN',
+  USE_GOOGLEFIT: 'USE_GOOGLEFIT',
+}
+
+export const IMG_DEFAULT_AVATAR = require('../../assets/images/img_default_avatar.png')
+
+export const TOUCH_OPACITY = 0.7
+
+export enum Sex {
+  Male,
+  FeMail,
 }

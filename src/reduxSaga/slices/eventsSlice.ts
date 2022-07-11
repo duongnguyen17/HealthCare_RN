@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { HEvent } from "../../common"
-import { EventsStateType } from "../../type/type"
+import { createSlice } from "@reduxjs/toolkit";
+import { HEvent } from "../../common";
+import { EventsStateType } from "../../type/type";
 
 
 const initialState: EventsStateType = {
@@ -29,7 +29,7 @@ const eventsSlice = createSlice({
         },
         searchEventSuccess: (state, { payload }) => {
             // console.log(`payload.searchResult`, payload.searchResult)
-            state.searchResult = payload.searchResult.sort((a: HEvent, b: HEvent) => (a.date.getTime() - b.date.getTime()))
+            state.searchResult = payload.searchResult.sort((a: HEvent, b: HEvent) => (new Date(a.date).getTime() - new Date(b.date).getTime()))
         }
     }
 })

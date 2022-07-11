@@ -39,7 +39,7 @@ export class HAlert extends Component<AlertProps, AlertState> {
   _id: String = 'Alert';
   cancelable: boolean = false;
   color: ColorValue = COLORS.LIGHT_GREEN;
-  icon: ImageSourcePropType | null = null;
+  icon: ImageSourcePropType | null = require('./assets/short_right.png');
   type: AlertType = AlertType.WARN;
   message: string = '';
   constructor(props: AlertProps) {

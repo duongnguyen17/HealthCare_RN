@@ -88,7 +88,7 @@ export default function HButton(props: HButtonProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    // width: '100%',
   },
   buttonNomal: {
     paddingHorizontal: 15,

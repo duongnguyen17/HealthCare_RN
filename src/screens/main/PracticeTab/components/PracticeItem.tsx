@@ -4,7 +4,7 @@ import { IMG_SOURCE } from "../../../../common";
 import HIcon from "../../../../components/HIcon";
 
 
-const PracticeItem = () => {
+const PracticeItem = ({ onPress }: { onPress: () => void }) => {
 
     return (
         <View style={styles.contaner}>
@@ -45,7 +45,7 @@ const PracticeItem = () => {
                             justifyContent: 'center',
                         }}
                             activeOpacity={0.7}
-                            onPress={() => { }}
+                            onPress={onPress}
                         >
                             <Text style={{ textTransform: 'uppercase', fontSize: 20, fontWeight: '700', color: 'white' }}>go</Text>
                         </TouchableOpacity>
