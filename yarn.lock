@@ -1250,12 +1250,12 @@
     color "^3.1.3"
     warn-once "^0.1.0"
 
-"@react-navigation/core@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.npmjs.org/@react-navigation/core/-/core-6.1.0.tgz"
-  integrity sha512-LyZqD/ZCXSK9+ES8KiH+0tU+7aL84jUw1N9OxZfEuns/OcnSXKC3sOO+9NQ9XRowB1wLUfJhmqZ8G8rUlg33fQ==
+"@react-navigation/core@^6.2.2":
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-6.2.2.tgz#29ca539e22581616aad82b7451d47c5efe936f31"
+  integrity sha512-gEJ1gRqt1EIqRrnJIpSQ0wWJRue9maAQNKYrlQ0a/LSKErF3g6w+sD2wW4Bbb1yj88pGhKeuI4wdB9MVK766Pg==
   dependencies:
-    "@react-navigation/routers" "^6.1.0"
+    "@react-navigation/routers" "^6.1.1"
     escape-string-regexp "^4.0.0"
     nanoid "^3.1.23"
     query-string "^7.0.0"
@@ -1274,19 +1274,20 @@
     "@react-navigation/elements" "^1.2.1"
     warn-once "^0.1.0"
 
-"@react-navigation/native@^6.0.6":
-  version "6.0.6"
-  resolved "https://registry.npmjs.org/@react-navigation/native/-/native-6.0.6.tgz"
-  integrity sha512-XzL7YPsaRRQgdCQSXbA8PJWLN2I4lhUUvSFoKQPNO4DS6y8eqZI1V8COPYlJg8+tsetGV5J8jt+jVjWL7h6ZrQ==
+"@react-navigation/native@^6.0.11":
+  version "6.0.11"
+  resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-6.0.11.tgz#d221a5f6a5222187a09fc968d07d67d83ce70708"
+  integrity sha512-z0YTB7Czdb9SNjxfzcFNB3Vym0qmUcxpiYGOOXX8PH0s+xlIs/w+2RVp6YAvAC48A30o7MMCYqy5OeR6lrtWHg==
   dependencies:
-    "@react-navigation/core" "^6.1.0"
+    "@react-navigation/core" "^6.2.2"
     escape-string-regexp "^4.0.0"
+    fast-deep-equal "^3.1.3"
     nanoid "^3.1.23"
 
-"@react-navigation/routers@^6.1.0":
-  version "6.1.0"
-  resolved "https://registry.npmjs.org/@react-navigation/routers/-/routers-6.1.0.tgz"
-  integrity sha512-8xJL+djIzpFdRW/sGlKojQ06fWgFk1c5jER9501HYJ12LF5DIJFr/tqBI2TJ6bk+y+QFu0nbNyeRC80OjRlmkA==
+"@react-navigation/routers@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@react-navigation/routers/-/routers-6.1.1.tgz#902ec3fedcf540af36cd9f013779c5134af58e73"
+  integrity sha512-mWWj2yh4na/OBaE7bWrft4kdAtxnG8MlV6ph3Bi6tHqgcnxENX+dnQY6y0qg/6E7cmMlaJg5nAC5y4Enr5ir8A==
   dependencies:
     nanoid "^3.1.23"
 
@@ -1489,6 +1490,11 @@
   version "15.7.4"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.4.tgz"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
+
+"@types/react-native-app-link@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-app-link/-/react-native-app-link-1.0.0.tgz#810555052af56cd327b782f6cc23f3c53956440b"
+  integrity sha512-6N7xALQXAz4MNym+fbpb3iza5G7aKlAi6Rzt0CvYNspzqBYjNIDHnyGHnFzg42JwFuOyvcXmlkU8kAhHnTxhTw==
 
 "@types/react-native-push-notification@^8.1.0":
   version "8.1.0"
@@ -8304,7 +8310,7 @@ yargs@^16.1.1:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-zepp-health-care-hasley@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/zepp-health-care-hasley/-/zepp-health-care-hasley-1.0.1.tgz#e705b58218c20874a4ec8a43561aa48588f10580"
-  integrity sha512-8QklQv06o54S09nqpKtTM2MieWK/ivxx9GF4ZkWnKjdySobO3GPGrCpQQJszZxGNSmXKLiDGX3DqWYUfNkdbTA==
+zepp-health-care-hasley@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/zepp-health-care-hasley/-/zepp-health-care-hasley-1.0.3.tgz#9d5db047ebdfc6df9ce633f94cae95c0b998eeaf"
+  integrity sha512-VHUFLk3Q3gy3uvtP3UxlBKaEtjFVBunjhW/HeTi7FavRSk4DjZodhER/bWMuNzRXQFFRph/NGlldXpyHOyQ7yg==

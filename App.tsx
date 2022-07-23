@@ -1,19 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Platform, StatusBar, UIManager } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { HAlert } from './src/components/HAlert';
-import { Loading } from './src/components/Loading';
+import React, {useEffect, useRef, useState} from 'react';
+import {Platform, StatusBar, UIManager} from 'react-native';
+import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider, useDispatch, useSelector} from 'react-redux';
+import {HAlert} from './src/components/HAlert';
+import {Loading} from './src/components/Loading';
 import AuthNavigator from './src/navigator/AuthNavigator';
 import MainNavigator from './src/navigator/MainNavigator';
 import RealmManager from './src/realm';
-import { authAction } from './src/reduxSaga/slices/authSlice';
+import {authAction} from './src/reduxSaga/slices/authSlice';
 import store from './src/reduxSaga/store';
 import Intro from './src/screens/Intro/Intro';
-import { RootStateType } from './src/type/type';
+import {RootStateType} from './src/type/type';
 
 // để sử dụng LayoutAnimation
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -21,7 +24,7 @@ const AppRoot = () => {
   const dispatch = useDispatch()
   let isLogin = useSelector((state: RootStateType) => state.authState.isLogin)
 
-  const [isIntro, setIsIntro] = useState<boolean>(true)
+  const [isIntro, setIsIntro] = useState<boolean>(true);
 
   useEffect(() => {
     if (isLogin == false) {
@@ -39,14 +42,14 @@ const AppRoot = () => {
   //   }
   // }
   if (isIntro) {
-    return <Intro setIsIntro={setIsIntro} />
+    return <Intro setIsIntro={setIsIntro} />;
   }
   return (
     <React.Fragment>
       <Loading />
       <HAlert />
       {isLogin ? <MainNavigator /> : <AuthNavigator />}
-
+      {/* <MainNavigator /> */}
     </React.Fragment>
   );
 };
@@ -64,7 +67,7 @@ const App = () => {
   return (
     <PaperProvider>
       <Provider store={store}>
-        <StatusBar barStyle={"light-content"} />
+        <StatusBar barStyle={'light-content'} />
         <AppRoot />
       </Provider>
     </PaperProvider>

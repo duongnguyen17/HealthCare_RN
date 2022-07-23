@@ -1,69 +1,70 @@
-import React, { useEffect, useState } from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {
-  RefreshControl, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import AppLink from 'react-native-app-link';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import LinearGradient from 'react-native-linear-gradient';
-import { COLORS, DIMENS, FONT_SIZE, STORAGE_KEY, STRINGS } from '../../../common';
+import {useDispatch, useSelector} from 'react-redux';
+import SendIntentAndroid from 'zepp-health-care-hasley';
+import {COLORS, DIMENS, FONT_SIZE, STRINGS} from '../../../common';
 import ContainerView from '../../../components/ContainerView';
 import Frame from '../../../components/Frame';
 import HairLine from '../../../components/HairLine';
 import HIcon from '../../../components/HIcon';
-import { navigateTo } from '../../../navigator/NavigationServices';
-import { RootStateType, TabViewProps } from '../../../type/type';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
-import Modal from 'react-native-modal';
-import { HGoogleFit } from '../../../utils/HGoogleFit';
-import Storage from '../../../utils/Storage';
-import { useDispatch, useSelector } from 'react-redux';
-import { healthAction } from '../../../reduxSaga/slices/healthSlice';
-import { useIsFocused } from '@react-navigation/native';
+import {navigateTo} from '../../../navigator/NavigationServices';
+import {healthAction} from '../../../reduxSaga/slices/healthSlice';
+import {RootStateType, TabViewProps} from '../../../type/type';
 
-const OverView = ({ }: TabViewProps) => {
-  const dispatch = useDispatch()
-  const focused = useIsFocused()
-  const { isAuthorized, today } = useSelector((state: RootStateType) => state.healthState)
-  const _id = useSelector((state: RootStateType) => state.authState._id)
-  const [modalVisible, setModalVisible] = useState(false)
+const OverView = ({}: TabViewProps) => {
+  const dispatch = useDispatch();
+  const focused = useIsFocused();
+  const {isAuthorized, today} = useSelector(
+    (state: RootStateType) => state.healthState,
+  );
+
   const [isReFresh, setIsReFresh] = useState(false);
 
   useEffect(() => {
-    checkGGFit()
-  }, [])
-
-  useEffect(() => {
     if (isAuthorized && focused) {
-      dispatch(healthAction.getOverviewToday())
+      dispatch(healthAction.getOverviewToday());
     }
-  }, [isAuthorized, focused])
-
-  const checkGGFit = async () => {
-    const storage = await Storage.getItem(STORAGE_KEY.USE_GOOGLEFIT + _id)
-    if (storage != 1) {
-      if (!isAuthorized) { setModalVisible(true) } else {
-        await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT + _id, 1)
-      }
-    } else {
-      if (!isAuthorized) dispatch(healthAction.onAuthorize())
-    }
-  }
+  }, [isAuthorized, focused]);
 
   const onRefresh = () => {
     setIsReFresh(true);
-    dispatch(healthAction.getOverviewToday())
+    dispatch(healthAction.getOverviewToday());
   };
 
-  const dataRe = [{}];
+  const openInStore = () => {
+    AppLink.openInStore({
+      appName: 'com.huami.watch.hmwatchmanager',
+      appStoreId: 1127269366,
+      appStoreLocale: 'vn',
+      playStoreId: 'com.huami.watch.hmwatchmanager',
+    })
+      .then(res => {})
+      .catch(err => {
+        // handle error
+      });
+  };
 
-  const googlefitAuth = async () => {
-    dispatch(healthAction.onAuthorize())
-    setModalVisible(false)
-  }
-
-  const connectDevice = () => {
-    //navigate to device screen
-    ToastAndroid.show("Chưa có chức năng này", 1000)
-    setModalVisible(false)
-  }
+  const goZepp = async () => {
+    try {
+      const result = await SendIntentAndroid.gotoOtherApp(
+        'com.huami.watch.hmwatchmanager',
+      );
+      if (result == false || result == undefined) {
+        openInStore();
+      }
+    } catch (error) {}
+  };
 
   return (
     <ContainerView>
@@ -78,15 +79,23 @@ const OverView = ({ }: TabViewProps) => {
           zIndex: 0,
         }}
         colors={[COLORS.LIGHT_BLUE, '#e6f2ff', '#ffffff']}
-        start={{ x: 0.5, y: 0.25 }}
-        end={{ x: 0, y: 1.0 }}
+        start={{x: 0.5, y: 0.25}}
+        end={{x: 0, y: 1.0}}
       />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 8, marginTop: 4, marginBottom: 2 }}>
-        <View>
-
-        </View>
-        <TouchableOpacity style={{ paddingVertical: 4, paddingHorizontal: 8 }} activeOpacity={0.7} onPress={() => { }}>
-          <HIcon name='plus' font='AntDesign' color='white' size={22} />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginHorizontal: 8,
+          marginTop: 4,
+          marginBottom: 2,
+        }}>
+        <View></View>
+        <TouchableOpacity
+          style={{paddingVertical: 4, paddingHorizontal: 8}}
+          activeOpacity={0.7}
+          onPress={goZepp}>
+          <HIcon name="plus" font="AntDesign" color="white" size={22} />
         </TouchableOpacity>
       </View>
       <ScrollView
@@ -96,52 +105,118 @@ const OverView = ({ }: TabViewProps) => {
         }>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
+            <Text style={styles.title_frame}>
+              {STRINGS.REPORT_TAB.FOOT_STEP}
+            </Text>
 
-            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.FOOT_STEP}</Text>
-
-            <View style={{ marginTop: 20, width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-              <View style={{ width: 140, height: 140, justifyContent: 'center', alignItems: 'center' }}>
+            <View
+              style={{
+                marginTop: 20,
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 10,
+              }}>
+              <View
+                style={{
+                  width: 140,
+                  height: 140,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 <AnimatedCircularProgress
-                  style={{ position: 'absolute' }}
+                  style={{position: 'absolute'}}
                   rotation={0}
                   size={120}
                   width={10}
                   fill={today?.processSteps ?? 0}
                   tintColor={COLORS.BLUE}
                   // onAnimationComplete={() => console.log('onAnimationComplete')}
-                  backgroundColor={COLORS.LIGHT_BLUE_1} />
-                <HIcon name='shoe-print' font='MaterialCommunityIcons' size={36} color={COLORS.BLUE} />
-                <Text style={{ fontWeight: '400', fontSize: 30, color: COLORS.BLACK }}>{today?.steps[2]?.steps[0]?.value}</Text>
+                  backgroundColor={COLORS.LIGHT_BLUE_1}
+                />
+                <HIcon
+                  name="shoe-print"
+                  font="MaterialCommunityIcons"
+                  size={36}
+                  color={COLORS.BLUE}
+                />
+                <Text
+                  style={{
+                    fontWeight: '400',
+                    fontSize: 30,
+                    color: COLORS.BLACK,
+                  }}>
+                  {today?.steps[2]?.steps[0]?.value}
+                </Text>
               </View>
               <View>
-                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: FONT_SIZE.CONTENT }}>
+                <Text
+                  style={{
+                    fontWeight: '400',
+                    color: COLORS.BLACK,
+                    fontSize: FONT_SIZE.CONTENT,
+                  }}>
                   Khoảng cách bước đi
                 </Text>
-                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 20 }}>{today?.distances[0]?.distance.toFixed(2)} <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 14 }}>m</Text></Text>
-                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: FONT_SIZE.CONTENT }}>
+                <Text
+                  style={{
+                    fontWeight: '400',
+                    color: COLORS.BLACK,
+                    fontSize: 20,
+                  }}>
+                  {today?.distances[0]?.distance.toFixed(2)}{' '}
+                  <Text
+                    style={{
+                      fontWeight: '400',
+                      color: COLORS.BLACK,
+                      fontSize: 14,
+                    }}>
+                    m
+                  </Text>
+                </Text>
+                <Text
+                  style={{
+                    fontWeight: '400',
+                    color: COLORS.BLACK,
+                    fontSize: FONT_SIZE.CONTENT,
+                  }}>
                   Mức tiêu thụ của bước đi
                 </Text>
-                <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 20 }}>{today?.calories[0]?.calorie.toFixed(3)} <Text style={{ fontWeight: '400', color: COLORS.BLACK, fontSize: 14 }}>Kcal</Text></Text>
+                <Text
+                  style={{
+                    fontWeight: '400',
+                    color: COLORS.BLACK,
+                    fontSize: 20,
+                  }}>
+                  {today?.calories[0]?.calorie.toFixed(3)}{' '}
+                  <Text
+                    style={{
+                      fontWeight: '400',
+                      color: COLORS.BLACK,
+                      fontSize: 14,
+                    }}>
+                    Kcal
+                  </Text>
+                </Text>
               </View>
             </View>
           </View>
-
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
             <View>
-              <Text style={{ fontSize: FONT_SIZE.HEADER }}>
+              <Text style={{fontSize: FONT_SIZE.HEADER}}>
                 {STRINGS.REPORT_TAB.SOME_PRODUCTS_FOR_YOU}
               </Text>
               <View>{/* <HSwipe data={dataRe} /> */}</View>
             </View>
-            <HairLine style={{ width: '60%' }} />
+            <HairLine style={{width: '60%'}} />
             <TouchableOpacity
-              style={{ width: '100%', alignItems: 'center' }}
+              style={{width: '100%', alignItems: 'center'}}
               onPress={() => {
                 navigateTo(STRINGS.ROUTE.REPORT_DETAIL);
               }}>
-              <Text style={{ marginTop: 8 }}>{STRINGS.REPORT_TAB.SEE_MORE}</Text>
+              <Text style={{marginTop: 8}}>{STRINGS.REPORT_TAB.SEE_MORE}</Text>
             </TouchableOpacity>
           </View>
         </Frame>
@@ -149,23 +224,39 @@ const OverView = ({ }: TabViewProps) => {
           <View style={styles.inLineFrame}>
             <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.SLEEP}</Text>
             <View style={styles.content_frame}>
-              {today?.sleep == undefined || today.sleep.length == 0 ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+              {today?.sleep == undefined || today.sleep.length == 0 ? (
+                <Text style={styles.text_nodata}>Không có dữ liệu</Text>
+              ) : (
+                <View></View>
+              )}
             </View>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.HEART_RATE}</Text>
+            <Text style={styles.title_frame}>
+              {STRINGS.REPORT_TAB.HEART_RATE}
+            </Text>
             <View style={styles.content_frame}>
-              {today?.heartbeat == undefined || today?.heartbeat.length == 0 ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+              {today?.heartbeat == undefined || today?.heartbeat.length == 0 ? (
+                <Text style={styles.text_nodata}>Không có dữ liệu</Text>
+              ) : (
+                <View></View>
+              )}
             </View>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.PRACTICE_HISTORY}</Text>
+            <Text style={styles.title_frame}>
+              {STRINGS.REPORT_TAB.PRACTICE_HISTORY}
+            </Text>
             <View style={styles.content_frame}>
-              {today?.sleep == undefined ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+              {today?.sleep == undefined ? (
+                <Text style={styles.text_nodata}>Không có dữ liệu</Text>
+              ) : (
+                <View></View>
+              )}
             </View>
           </View>
         </Frame>
@@ -173,36 +264,29 @@ const OverView = ({ }: TabViewProps) => {
           <View style={styles.inLineFrame}>
             <Text style={styles.title_frame}>SpO2</Text>
             <View style={styles.content_frame}>
-              {today?.sleep == undefined ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+              {today?.sleep == undefined ? (
+                <Text style={styles.text_nodata}>Không có dữ liệu</Text>
+              ) : (
+                <View></View>
+              )}
             </View>
           </View>
         </Frame>
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
-            <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.WEIGHT_HEIGHT}</Text>
+            <Text style={styles.title_frame}>
+              {STRINGS.REPORT_TAB.WEIGHT_HEIGHT}
+            </Text>
             <View style={styles.content_frame}>
-              {today?.sleep == undefined ? <Text style={styles.text_nodata}>Không có dữ liệu</Text> : <View></View>}
+              {today?.sleep == undefined ? (
+                <Text style={styles.text_nodata}>Không có dữ liệu</Text>
+              ) : (
+                <View></View>
+              )}
             </View>
           </View>
         </Frame>
       </ScrollView>
-      <Modal onDismiss={() => { }} isVisible={modalVisible} >
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.view_modal}>
-            <Text style={styles.title_modal}>Chọn phương thức theo dõi sức khỏe</Text>
-            <TouchableOpacity style={[styles.button_modal, { backgroundColor: COLORS.LIGHT_BLUE, marginTop: 20 }]}
-              onPress={googlefitAuth}
-            >
-              <Text style={styles.title_button_modal}>Thiết bị này</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button_modal, { backgroundColor: COLORS.LIGHT_ORANGE }]}
-              onPress={connectDevice}
-            >
-              <Text style={styles.title_button_modal}>Thiết bị ngoại vi</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </ContainerView>
   );
 };
@@ -249,17 +333,15 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginHorizontal: 20,
     alignItems: 'center',
-    borderRadius: 10
+    borderRadius: 10,
   },
   title_button_modal: {
     color: COLORS.WHITE,
     fontWeight: '500',
     fontSize: FONT_SIZE.CONTENT,
   },
-  content_frame: {
-
-
-  }, text_nodata: {
+  content_frame: {},
+  text_nodata: {
     alignSelf: 'center',
     color: COLORS.GRAY_TEXT_2,
   },
