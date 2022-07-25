@@ -10,10 +10,10 @@ export const VisitedSchema = {
         location: 'double?',
         descript: 'string?',
         date: 'double',
-        medicines: 'double?[]',
-        prescription: 'PicNote',
-        xRay: 'PicNote',
-        test: 'PicNote',
+        medicines: 'double[]',
+        prescription: 'PicNote?',
+        xRay: 'PicNote?',
+        test: 'PicNote?',
     },
     primaryKey: '_id'
 }
@@ -22,7 +22,7 @@ export const PicNoteSchema = {
     name: SCHEMA.PICNOTE,
     embedded: true, // default: false
     properties: {
-        pictures: 'string[]',
-        note: 'string',
+        pictures: 'string?[]',
+        note: 'string?',
     }
 }

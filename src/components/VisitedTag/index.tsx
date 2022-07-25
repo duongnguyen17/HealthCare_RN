@@ -1,30 +1,38 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {COLORS, FONT_SIZE, Location, Medicine, STRINGS} from '../../common';
+import {
+  COLORS,
+  FONT_SIZE,
+  Medicine,
+  STRINGS,
+  Visited,
+  VisitedItemDisplay,
+} from '../../common';
 import {navigateTo} from '../../navigator/NavigationServices';
+import {showDate, showDateTime} from '../../utils/dateutils';
 
-const LocationTag = ({data, onPressItem}: MedicineTagProps) => {
+const VisitedTag = ({data, onPressItem}: VisitedTagProps) => {
   const onPress = () => {
-    //@ts-ignore
     if (onPressItem !== undefined) onPressItem(data._id);
-    else {
-      gotoLocationScreen();
-    }
+    else navigateTo(STRINGS.ROUTE.DIARY.VISITED, {_id: data._id});
   };
-  const gotoLocationScreen = () => {
-    navigateTo(STRINGS.ROUTE.LOCATION_SCREEN, {_id: data._id});
-  };
+
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={onPress}
       activeOpacity={0.7}>
-      <Text style={styles.title}>{data?.name}</Text>
+      <Text style={styles.title}>{data?.title}</Text>
+      <Text style={styles.note}>{showDateTime(data?.date)}</Text>
+      <Text style={styles.note}>
+        {data?.location?.name ?? 'Không lưu địa điểm'}
+      </Text>
+      <Text style={styles.note}>{data?.descript}</Text>
     </TouchableOpacity>
   );
 };
 
-export default LocationTag;
+export default VisitedTag;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.LIGHT_BLUE_1,
@@ -40,9 +48,9 @@ const styles = StyleSheet.create({
   },
   note: {},
 });
-interface MedicineTagProps {
-  data: Location;
-  onPressItem?: () => void;
+interface VisitedTagProps {
+  data: VisitedItemDisplay;
+  onPressItem?: (_id: number) => void;
 }
 
 export interface DataTagType {

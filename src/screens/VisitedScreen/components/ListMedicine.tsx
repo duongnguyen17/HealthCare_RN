@@ -1,43 +1,65 @@
-import React, { memo, useEffect } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { COLORS, STRINGS } from '../../../common';
+import React, {memo, useEffect, useState} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {COLORS, STRINGS} from '../../../common';
 import MedicineItem from '../../../components/MedicineItem';
-import { navigateTo } from '../../../navigator/NavigationServices';
-import { medicinesAction } from '../../../reduxSaga/slices/medicinesSlice';
-import { RootStateType } from '../../../type/type';
+import {navigateTo} from '../../../navigator/NavigationServices';
+import {getListMedicines} from '../../../realm/controllers/medicine.controller';
 
-
-export default ({ medicineIds, addMedicine }: { medicineIds: Array<number>, addMedicine: any }) => {
-    const tempMedicines = useSelector((state: RootStateType) => state.medicineState.tempMedicines)
-    const dispatch = useDispatch()
+export default memo(
+  ({
+    visitedId,
+    medicineIds,
+    addMedicine,
+    updateScredules,
+  }: {
+    visitedId: number;
+    medicineIds: Array<number>;
+    addMedicine: any;
+    updateScredules: any;
+  }) => {
+    const [medicines, setMedicines] = useState<any>([]);
 
     useEffect(() => {
-        dispatch(medicinesAction.getMedicines(medicineIds))
-    }, [medicineIds])
+      _getListMedicines(medicineIds);
+    }, [medicineIds]);
 
-    const gotoMedicineScreen = (_id: number) => {
-        navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
-            _id: _id
-        });
+    const _getListMedicines = async (medicineIds: Array<number>) => {
+      const listMedicines = await getListMedicines(medicineIds);
+      setMedicines(listMedicines);
     };
 
+    const gotoMedicineScreen = (_id: number) => {
+      navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
+        _id: _id,
+      });
+    };
 
     const gotoListMedicineScreen = () => {
-        navigateTo(STRINGS.ROUTE.LIST_MEDICINE_SCREEN, { addMedicine })
-    }
+      navigateTo(STRINGS.ROUTE.LIST_MEDICINE_SCREEN, {addMedicine});
+    };
 
     return (
-        <View>
-            {
-                tempMedicines.map((value, index) => <MedicineItem key={index} medicine={value} gotoMedicine={gotoMedicineScreen} />)
-            }
-            <TouchableOpacity
-                onPress={gotoListMedicineScreen}>
-                <Text style={{ paddingHorizontal: 20, alignSelf: 'center', color: COLORS.BLUE }}>
-                    {STRINGS.VISITED_SCREEN.ADD_MEDICINE}
-                </Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
+      <View>
+        {medicines.map((value: any, index: number) => (
+          <MedicineItem
+            key={index}
+            medicine={value}
+            gotoMedicine={gotoMedicineScreen}
+            visitedId={visitedId}
+            updateScredules={updateScredules}
+          />
+        ))}
+        <TouchableOpacity onPress={gotoListMedicineScreen}>
+          <Text
+            style={{
+              paddingHorizontal: 20,
+              alignSelf: 'center',
+              color: COLORS.BLUE,
+            }}>
+            {STRINGS.VISITED_SCREEN.ADD_MEDICINE}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  },
+);

@@ -1,119 +1,131 @@
 import DateTimePicker from '@react-native-community/datetimepicker';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  Keyboard, Platform, ScrollView, StyleSheet, Text,
-  TextInput, TouchableOpacity, TouchableWithoutFeedback, View
+  Keyboard,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import {Asset} from 'react-native-image-picker';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   AlertType,
   COLORS,
   DIMENS,
   FONT_SIZE,
-  Medicine, PicNote, SearchType,
-  STRINGS, Visited
+  Medicine,
+  PicNote,
+  Schedule,
+  STRINGS,
+  Visited,
 } from '../../common';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import ContainerView from '../../components/ContainerView';
 import HairLine from '../../components/HairLine';
-import { showAlert } from '../../components/HAlert';
+import {showAlert} from '../../components/HAlert';
+import HButton from '../../components/HButton';
 import HHeaderCommon from '../../components/HHeader/HHeaderCommon';
-import HIcon from '../../components/HIcon';
-import MedicineItem from '../../components/MedicineItem';
+import ImageView from '../../components/ImageView';
 import {
   goBack,
   navigateTo,
-  navigationAvailbe,
-  routeParam
+  routeParam,
 } from '../../navigator/NavigationServices';
-import { medicinesAction } from '../../reduxSaga/slices/medicinesSlice';
-import { visitedsAction } from '../../reduxSaga/slices/visitedsSlice';
-import { RootStateType, ScreenProps } from '../../type/type';
+import {medicinesAction} from '../../reduxSaga/slices/medicinesSlice';
+import {visitedsAction} from '../../reduxSaga/slices/visitedsSlice';
+import {RootStateType, ScreenProps} from '../../type/type';
+import {arrayUnique} from '../../utils/arrayUtils';
+import {showDate, showTime} from '../../utils/dateutils';
+import {getPictures, takePicture} from '../../utils/picture';
 import Tag from '../main/DiaryTab/components/Tag';
 import TagWithIcon from '../main/DiaryTab/components/TagWithIcon';
-import { Asset, launchImageLibrary } from 'react-native-image-picker';
-import { getPicture, getPictures, takePicture } from '../../utils/picture';
-import ImageView from '../../components/ImageView';
-import { arrayUnique } from '../../utils/arrayUtils';
 import ListMedicine from './components/ListMedicine';
-import { LocationItem } from './components/LocationItem';
+import {LocationItem} from './components/LocationItem';
+import {PreItem} from './components/PreItem';
 enum ImgType {
   Prescription,
   XRay,
-  Test
+  Test,
 }
 
 const VisitedScreen = (props: ScreenProps) => {
-  const _id = routeParam(props.route, '_id', Date.now());
-  const RBSheetImagePicker = useRef<any>()
+  const now = useRef(Date.now());
+  const _id = routeParam(props.route, '_id');
+  const RBSheetImagePicker = useRef<any>();
   const dispatch = useDispatch();
-  const tempMedicine = useSelector((state: RootStateType) => state.medicineState.tempMedicine)
-  const visited: Visited | null | undefined = useSelector((state: RootStateType) => state.visitedState.tempVisited)
-  const imgType = useRef(ImgType.Prescription)
+
+  const visited = useSelector(
+    (state: RootStateType) => state.visitedState.visited,
+  );
+  const imgType = useRef(ImgType.Prescription);
 
   const [title, setTitle] = useState<string>('');
-  const [pre, setPre] = useState<number | null>();
+  const [pre, setPre] = useState<number>();
   const [location, setLocation] = useState<number | undefined>();
   const [date, setDate] = useState(Date.now());
-  const [medicines, setMedicines] = useState<Array<number>>([]);
-  const [prescription, setPrescription] = useState<PicNote>()
-  const [xRay, setXRay] = useState<PicNote>()
-  const [test, setTest] = useState<PicNote>()
+  const [medicines, setMedicines] = useState<Array<any>>([]);
+  const [prescription, setPrescription] = useState<PicNote>();
+  const [xRay, setXRay] = useState<PicNote>();
+  const [test, setTest] = useState<PicNote>();
   const [descript, setDescript] = useState<string>('');
+  const [schedules, setSchedules] = useState<Map<number, Schedule>>(new Map());
 
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [timePickerVisible, setTimePickerVisible] = useState(false);
 
+  useEffect(() => {
+    dispatch(visitedsAction.getVisted(_id));
+  }, []);
 
   useEffect(() => {
-    if (_id != undefined) {
-      dispatch(visitedsAction.getVisted({ _id: _id }))
-    }
-  }, [])
-
-  useEffect(() => {
-    if (_id != undefined && visited != null && visited != undefined) {
-      setTitle(visited?.title)
-      setPre(visited?.pre)
-      setLocation(visited?.location?.name ?? "")
-      setDate(visited?.date)
-      setDescript(visited?.descript)
-      setMedicines(visited?.medicines ?? [])
-    }
-  }, [visited])
-
-  useEffect(() => {
-    if (tempMedicine != null && tempMedicine != undefined)
-      updateMedicine({ ...tempMedicine })
-  }, [tempMedicine])
+    //@ts-ignore
+    setTitle(visited?.title);
+    //@ts-ignore
+    setPre(visited?.pre);
+    //@ts-ignore
+    setLocation(visited?.location);
+    //@ts-ignore
+    setDate(visited?.date ?? date);
+    //@ts-ignore
+    setDescript(visited?.descript);
+    //@ts-ignore
+    setMedicines(visited?.medicines ?? []);
+  }, [visited]);
 
   const onSubmit = () => {
     if (title == '' || title == undefined) {
-      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
+      showAlert(
+        AlertType.WARN,
+        STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK,
+      );
     } else {
-      let tempVisited = {
-        _id: _id,
+      console.log('schedules', schedules);
+      let tempVisited: Visited = {
+        _id: _id ?? Date.now(),
         title,
         pre,
         location,
         descript,
         date,
-
+        medicines,
+        prescription,
+        xRay,
+        test,
       };
       if (!visited) {
         dispatch(visitedsAction.addVisited(tempVisited));
       } else {
-        dispatch(visitedsAction.updateVisited(tempVisited));
+        // dispatch(visitedsAction.updateVisited(tempVisited));
       }
-      if (medicines.length != 0) {
-        let medicinesTemp = [...medicines];
-        medicinesTemp.forEach(e => {
-          if (e.visitedId !== visitedId) {
-            e.visitedId = visitedId;
-            e.start = date;
-          }
+      if (schedules.size != 0) {
+        schedules.forEach((value, key) => {
+          dispatch(medicinesAction.updateSchedule({_id: key, schedule: value}));
         });
-        dispatch(medicinesAction.updateAllMedicineOfVisited(medicinesTemp));
       }
       goBack();
     }
@@ -139,11 +151,15 @@ const VisitedScreen = (props: ScreenProps) => {
     // dispatch(medicinesAction.addTempMedicine({ medicine: null }))
   };
 
+  const updateScredules = (medicine: number, schedule: Schedule) => {
+    schedules.set(medicine, schedule);
+  };
+
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
-    setDatePickerVisible(false)
-    setTimePickerVisible(true)
+    setDatePickerVisible(false);
+    setTimePickerVisible(true);
   };
   const onChangeTime = (event: any, selectedTime: any) => {
     const currentTime = selectedTime || date;
@@ -151,178 +167,200 @@ const VisitedScreen = (props: ScreenProps) => {
     setTimePickerVisible(false);
   };
 
-  const gotoListVisitedScreen = () => {
-    navigateTo(STRINGS.ROUTE.LIST_VISITED_SCREEN);
-  };
+  const DatePicker = useCallback(
+    () => (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            setDatePickerVisible(!datePickerVisible);
+          }}
+          style={{flexDirection: 'row'}}>
+          <Text>Ngày khám</Text>
+          <Text style={{marginLeft: 50}}>{showDate(date)}</Text>
+          <Text style={styles.textTime}>{showTime(date)}</Text>
+        </TouchableOpacity>
 
-  const gotoListLocationScreen = () => {
-    navigateTo(STRINGS.ROUTE.LIST_LOCATION_SCREEN)
-  }
-
-  const gotoMedicineScreen = (medicine: Medicine | null = null) => {
-    if (title == '' || title == undefined) {
-      showAlert(AlertType.WARN, STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK);
-    } else
-      navigateTo(STRINGS.ROUTE.DIARY.MEDICINE, {
-        data: { title: title, date: date },
-        medicine,
-      });
-  };
-
-  const DatePicker = useCallback(() => (
-    <View >
-      <TouchableOpacity
-        onPress={() => {
-          setDatePickerVisible(!datePickerVisible);
-        }}
-        style={{ flexDirection: 'row' }}>
-        <Text>Ngày khám</Text>
-        <Text style={{ marginLeft: 50 }}>
-          {new Date(date).toString().slice(0, 10)}
-        </Text>
-        <Text style={styles.textTime}>{new Date(date).toString().slice(16, 21)}</Text>
-      </TouchableOpacity>
-
-      {
-        datePickerVisible && (
+        {datePickerVisible && (
           <DateTimePicker
             //@ts-ignore
             value={new Date(date)}
             //@ts-ignore
-            mode={"datetime"}
+            mode={'datetime'}
             display="default"
             onChange={onChangeDate}
           />
-        )
-      }
-      {
-        timePickerVisible && (
+        )}
+        {timePickerVisible && (
           <DateTimePicker
             //@ts-ignore
             value={new Date(date)}
             //@ts-ignore
-            mode={"time"}
+            mode={'time'}
             display="default"
             onChange={onChangeTime}
           />
-        )
-      }
-    </View>
-  ), [datePickerVisible, timePickerVisible])
+        )}
+      </View>
+    ),
+    [datePickerVisible, timePickerVisible],
+  );
 
   const takePic = async () => {
-    RBSheetImagePicker.current.close()
-    const photo = await takePicture()
+    RBSheetImagePicker.current.close();
+    const photo = await takePicture();
     if (photo != null && photo != undefined) {
-      const arrayUri = getUri(photo)
+      const arrayUri = getUri(photo);
       switch (imgType.current) {
         case ImgType.Prescription:
-          setPrescription({ ...prescription, pictures: arrayUnique(arrayUri.concat(prescription?.pictures ?? [])) })
+          setPrescription({
+            ...prescription,
+            pictures: arrayUnique(
+              arrayUri.concat(prescription?.pictures ?? []),
+            ),
+          });
           break;
         case ImgType.XRay:
-          setXRay({ ...xRay, pictures: arrayUnique(arrayUri.concat(xRay?.pictures ?? [])) })
+          setXRay({
+            ...xRay,
+            pictures: arrayUnique(arrayUri.concat(xRay?.pictures ?? [])),
+          });
           break;
         case ImgType.Test:
-          setTest({ ...test, pictures: arrayUnique(arrayUri.concat(test?.pictures ?? [])) })
+          setTest({
+            ...test,
+            pictures: arrayUnique(arrayUri.concat(test?.pictures ?? [])),
+          });
           break;
         default:
-          console.log('chưa truyền kiểu')
+          console.log('chưa truyền kiểu');
           break;
       }
     }
-  }
+  };
 
   const getUri = (photo: Asset[]): Array<string | undefined> => {
-    const arrayUri = photo.map((value, index) => (Platform.OS === 'ios' ? value.uri?.replace('file://', '') : value.uri))
-    return arrayUri
-  }
+    const arrayUri = photo.map((value, index) =>
+      Platform.OS === 'ios' ? value.uri?.replace('file://', '') : value.uri,
+    );
+    return arrayUri;
+  };
 
   const getPic = async () => {
-    RBSheetImagePicker.current.close()
-    const photo = await getPictures()
+    RBSheetImagePicker.current.close();
+    const photo = await getPictures();
     if (photo != null && photo != undefined) {
-      const arrayUri = getUri(photo)
+      const arrayUri = getUri(photo);
       switch (imgType.current) {
         case ImgType.Prescription:
-          setPrescription({ ...prescription, pictures: arrayUnique(arrayUri.concat(prescription?.pictures ?? [])) })
+          setPrescription({
+            ...prescription,
+            pictures: arrayUnique(
+              arrayUri.concat(prescription?.pictures ?? []),
+            ),
+          });
           break;
         case ImgType.XRay:
-          setXRay({ ...xRay, pictures: arrayUnique(arrayUri.concat(xRay?.pictures ?? [])) })
+          setXRay({
+            ...xRay,
+            pictures: arrayUnique(arrayUri.concat(xRay?.pictures ?? [])),
+          });
           break;
         case ImgType.Test:
-          setTest({ ...test, pictures: arrayUnique(arrayUri.concat(test?.pictures ?? [])) })
+          setTest({
+            ...test,
+            pictures: arrayUnique(arrayUri.concat(test?.pictures ?? [])),
+          });
           break;
         default:
-          console.log('chưa truyền kiểu')
+          console.log('chưa truyền kiểu');
           break;
       }
     }
-  }
+  };
 
   const deletePic = (index: number) => {
-    let arrayUrls
+    let arrayUrls;
     switch (imgType.current) {
       case ImgType.Prescription:
-        arrayUrls = prescription?.pictures
-        arrayUrls?.splice(index, 1)
-        setPrescription({ ...prescription, pictures: arrayUrls })
+        arrayUrls = prescription?.pictures;
+        arrayUrls?.splice(index, 1);
+        setPrescription({...prescription, pictures: arrayUrls});
         break;
       case ImgType.XRay:
-        arrayUrls = xRay?.pictures
-        arrayUrls?.splice(index, 1)
-        setXRay({ ...xRay, pictures: arrayUrls })
+        arrayUrls = xRay?.pictures;
+        arrayUrls?.splice(index, 1);
+        setXRay({...xRay, pictures: arrayUrls});
         break;
       case ImgType.Test:
-        arrayUrls = test?.pictures
-        arrayUrls?.splice(index, 1)
-        setTest({ ...test, pictures: arrayUrls })
+        arrayUrls = test?.pictures;
+        arrayUrls?.splice(index, 1);
+        setTest({...test, pictures: arrayUrls});
         break;
       default:
-        console.log('chưa truyền kiểu')
+        console.log('chưa truyền kiểu');
         break;
     }
-  }
+  };
 
-  const opneRBSHeet = (type: ImgType) => {
-    imgType.current = type
-    RBSheetImagePicker.current.open()
-  }
+  const openSheet = (type: ImgType) => {
+    imgType.current = type;
+    RBSheetImagePicker.current.open();
+  };
 
   const changeLocation = (_id: number) => {
-    setLocation(_id)
-    goBack()
-  }
+    setLocation(_id);
+    goBack();
+  };
+
+  const changePre = (_id: number) => {
+    setPre(_id);
+    goBack();
+  };
 
   const addMedicine = (_id: number) => {
     if (!medicines.includes(_id)) {
-      setMedicines([_id, ...medicines])
+      setMedicines([_id, ...medicines]);
     }
-    goBack()
-  }
+    goBack();
+  };
+
+  const deleteVisited = () => {
+    dispatch(visitedsAction.deleteVisited(_id));
+    goBack();
+  };
+
+  const setNoteTest = (text: string) => {
+    setTest({
+      pictures: test?.pictures,
+      note: text,
+    });
+  };
+
+  const setNoteXRay = (text: string) => {
+    setXRay({
+      pictures: xRay?.pictures,
+      note: text,
+    });
+  };
+
+  const setNotePrescription = (text: string) => {
+    setPrescription({
+      pictures: prescription?.pictures,
+      note: text,
+    });
+  };
 
   return (
     <ContainerView>
-      < TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-        <View style={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{flex: 1}}>
           <HHeaderCommon
-            renderRight={() => (
-              <TouchableOpacity
-                onPress={onSubmit}
-                style={styles.btnSave}>
-                <Text
-                  style={styles.textSave}>
-                  Lưu
-                </Text>
-              </TouchableOpacity>
-            )}
-            renderTitle={(() => <Text style={styles.textTitle}>Lần Khám</Text>)}
+            renderTitle={() => <Text style={styles.textTitle}>Lần Khám</Text>}
           />
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollView showsVerticalScrollIndicator={false}>
             <Tag>
               <TextInput
-                style={{ fontSize: 30 }}
+                style={{fontSize: 30}}
                 value={title}
                 placeholder={STRINGS.VISITED_SCREEN.VISITED_NAME}
                 multiline
@@ -331,47 +369,54 @@ const VisitedScreen = (props: ScreenProps) => {
               />
             </Tag>
             <TagWithIcon iconName="event-note" iconFont="MaterialIcons">
-              <TouchableOpacity
-                style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-                onPress={gotoListVisitedScreen}>
-                <Text>{STRINGS.VISITED_SCREEN.LAST_VISITED}</Text>
-                <View
-                  style={{
-                    flex: 1,
-                    marginHorizontal: 5,
-                    alignItems: 'center',
-                  }}>
-                  <Text>
-                    {pre ?? (
-                      <Text style={{ color: COLORS.GRAY_DECOR }}>
-                        Không có
-                      </Text>
-                    )}
-                  </Text>
-                </View>
-                <HIcon font="MaterialIcons" name="arrow-forward-ios" size={18} />
-              </TouchableOpacity>
+              <PreItem _id={pre} onPress={changePre} />
             </TagWithIcon>
             <TagWithIcon iconName="map-marker" iconFont="FontAwesome">
               <LocationItem _id={location} onPress={changeLocation} />
             </TagWithIcon>
-            <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
+            <TagWithIcon
+              iconName="calendar"
+              iconFont="FontAwesome"
+              iconSize={24}>
               <DatePicker />
             </TagWithIcon>
             <TagWithIcon iconName="medicinebox" iconFont="AntDesign">
-              <ListMedicine medicineIds={medicines} addMedicine={addMedicine} />
-              <HairLine style={{ width: '60%', marginVertical: 10 }} />
-              <ImageView uris={prescription?.pictures ?? []} deletePic={deletePic} />
+              <ListMedicine
+                visitedId={now.current}
+                medicineIds={medicines}
+                addMedicine={addMedicine}
+                updateScredules={updateScredules}
+              />
+              <HairLine style={{width: '60%', marginVertical: 10}} />
+              <ImageView
+                uris={prescription?.pictures ?? []}
+                deletePic={deletePic}
+              />
               <TouchableOpacity
                 onPress={() => {
-                  opneRBSHeet(ImgType.Prescription);
+                  openSheet(ImgType.Prescription);
                 }}>
-                <Text style={{ paddingHorizontal: 20, alignSelf: 'center', color: COLORS.BLUE }}>
+                <Text
+                  style={{
+                    paddingHorizontal: 20,
+                    alignSelf: 'center',
+                    color: COLORS.BLUE,
+                  }}>
                   Thêm hình ảnh đơn thuốc
                 </Text>
               </TouchableOpacity>
-              <View style={{ borderColor: COLORS.GRAY_DECOR, borderWidth: 1, marginTop: 10 }}>
-                <TextInput multiline={true} style={{ fontSize: 14 }} placeholder={"Ghi chú"} />
+              <View
+                style={{
+                  borderColor: COLORS.GRAY_DECOR,
+                  borderWidth: 1,
+                  marginTop: 10,
+                }}>
+                <TextInput
+                  multiline={true}
+                  onChangeText={setNotePrescription}
+                  style={{fontSize: 14}}
+                  placeholder={'Ghi chú'}
+                />
               </View>
             </TagWithIcon>
             <TagWithIcon iconName="x-ray" iconFont="FontAwesome5">
@@ -379,14 +424,29 @@ const VisitedScreen = (props: ScreenProps) => {
               <ImageView uris={xRay?.pictures ?? []} deletePic={deletePic} />
               <TouchableOpacity
                 onPress={() => {
-                  opneRBSHeet(ImgType.XRay);
+                  openSheet(ImgType.XRay);
                 }}>
-                <Text style={{ paddingVertical: 10, alignSelf: 'center', color: COLORS.BLUE }}>
+                <Text
+                  style={{
+                    paddingVertical: 10,
+                    alignSelf: 'center',
+                    color: COLORS.BLUE,
+                  }}>
                   Thêm hình ảnh
                 </Text>
               </TouchableOpacity>
-              <View style={{ borderColor: COLORS.GRAY_DECOR, borderWidth: 1, marginTop: 10 }}>
-                <TextInput multiline={true} style={{ fontSize: 14 }} placeholder={"Ghi chú"} />
+              <View
+                style={{
+                  borderColor: COLORS.GRAY_DECOR,
+                  borderWidth: 1,
+                  marginTop: 10,
+                }}>
+                <TextInput
+                  multiline={true}
+                  onChangeText={setNoteXRay}
+                  style={{fontSize: 14}}
+                  placeholder={'Ghi chú'}
+                />
               </View>
             </TagWithIcon>
             <TagWithIcon iconName="test-tube" iconFont="Fontisto">
@@ -394,14 +454,29 @@ const VisitedScreen = (props: ScreenProps) => {
               <ImageView uris={test?.pictures ?? []} deletePic={deletePic} />
               <TouchableOpacity
                 onPress={() => {
-                  opneRBSHeet(ImgType.Test);
+                  openSheet(ImgType.Test);
                 }}>
-                <Text style={{ paddingVertical: 10, alignSelf: 'center', color: COLORS.BLUE }}>
+                <Text
+                  style={{
+                    paddingVertical: 10,
+                    alignSelf: 'center',
+                    color: COLORS.BLUE,
+                  }}>
                   Thêm hình ảnh
                 </Text>
               </TouchableOpacity>
-              <View style={{ borderColor: COLORS.GRAY_DECOR, borderWidth: 1, marginTop: 10 }}>
-                <TextInput multiline={true} style={{ fontSize: 14 }} placeholder={"Ghi chú"} />
+              <View
+                style={{
+                  borderColor: COLORS.GRAY_DECOR,
+                  borderWidth: 1,
+                  marginTop: 10,
+                }}>
+                <TextInput
+                  multiline={true}
+                  onChangeText={setNoteTest}
+                  style={{fontSize: 14}}
+                  placeholder={'Ghi chú'}
+                />
               </View>
             </TagWithIcon>
             <TagWithIcon iconName="notes" iconFont="MaterialIcons">
@@ -412,10 +487,26 @@ const VisitedScreen = (props: ScreenProps) => {
                 placeholder={STRINGS.VISITED_SCREEN.NOTE}
               />
             </TagWithIcon>
+            <HButton
+              style={styles.btnSave}
+              title="Lưu"
+              textStyle={styles.textBtnLogin}
+              type={'normal'}
+              onPress={onSubmit}
+            />
+            <HButton
+              style={styles.btnSave}
+              title="Xóa"
+              textStyle={styles.textBtnLogin}
+              type={'delete'}
+              onPress={deleteVisited}
+            />
           </ScrollView>
         </View>
-      </TouchableWithoutFeedback >
-      <RBSheet ref={RBSheetImagePicker} height={2 * DIMENS.BUTTON_RBSHEET_HEIGHT}>
+      </TouchableWithoutFeedback>
+      <RBSheet
+        ref={RBSheetImagePicker}
+        height={2 * DIMENS.BUTTON_RBSHEET_HEIGHT}>
         <TouchableOpacity style={styles.option_container} onPress={takePic}>
           <Text style={styles.title_option}>Chụp ảnh</Text>
         </TouchableOpacity>
@@ -424,11 +515,10 @@ const VisitedScreen = (props: ScreenProps) => {
           <Text style={styles.title_option}>Thư viện</Text>
         </TouchableOpacity>
       </RBSheet>
-    </ContainerView >
+    </ContainerView>
   );
 };
 export default VisitedScreen;
-
 
 const styles = StyleSheet.create({
   textTime: {
@@ -443,8 +533,8 @@ const styles = StyleSheet.create({
     color: COLORS.WHITE,
   },
   btnSave: {
-    backgroundColor: COLORS.BLUE,
-    borderRadius: 8,
+    marginVertical: 10,
+    marginHorizontal: 40,
   },
   textTitle: {
     fontSize: FONT_SIZE.BIG_HEADER,
@@ -455,12 +545,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }, title_option: {
+  },
+  title_option: {
     color: COLORS.BLACK,
-    fontSize: FONT_SIZE.HEADER_TAG
+    fontSize: FONT_SIZE.HEADER_TAG,
   },
   hairline_option: {
     width: '90%',
     backgroundColor: COLORS.GRAY_DECOR,
   },
-})
+  textBtnLogin: {
+    fontSize: 16,
+  },
+});

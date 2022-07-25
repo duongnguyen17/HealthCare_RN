@@ -5,19 +5,18 @@ export const MedicineSchema = {
     properties: {
         _id: 'int',
         title: 'string',
-        infor: 'PicNote',
+        infor: 'PicNote?',
         schedules: 'Schedule[]',
     },
     primaryKey: '_id'
 }
-
 
 export const ScheduleSchema = {
     name: SCHEMA.SCHEDULE,
     embedded: true, // default: false
     properties: {
         visitedId: 'double?',
-        remind: 'Remind[]',
+        reminds: 'Remind[]',
         start: 'double?',
         during: 'double?',
     }

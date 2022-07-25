@@ -1,9 +1,9 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {
+  FlatList,
   Keyboard,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,43 +12,45 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {Asset} from 'react-native-image-picker';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  AlertType,
   COLORS,
-  DIMENS,
   FONT_SIZE,
   PicNote,
+  Remind,
   Schedule,
   STRINGS,
   TimeUnit,
 } from '../../common';
 import ContainerView from '../../components/ContainerView';
-import HairLine from '../../components/HairLine';
-import HButton from '../../components/HButton';
+import {showAlert} from '../../components/HAlert';
+import HDropDownPicker from '../../components/HDropDownPicker';
 import HeaderCommon from '../../components/HHeader/HHeaderCommon';
-import ImageView from '../../components/ImageView';
-import {goBack, routeParam} from '../../navigator/NavigationServices';
+import RemindItem from '../../components/RemindItem';
+import {
+  goBack,
+  navigateTo,
+  routeParam,
+} from '../../navigator/NavigationServices';
 import {medicinesAction} from '../../reduxSaga/slices/medicinesSlice';
 import {RootStateType, ScreenProps} from '../../type/type';
-import {arrayUnique} from '../../utils/arrayUtils';
-import {getPictures, takePicture} from '../../utils/picture';
+import {getHoursMinutes} from '../../utils/dateutils';
 import Tag from '../main/DiaryTab/components/Tag';
 import TagWithIcon from '../main/DiaryTab/components/TagWithIcon';
 
-const MedicineScreen = (props: ScreenProps) => {
+const AddMedicineScreen = (props: ScreenProps) => {
   const _id = routeParam(props.route, '_id');
   const visitedId = routeParam(props.route, 'visitedId');
 
   const dispatch = useDispatch();
-  const medicine = useSelector(
-    (state: RootStateType) => state.medicineState.medicine,
-  );
-  const RBSheetImagePicker = useRef<any>();
+  const medicine =
+    routeParam(props.route, 'medicine') ??
+    useSelector((state: RootStateType) => state.medicineState.tempMedicine);
+
   const [title, setTitle] = useState<string>('');
   const [infor, setInfor] = useState<PicNote>({});
-  //   const [reminds, setReminds] = useState<Array<Remind | any>>([]);
+  const [reminds, setReminds] = useState<Array<Remind | any>>([]);
   const [timeUnit, setTimeUnit] = useState<TimeUnit>(TimeUnit.DAY);
   const [count, setCount] = useState<string>('0');
   const [startDate, setStartDate] = useState<any>(new Date());
@@ -57,77 +59,59 @@ const MedicineScreen = (props: ScreenProps) => {
   const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(medicinesAction.getMedicine(_id));
-  }, []);
+    if (_id != undefined) {
+      dispatch(medicinesAction.getMedicine({_id: _id}));
+    }
+  }, [_id]);
 
   useEffect(() => {
-    //@ts-ignore
-    setTitle(medicine?.title);
-    //@ts-ignore
-    setInfor(medicine?.infor);
-    //@ts-ignore
-    setSchedules(medicine?.shcedules);
+    if (medicine != null && medicine != undefined) {
+      setTitle(medicine?.title);
+    }
   }, [medicine]);
 
   const onSubmit = () => {
-    // let remindTimeArr = reminds.map(e => e.time);
-    // let isDuplicate = remindTimeArr.some(
-    //   (e, i) => remindTimeArr.indexOf(e) != i,
-    // );
-    // if (isDuplicate) {
-    //   showAlert(
-    //     AlertType.WARN,
-    //     STRINGS.MEDICINE_SCREEN.TIME_REMIND_DO_NOT_DUPLICATE,
-    //   );
-    // } else if (title == '' || title == undefined) {
-    //   showAlert(
-    //     AlertType.WARN,
-    //     STRINGS.MEDICINE_SCREEN.THE_NAME_OF_DRUG_CANNOT_BE_LEFT_BLANK,
-    //   );
-    // } else if (!!medicine?.visitedId) {
-    //   //nếu là update
-    //   dispatch(
-    //     medicinesAction.updateMedicine({
-    //       _id: medicine._id,
-    //       title,
-    //       during: calDuring(count, timeUnit),
-    //       remind: reminds,
-    //       start: medicine?.start,
-    //       visitedId: medicine?.visitedId,
-    //     }),
-    //   );
-    //   goBack();
-    // } else {
-    //   //nếu là tạo mới
-    //   dispatch(
-    //     medicinesAction.addMedicine({
-    //       medicine: {
-    //         _id: Date.now(),
-    //         title,
-    //         infor,
-    //         schedules,
-    //       },
-    //     }),
-    //   );
-    //   goBack();
-    // }
-    //nếu là tạo mới
-    dispatch(
-      medicinesAction.addMedicine({
-        medicine: {
-          _id: Date.now(),
-          title,
-          infor,
-          schedules,
-        },
-      }),
+    let remindTimeArr = reminds.map(e => e.time);
+    let isDuplicate = remindTimeArr.some(
+      (e, i) => remindTimeArr.indexOf(e) != i,
     );
-    goBack();
-  };
-
-  const deleteMedicine = () => {
-    dispatch(medicinesAction.deleteMedicine(_id));
-    goBack();
+    if (isDuplicate) {
+      showAlert(
+        AlertType.WARN,
+        STRINGS.MEDICINE_SCREEN.TIME_REMIND_DO_NOT_DUPLICATE,
+      );
+    } else if (title == '' || title == undefined) {
+      showAlert(
+        AlertType.WARN,
+        STRINGS.MEDICINE_SCREEN.THE_NAME_OF_DRUG_CANNOT_BE_LEFT_BLANK,
+      );
+    } else if (!!medicine?.visitedId) {
+      //nếu là update
+      dispatch(
+        medicinesAction.updateMedicine({
+          _id: medicine._id,
+          title,
+          during: calDuring(count, timeUnit),
+          remind: reminds,
+          start: medicine?.start,
+          visitedId: medicine?.visitedId,
+        }),
+      );
+      goBack();
+    } else {
+      //nếu là tạo mới
+      dispatch(
+        medicinesAction.addMedicine({
+          medicine: {
+            _id: Date.now(),
+            title,
+            infor,
+            schedules,
+          },
+        }),
+      );
+      goBack();
+    }
   };
 
   const calDuring = (c: string, u: TimeUnit) => {
@@ -147,6 +131,32 @@ const MedicineScreen = (props: ScreenProps) => {
         break;
     }
     return parseInt(c) * unit;
+  };
+
+  const addRemind = () => {
+    //thêm 1 nhắc nhở trống vào cuối mảng
+    setReminds([
+      ...reminds,
+      {
+        time: getHoursMinutes(new Date()),
+        descript: '',
+        repeat: true,
+        amount: '',
+        isNew: true,
+      },
+    ]);
+  };
+  const updateRemind = (remind: Remind, index: number) => {
+    reminds[index] = remind;
+    // reminds[index].amount = remind.amount;
+    // reminds[index].descript = remind.descript;
+    // reminds[index].repeat = remind.repeat;
+    // reminds[index].time = remind.time;
+  };
+  const deleteRemind = (index: number) => {
+    let temp = [...reminds];
+    temp.splice(index, 1);
+    setReminds(temp);
   };
 
   const addNote = (text: string) => {
@@ -223,6 +233,50 @@ const MedicineScreen = (props: ScreenProps) => {
     [startDate, datePickerVisible],
   );
 
+  const AddSchedule = useCallback(() => {
+    if (_id !== undefined || (_id == undefined && visitedId == undefined))
+      return null;
+    else {
+      return (
+        <>
+          <TagWithIcon iconName="reminder" iconFont="MaterialCommunityIcons">
+            <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
+
+            {reminds?.map((value, index) => (
+              <RemindItem
+                key={index}
+                item={value}
+                index={index}
+                updateRemind={updateRemind}
+                deleteRemind={deleteRemind}
+                isNew={value.isNew}
+              />
+            ))}
+            <TouchableOpacity onPress={addRemind}>
+              <Text
+                style={{
+                  paddingHorizontal: 20,
+                  alignSelf: 'center',
+                  paddingVertical: 5,
+                  color: COLORS.BLUE,
+                }}>
+                {STRINGS.MEDICINE_SCREEN.ADD_REMIND}
+              </Text>
+            </TouchableOpacity>
+          </TagWithIcon>
+          <TagWithIcon iconName="calendar" iconFont="FontAwesome" iconSize={24}>
+            <DatePicker />
+          </TagWithIcon>
+          <TagWithIcon>
+            <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>Nhắc nhở</Text>
+            <PickDay />
+            <PickUnit />
+          </TagWithIcon>
+        </>
+      );
+    }
+  }, [reminds, timeUnit, count, datePickerVisible]);
+
   const Schedules = useCallback(
     () =>
       _id !== undefined ? (
@@ -235,7 +289,7 @@ const MedicineScreen = (props: ScreenProps) => {
           </TouchableOpacity>
         </TagWithIcon>
       ) : null,
-    [schedules],
+    [schedules.length],
   );
 
   const Visiteds = useCallback(
@@ -250,48 +304,8 @@ const MedicineScreen = (props: ScreenProps) => {
           </TouchableOpacity>
         </TagWithIcon>
       ) : null,
-    [schedules],
+    [schedules.length],
   );
-  const getUri = (photo: Asset[]): Array<string | undefined> => {
-    const arrayUri = photo.map((value, index) =>
-      Platform.OS === 'ios' ? value.uri?.replace('file://', '') : value.uri,
-    );
-    return arrayUri;
-  };
-  const getPic = async () => {
-    RBSheetImagePicker.current.close();
-    const photo = await getPictures();
-    if (photo != null && photo != undefined) {
-      const arrayUri = getUri(photo);
-      setInfor({
-        ...infor,
-        pictures: arrayUnique(arrayUri.concat(infor?.pictures ?? [])),
-      });
-    }
-  };
-
-  const takePic = async () => {
-    RBSheetImagePicker.current.close();
-    const photo = await takePicture();
-    if (photo != null && photo != undefined) {
-      const arrayUri = getUri(photo);
-
-      setInfor({
-        ...infor,
-        pictures: arrayUnique(arrayUri.concat(infor?.pictures ?? [])),
-      });
-    }
-  };
-
-  const openSheet = () => {
-    RBSheetImagePicker.current.open();
-  };
-
-  const deletePic = (index: number) => {
-    let arrayUrls = infor?.pictures;
-    arrayUrls?.splice(index, 1);
-    setInfor({...infor, pictures: arrayUrls});
-  };
 
   return (
     <ContainerView>
@@ -314,6 +328,25 @@ const MedicineScreen = (props: ScreenProps) => {
                 Thuốc
               </Text>
             )}
+            renderRight={() => (
+              <TouchableOpacity
+                onPress={onSubmit}
+                style={{
+                  backgroundColor: COLORS.BLUE,
+                  borderRadius: 8,
+                }}>
+                <Text
+                  style={{
+                    marginHorizontal: 10,
+                    marginVertical: 5,
+                    fontWeight: '700',
+                    fontSize: FONT_SIZE.CONTENT,
+                    color: COLORS.WHITE,
+                  }}>
+                  Lưu
+                </Text>
+              </TouchableOpacity>
+            )}
           />
           <ScrollView>
             <Tag>
@@ -329,8 +362,7 @@ const MedicineScreen = (props: ScreenProps) => {
               <Text style={{fontSize: FONT_SIZE.HEADER_TAG}}>
                 Thông tin thuốc
               </Text>
-              <ImageView uris={infor?.pictures ?? []} deletePic={deletePic} />
-              <TouchableOpacity onPress={openSheet}>
+              <TouchableOpacity onPress={() => {}}>
                 <Text
                   style={{
                     paddingVertical: 10,
@@ -354,41 +386,16 @@ const MedicineScreen = (props: ScreenProps) => {
                 />
               </View>
             </TagWithIcon>
-            {/* <AddSchedule /> */}
+            <AddSchedule />
             <Visiteds />
             <Schedules />
-            <HButton
-              style={styles.btnSave}
-              title="Lưu"
-              textStyle={styles.textBtnLogin}
-              type={'normal'}
-              onPress={onSubmit}
-            />
-            <HButton
-              style={styles.btnSave}
-              title="Xóa"
-              textStyle={styles.textBtnLogin}
-              type={'delete'}
-              onPress={deleteMedicine}
-            />
           </ScrollView>
         </View>
       </TouchableWithoutFeedback>
-      <RBSheet
-        ref={RBSheetImagePicker}
-        height={2 * DIMENS.BUTTON_RBSHEET_HEIGHT}>
-        <TouchableOpacity style={styles.option_container} onPress={takePic}>
-          <Text style={styles.title_option}>Chụp ảnh</Text>
-        </TouchableOpacity>
-        <HairLine style={styles.hairline_option} />
-        <TouchableOpacity style={styles.option_container} onPress={getPic}>
-          <Text style={styles.title_option}>Thư viện</Text>
-        </TouchableOpacity>
-      </RBSheet>
     </ContainerView>
   );
 };
-export default MedicineScreen;
+export default AddMedicineScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -396,25 +403,5 @@ const styles = StyleSheet.create({
   textTime: {
     fontSize: FONT_SIZE.CONTENT,
     marginLeft: 6,
-  },
-  btnSave: {
-    marginVertical: 10,
-    marginHorizontal: 40,
-  },
-  textBtnLogin: {
-    fontSize: 16,
-  },
-  option_container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title_option: {
-    color: COLORS.BLACK,
-    fontSize: FONT_SIZE.HEADER_TAG,
-  },
-  hairline_option: {
-    width: '90%',
-    backgroundColor: COLORS.GRAY_DECOR,
   },
 });

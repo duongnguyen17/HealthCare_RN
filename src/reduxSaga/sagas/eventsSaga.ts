@@ -3,7 +3,7 @@ import { AlertType, EventType, HEvent, HEventMedicine, HEventVisited, Medicine, 
 import { showAlert } from "../../components/HAlert";
 import { hideLoading, showLoading } from "../../components/Loading";
 import { getAllMedicine, searchMedicine } from "../../realm/controllers/medicine.controller";
-import { getAllVisited, searchVisited } from "../../realm/controllers/visited.controller";
+import { getListVisited, searchVisited } from "../../realm/controllers/visited.controller";
 import { isEqualDay, setHoursMinutes } from "../../utils/dateutils";
 import { eventsAction } from "../slices/eventsSlice";
 
@@ -21,7 +21,7 @@ function* getAllEventSaga() {
 
         //lấy tất cả visited để xếp vào list event
         //@ts-ignore
-        let allVisited = yield call(getAllVisited)
+        let allVisited = yield call(getListVisited)
         allVisited.forEach((element: any) => {
             let eTemp: HEventVisited = {
                 _id: element._id,

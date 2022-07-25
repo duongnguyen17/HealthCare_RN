@@ -1,76 +1,51 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { Medicine } from "../../common"
-import { MedicinesStateType } from "../../type/type"
+import {createSlice} from '@reduxjs/toolkit';
+import {Medicine} from '../../common';
+import {MedicinesStateType} from '../../type/type';
 
 const initialState: MedicinesStateType = {
-    all: [],
-    tempMedicine: null,
-    tempMedicines: [],
-}
+  listMedicine: [],
+  medicine: null,
+};
 
 const medicinesSlice = createSlice({
-    name: 'medicines',
-    initialState,
-    reducers: {
-        getAllMedicine: () => { },
-        getAllMedicineSuccess: (state, { payload }) => {
-            state.all = payload.all
-        },
-        addMedicine: (state, { payload }) => {
-        },
-        addMedicineSuccess: (state, { payload }) => {
-            state.all = [...state.all, payload].sort((a, b) => (a.start - b.start))
-        },
-        deleteMedicine: (state, { payload }) => {
+  name: 'medicines',
+  initialState,
+  reducers: {
+    searchMedicine: (state, {payload}) => {},
+    searchMedicineSuccess: (state, {payload}) => {
+      state.listMedicine = payload.listMedicine;
+    },
+    getMedicine: (state, {payload}) => {},
+    getMedicineSuccess: (state, {payload}) => {
+      state.medicine = payload.medicine;
+    },
+    addMedicine: (state, {payload}) => {},
+    deleteMedicine: (state, {payload}) => {},
+    updateSchedule: (state, {payload}) => {},
 
-        },
-        deleteMedicineSuccess: (state, { payload }) => {
-            let _id = payload
-            let allTemp = [...state.all]
-            let index = allTemp.findIndex((e) => e._id == _id)
-            allTemp.splice(index, 1)
-            state.all = allTemp
-        },
-        addTempMedicine: (state, { payload }) => {
-            state.tempMedicine = payload.medicine
-        },
+    addTempMedicine: (state, {payload}) => {},
+    updateMedicine: (state, {payload}) => {},
+    updateMedicineSuccess: (state, {payload}) => {
+      let medicine: Medicine = payload.medicine;
+      let allTemp: Array<Medicine> = [...state.all];
+      let index = allTemp.findIndex(e => e._id == medicine._id);
+      allTemp[index].title = medicine.title;
+      allTemp[index].remind = medicine.remind;
+      allTemp[index].during = medicine.during;
+      state.all = allTemp;
+    },
+    getAllMedicineOfVisited: (state, {payload}) => {},
+    getAllMedicineOfVisitedSuccess: (state, {payload}) => {},
+    updateAllMedicineOfVisited: (state, {payload}) => {},
+    // updateAllMedicineOfVisitedSuccess: (state, { payload }) => {
 
-        updateMedicine: (state, { payload }) => {
-        },
-        updateMedicineSuccess: (state, { payload }) => {
-            let medicine: Medicine = payload.medicine
-            let allTemp: Array<Medicine> = [...state.all]
-            let index = allTemp.findIndex((e) => e._id == medicine._id)
-            allTemp[index].title = medicine.title
-            allTemp[index].remind = medicine.remind
-            allTemp[index].during = medicine.during
-            state.all = allTemp
-        },
-        getAllMedicineOfVisited: (state, { payload }) => {
+    // },
+    getMedicines: (state, {payload}) => {},
+    getMedicinesSuccess: (state, {payload}) => {
+      state.tempMedicines = payload.medicines;
+    },
+  },
+});
 
-        },
-        getAllMedicineOfVisitedSuccess: (state, { payload }) => {
-
-        },
-        updateAllMedicineOfVisited: (state, { payload }) => {
-
-        },
-        // updateAllMedicineOfVisitedSuccess: (state, { payload }) => {
-
-        // },
-        getMedicine: (state, { payload }) => {
-
-        },
-        getMedicineSuccess: (state, { payload }) => {
-            state.tempMedicine = payload.medicine
-        },
-        getMedicines: (state, { payload }) => { },
-        getMedicinesSuccess: (state, { payload }) => {
-            state.tempMedicines = payload.medicines
-        },
-    }
-})
-
-
-export const medicinesAction = medicinesSlice.actions
-export const medicinesReducer = medicinesSlice.reducer
+export const medicinesAction = medicinesSlice.actions;
+export const medicinesReducer = medicinesSlice.reducer;

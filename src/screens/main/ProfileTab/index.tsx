@@ -80,12 +80,20 @@ const Profile = (prop: ViewProps) => {
     RBSheetRefHMM.current.close();
   };
 
+  const createVisited = () => {
+    navigateTo(STRINGS.ROUTE.DIARY.VISITED);
+  };
+
   const listVisited = () => {
     navigateTo(STRINGS.ROUTE.LIST_VISITED_SCREEN);
   };
 
   const listMedicine = () => {
     navigateTo(STRINGS.ROUTE.LIST_MEDICINE_SCREEN);
+  };
+
+  const listLocation = () => {
+    navigateTo(STRINGS.ROUTE.LIST_LOCATION_SCREEN);
   };
 
   const testGGFit = () => {
@@ -163,8 +171,9 @@ const Profile = (prop: ViewProps) => {
             buttons={[
               {title: 'Danh sách nhật kí khám bệnh', onPress: listVisited},
               {title: 'Danh sách các thuốc đã uống', onPress: listMedicine},
-              {title: 'Tạo nhật kí khám bệnh', onPress: listVisited},
-              {title: 'Thêm thuốc', onPress: listVisited},
+              {title: 'Tạo nhật kí khám bệnh', onPress: createVisited},
+              // {title: 'Thêm thuốc', onPress: listVisited},
+              {title: 'Danh sách địa điểm từng khám', onPress: listLocation},
             ]}
           />
         </Section>
