@@ -33,7 +33,60 @@ export const isThisMonth = (
   someDate1: Date | number,
   someDate2: Date | number,
 ): boolean => {
-  return true;
+  const date1 = new Date(someDate1);
+  const date2 = new Date(someDate2);
+  return (
+    date1.getMonth() === date2.getMonth() &&
+    date1.getFullYear() == date2.getFullYear()
+  );
+};
+
+/**
+ * check 1 is pre month-year of 2
+ */
+export const isPreMonth = (
+  someDate1: Date | number,
+  someDate2: Date | number,
+): boolean => {
+  const date1 = new Date(someDate1);
+  const date2 = new Date(someDate2);
+
+  if (
+    date1.getMonth() + 1 === date2.getMonth() &&
+    date1.getFullYear() == date2.getFullYear()
+  )
+    return true;
+  if (
+    date1.getMonth() == 12 &&
+    date2.getMonth() == 1 &&
+    date1.getFullYear() + 1 == date2.getFullYear()
+  )
+    return true;
+  return false;
+};
+
+/**
+ * check 1 is next month-year of 2
+ */
+export const isNextMonth = (
+  someDate1: Date | number,
+  someDate2: Date | number,
+): boolean => {
+  const date1 = new Date(someDate1);
+  const date2 = new Date(someDate2);
+
+  if (
+    date1.getMonth() - 1 === date2.getMonth() &&
+    date1.getFullYear() == date2.getFullYear()
+  )
+    return true;
+  if (
+    date1.getMonth() == 1 &&
+    date2.getMonth() == 12 &&
+    date1.getFullYear() == date2.getFullYear() + 1
+  )
+    return true;
+  return false;
 };
 
 /**Caculate day in week */

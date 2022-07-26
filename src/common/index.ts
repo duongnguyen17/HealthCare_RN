@@ -194,7 +194,7 @@ export interface Medicine {
   _id: number;
   title: string;
   infor: PicNote;
-  shcedules: Array<Schedule>;
+  schedules: Array<Schedule>;
 }
 
 export interface Schedule {
@@ -239,7 +239,7 @@ export interface MedicineItemDisplay {
   _id: number;
   title: string;
   infor: PicNote;
-  shcedules: Array<Schedule>;
+  schedules: Array<Schedule>;
 }
 
 export interface PicNote {

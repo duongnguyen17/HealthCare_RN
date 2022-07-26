@@ -66,7 +66,7 @@ const MedicineScreen = (props: ScreenProps) => {
     //@ts-ignore
     setInfor(medicine?.infor);
     //@ts-ignore
-    setSchedules(medicine?.shcedules);
+    setSchedules(medicine?.schedules);
   }, [medicine]);
 
   const onSubmit = () => {

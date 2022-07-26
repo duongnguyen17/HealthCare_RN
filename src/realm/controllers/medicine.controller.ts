@@ -129,17 +129,19 @@ export const updateMedicines = async (medicines: Array<Medicine>) => {
 };
 
 /**Tìm kiếm thuốc theo từ khoá */
-export const searchMedicine = async (keyword: string, index: number) => {
+export const searchMedicine = async (keyword: string = '', index?: number) => {
   try {
     const realm = await RealmManager.getRealm();
     const result = new Array<MedicineItemDisplay>();
     const allMedicines = realm.objects(SCHEMA.MEDICINE);
-    const listMedicine = allMedicines?.filter(value =>
+    let listMedicine = allMedicines?.filter(value =>
       //@ts-ignore
       value?.title?.toLowerCase().startsWith(keyword?.toLowerCase()),
     );
-    console.log('listMedicine', JSON.stringify(listMedicine));
-    listMedicine.slice(index, index + NUM_RESULT).forEach(value => {
+    if (index != null && index != undefined) {
+      listMedicine = listMedicine?.slice(index, index + NUM_RESULT);
+    }
+    listMedicine.forEach(value => {
       result.push({
         //@ts-ignore
         _id: value._id,
@@ -148,7 +150,7 @@ export const searchMedicine = async (keyword: string, index: number) => {
         //@ts-ignore
         infor: value.infor,
         //@ts-ignore
-        shcedules: value.shcedules,
+        schedules: value.schedules,
       });
     });
     return result;
@@ -157,6 +159,7 @@ export const searchMedicine = async (keyword: string, index: number) => {
       '🚀 ~ file: medicine.controller.ts ~ line 110 ~ searchMedicine ~ error',
       error,
     );
+    return [];
   }
 };
 

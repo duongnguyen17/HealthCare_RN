@@ -29,7 +29,14 @@ const MedicineItem = ({
   const [startDate, setStartDate] = useState<any>(new Date());
   const [reminds, setReminds] = useState<Array<Remind>>([]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    updateScredules(medicine._id, {
+      visitedId,
+      during: calDuring(count, timeUnit),
+      start: startDate.getTime(),
+      reminds: reminds,
+    } as Schedule);
+  }, [timeUnit, count]);
 
   const addRemind = () => {
     //thêm 1 nhắc nhở trống vào cuối mảng
@@ -50,7 +57,7 @@ const MedicineItem = ({
     reminds[index] = remind;
     updateScredules(medicine._id, {
       visitedId,
-      during: parseInt(count),
+      during: calDuring(count, timeUnit),
       start: startDate.getTime(),
       reminds: reminds,
     } as Schedule);
@@ -62,10 +69,26 @@ const MedicineItem = ({
     setReminds(temp);
     updateScredules(medicine._id, {
       visitedId,
-      during: parseInt(count),
+      during: calDuring(count, timeUnit),
       start: startDate.getTime(),
       reminds: temp,
     } as Schedule);
+  };
+
+  const calDuring = (during: string, unit: TimeUnit) => {
+    let result = 0;
+    switch (unit) {
+      case TimeUnit.WEEK:
+        result = parseInt(during) * 7;
+        break;
+      case TimeUnit.MONTH:
+        result = parseInt(during) * 30;
+        break;
+      default:
+        result = parseInt(during);
+        break;
+    }
+    return result;
   };
 
   const gotoMedicineScreen = () => {

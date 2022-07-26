@@ -1,18 +1,25 @@
 import RealmManager from '../';
 import {Visited, VisitedItemDisplay} from '../../common';
+import {isNextMonth, isPreMonth, isThisMonth} from '../../utils/dateutils';
 import {NUM_RESULT, SCHEMA} from '../common';
 
-export const searchVisited = async (keyword: string, index: number) => {
+export const searchVisited = async (
+  keyword: string = '',
+  index?: number,
+  date?: Date,
+) => {
   try {
     const realm = await RealmManager.getRealm();
-    const result = new Array<VisitedItemDisplay>();
+    let result = new Array<VisitedItemDisplay>();
     const allVisited = realm.objects(SCHEMA.VISITED);
-    const listVisited = allVisited?.filter(value =>
+    let listVisited = allVisited?.filter(value =>
       //@ts-ignore
       value?.title?.toLowerCase().startsWith(keyword?.toLowerCase()),
     );
-    console.log('listVisited', listVisited);
-    listVisited?.slice(index, index + NUM_RESULT).forEach(value => {
+    if (index != null && index != undefined) {
+      listVisited = listVisited?.slice(index, index + NUM_RESULT);
+    }
+    listVisited.forEach(value => {
       //@ts-ignore
       const location = value.location
         ? realm.objectForPrimaryKey(
@@ -44,6 +51,15 @@ export const searchVisited = async (keyword: string, index: number) => {
         test: value.test,
       });
     });
+
+    if (date != null && date != undefined) {
+      result = result.filter(
+        value =>
+          isThisMonth(value.date, date) ||
+          isNextMonth(value.date, date) ||
+          isPreMonth(value.date, date),
+      );
+    }
     return result;
   } catch (error) {
     console.log(

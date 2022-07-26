@@ -51,9 +51,9 @@ function genNotifiSchedule(schedule: Schedule, medicine: Medicine) {
       vibration: 300,
     };
     reminds.forEach((value, index) => {
-      let during = value.repeat ? schedule.during : 0;
-      for (let i = during; i > 0; i--) {
-        let date = addDays(now, --i);
+      let during = value.repeat ? schedule.during - 1 : 0;
+      for (let i = during; i >= 0; i--) {
+        let date = addDays(now, i);
         date = setHoursMinutes(date, value.time);
         if (date.getTime() - now > 0) {
           notifiObject.date = date;

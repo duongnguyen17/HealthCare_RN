@@ -39,8 +39,7 @@ export interface VisitedsStateType {
   visited: Visited | null | undefined;
 }
 export interface EventsStateType {
-  all: Array<HEvent>;
-  searchResult: Array<HEvent>;
+  listEvent: Array<HEvent>;
 }
 
 export interface SearchStateType {

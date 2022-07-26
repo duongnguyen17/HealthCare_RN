@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, LayoutAnimation, StyleSheet, Text, View} from 'react-native';
-import { COLORS, FONT_SIZE, HEvent, STRINGS, TYPE_SHOW } from '../../../../common';
-import { Calendar } from '../../../../components/CustomCalendar';
+import {
+  COLORS,
+  FONT_SIZE,
+  HEvent,
+  STRINGS,
+  TYPE_SHOW,
+} from '../../../../common';
+import {Calendar} from '../../../../components/CustomCalendar';
 import RadioList from './RadioList';
 
 const ExtendDiary = ({
@@ -14,10 +20,10 @@ const ExtendDiary = ({
   setEventType,
 }: ExtendDiaryProps): JSX.Element => {
   const [s_visible, setS_visible] = useState<boolean>();
-  const [account, setAccount] = useState([
-    {username: 'duongthptnt@gmail.com'},
-    {username: 'duongthptnt@outlook.com'},
-  ]);
+  // const [account, setAccount] = useState([
+  //   {username: 'duongthptnt@gmail.com'},
+  //   {username: 'duongthptnt@outlook.com'},
+  // ]);
   useEffect(() => {
     if (s_visible == undefined) setS_visible(visible);
     else show();
@@ -63,7 +69,7 @@ const ExtendDiary = ({
             flex: 1,
             marginHorizontal: 10,
           }}>
-          <View style={{marginVertical: 10}}>
+          {/* <View style={{marginVertical: 10}}>
             <Text style={{fontSize: FONT_SIZE.TITLE}}>
               {STRINGS.DIARY_TAB.ACCOUNT_HAS_AUTH}
             </Text>
@@ -79,7 +85,7 @@ const ExtendDiary = ({
               s_visible ? {height: 1} : {height: 0},
               {backgroundColor: COLORS.GRAY_DECOR},
             ]}
-          />
+          /> */}
           <View style={{marginTop: 10}}>
             <Text style={{fontSize: FONT_SIZE.TITLE}}>
               {STRINGS.DIARY_TAB.CONTENT_DISPLAY}

@@ -31,11 +31,7 @@ import {showAlert} from '../../components/HAlert';
 import HButton from '../../components/HButton';
 import HHeaderCommon from '../../components/HHeader/HHeaderCommon';
 import ImageView from '../../components/ImageView';
-import {
-  goBack,
-  navigateTo,
-  routeParam,
-} from '../../navigator/NavigationServices';
+import {goBack, routeParam} from '../../navigator/NavigationServices';
 import {medicinesAction} from '../../reduxSaga/slices/medicinesSlice';
 import {visitedsAction} from '../../reduxSaga/slices/visitedsSlice';
 import {RootStateType, ScreenProps} from '../../type/type';
@@ -104,7 +100,6 @@ const VisitedScreen = (props: ScreenProps) => {
         STRINGS.VISITED_SCREEN.THE_NAME_OF_EXAMINATION_CANNOT_BE_LEFT_BLANK,
       );
     } else {
-      console.log('schedules', schedules);
       let tempVisited: Visited = {
         _id: _id ?? Date.now(),
         title,
@@ -152,6 +147,7 @@ const VisitedScreen = (props: ScreenProps) => {
   };
 
   const updateScredules = (medicine: number, schedule: Schedule) => {
+    // console.log('schedule', schedule)
     schedules.set(medicine, schedule);
   };
 

@@ -1,7 +1,7 @@
-import { useIsFocused } from '@react-navigation/native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   AlertType,
   COLORS,
@@ -10,57 +10,48 @@ import {
   FONT_SIZE,
   HEvent,
   STRINGS,
-  TYPE_SHOW
+  TYPE_SHOW,
 } from '../../../common';
 import ContainerView from '../../../components/ContainerView';
-import { showAlert } from '../../../components/HAlert';
+import {showAlert} from '../../../components/HAlert';
 import HDayTag from '../../../components/HDayTag';
 import HHeader from '../../../components/HHeader';
 import HIcon from '../../../components/HIcon';
 import TriangleAnimated from '../../../components/TriangleAnimated';
-import { navigateTo } from '../../../navigator/NavigationServices';
-import { eventsAction } from '../../../reduxSaga/slices/eventsSlice';
-import { RootStateType } from '../../../type/type';
-import ExtendDiary, { TypeExtend } from './components/ExtendDiary';
+import {navigateTo} from '../../../navigator/NavigationServices';
+import {eventsAction} from '../../../reduxSaga/slices/eventsSlice';
+import {RootStateType} from '../../../type/type';
+import ExtendDiary, {TypeExtend} from './components/ExtendDiary';
 
 const Diary = () => {
-  const allEvent: Array<HEvent> = useSelector(
-    (state: RootStateType) => state.eventState.all,
+  const listEvent: Array<HEvent> = useSelector(
+    (state: RootStateType) => state.eventState.listEvent,
   );
-  const [current, setCurrent] = useState<Date>(new Date());
+
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+
   const list = useRef<any>();
+  const [current, setCurrent] = useState<Date>(new Date());
   const [extendVisible, setExtendVisible] = useState<boolean>(false);
   const [calendarVisible, setCalendarVisible] = useState<boolean>(false);
   const [typeExtend, setTypeExtend] = useState<TypeExtend>(TypeExtend.calendar);
-  const [data, setData] = useState<Array<HEvent>>([]);
   const [eventType, setEventType] = useState<TYPE_SHOW>(TYPE_SHOW.ALL);
-  useEffect(() => {
-    if (isFocused) {
-      dispatch(eventsAction.getAllEvent())
-    }
-  }, [isFocused]);
 
   useEffect(() => {
-    //filter data
-    if (eventType == TYPE_SHOW.ALL) {
-      setData(allEvent);
-    } else {
-      let dataTemp: Array<HEvent> = [];
-      allEvent.forEach(element => {
-        // @ts-ignore
-        let arr = element.event.filter(e => e.type == eventType);
-        if (arr.length != 0) dataTemp.push({ date: element.date, event: arr });
-      });
-      setData(dataTemp);
-    }
-  }, [eventType, allEvent]);
+    isFocused &&
+      dispatch(
+        eventsAction.getListEvent({
+          type: eventType,
+          date: current,
+        }),
+      );
+  }, [isFocused, eventType, current]);
 
   const gotoSearchScreen = (): void => {
     navigateTo(STRINGS.ROUTE.SEARCH);
   };
-  const renderItem = ({ item }: any) => <HDayTag data={item} />;
+  const renderItem = ({item}: any) => <HDayTag data={item} />;
 
   const showHideExtend = useCallback(
     (type: TypeExtend): void => {
@@ -81,11 +72,11 @@ const Diary = () => {
     index,
   });
   const scrollToSomeDay = (someDay: Date) => {
-    const iCurrDay: number = -1
+    const iCurrDay: number = -1;
     if (iCurrDay == -1)
       showAlert(AlertType.SUCCESS, STRINGS.DIARY_TAB.TODAY_HAS_NO_EVENT);
     else {
-      list.current.scrollToIndex({ animated: true, index: iCurrDay });
+      list.current.scrollToIndex({animated: true, index: iCurrDay});
     }
   };
   // const onScrollUp = (y: number) => {
@@ -95,6 +86,12 @@ const Diary = () => {
   //     setExtendVisible(false);
   //   }
   // };
+
+  const onSetEventType = (type: TYPE_SHOW) => {
+    setEventType(type);
+    showHideExtend(TypeExtend.option);
+  };
+
   return (
     <ContainerView>
       <HHeader
@@ -103,10 +100,9 @@ const Diary = () => {
           height: DIMENS.HEADER_HEIGHT,
           alignItems: 'center',
           justifyContent: 'space-between',
-        }}
-      >
+        }}>
         <TouchableOpacity
-          style={{ paddingHorizontal: 10, paddingVertical: 8 }}
+          style={{paddingHorizontal: 10, paddingVertical: 8}}
           onPress={() => {
             showHideExtend(TypeExtend.option);
           }}>
@@ -124,10 +120,10 @@ const Diary = () => {
             showHideExtend(TypeExtend.calendar);
             setCalendarVisible(!calendarVisible);
           }}>
-          <Text style={{ fontSize: FONT_SIZE.CONTENT }}>Tháng 12</Text>
+          <Text style={{fontSize: FONT_SIZE.CONTENT}}>Tháng 12</Text>
           <TriangleAnimated state={calendarVisible} />
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={gotoSearchScreen}
             style={{
@@ -152,14 +148,14 @@ const Diary = () => {
       <ExtendDiary
         current={current}
         setCurrent={setCurrent}
-        data={allEvent}
+        data={listEvent}
         type={typeExtend}
         visible={extendVisible}
         eventType={eventType}
-        setEventType={setEventType}
+        setEventType={onSetEventType}
       />
-      <View style={{ flex: 1, backgroundColor: COLORS.WHITE }}>
-        {data.length == 0 ? (
+      <View style={{flex: 1, backgroundColor: COLORS.WHITE}}>
+        {listEvent.length == 0 ? (
           <Text
             style={{
               color: COLORS.GRAY_TEXT_1,
@@ -173,18 +169,18 @@ const Diary = () => {
           /* chỗ này yêu cầu phải có 1 renderItem nhưng mình dùng CellRendererComponent nên nó báo lỗi
            @ts-ignore */
           <FlatList
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             ref={list}
             // onScroll={e => {
             //   onScrollUp(e.nativeEvent.contentOffset.y);
             // }}
             showsVerticalScrollIndicator={false}
             CellRendererComponent={renderItem}
-            data={data}
+            data={listEvent}
             getItemLayout={getItemLayout}
-          // onScroll={e => {
-          //   console.log(e.nativeEvent.contentOffset.y); 
-          // }}
+            // onScroll={e => {
+            //   console.log(e.nativeEvent.contentOffset.y);
+            // }}
           />
         )}
       </View>
@@ -225,7 +221,7 @@ export interface DateData {
   event: Array<Object>;
 }
 
-interface EventVisit { }
+interface EventVisit {}
 interface EventMedicine {
   title: string;
   type: EventType;
