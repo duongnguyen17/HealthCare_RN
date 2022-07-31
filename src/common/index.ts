@@ -92,6 +92,7 @@ export const STRINGS = {
   },
   STORAGE_KEY: {
     OPENED_NOTIFICATION: 'OPENED_NOTIFICATION',
+    USERID: 'USERID',
   },
 };
 

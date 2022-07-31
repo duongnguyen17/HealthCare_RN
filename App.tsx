@@ -8,6 +8,7 @@ import AuthNavigator from './src/navigator/AuthNavigator';
 import MainNavigator from './src/navigator/MainNavigator';
 import RealmManager from './src/realm';
 import {authAction} from './src/reduxSaga/slices/authSlice';
+import {userAction} from './src/reduxSaga/slices/userSlice';
 import store from './src/reduxSaga/store';
 import Intro from './src/screens/Intro/Intro';
 import {RootStateType} from './src/type/type';
@@ -21,17 +22,20 @@ if (
 }
 
 const AppRoot = () => {
-  const dispatch = useDispatch()
-  let isLogin = useSelector((state: RootStateType) => state.authState.isLogin)
-
+  const dispatch = useDispatch();
+  // let isLogin = useSelector((state: RootStateType) => state.authState.isLogin);
+  const _id = useSelector((state: RootStateType) => state.userState._id);
   const [isIntro, setIsIntro] = useState<boolean>(true);
 
   useEffect(() => {
-    if (isLogin == false) {
-      dispatch(authAction.verifyToken())
+    if (_id === undefined || _id === null) {
+      dispatch(userAction.getUserProfile());
     }
+    // if (isLogin == false) {
+    //   dispatch(authAction.verifyToken());
+    // }
     // checkGGFLogined()
-  }, [])
+  }, []);
 
   // const checkGGFLogined = async () => {
   //   const googlefitLogined = await Storage.getItem(STORAGE_KEY.GOOGLEFIT_LOGINED)
@@ -48,8 +52,8 @@ const AppRoot = () => {
     <React.Fragment>
       <Loading />
       <HAlert />
-      {isLogin ? <MainNavigator /> : <AuthNavigator />}
-      {/* <MainNavigator /> */}
+      {/* {isLogin ? <MainNavigator /> : <AuthNavigator />} */}
+      <MainNavigator />
     </React.Fragment>
   );
 };

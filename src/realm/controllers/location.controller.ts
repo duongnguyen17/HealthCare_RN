@@ -1,7 +1,5 @@
-import {Location} from '../../common';
-import {NUM_RESULT, SCHEMA} from '../common';
 import RealmManager from '../';
-import NotifiSchedule from '../../utils/Notifi';
+import {NUM_RESULT, SCHEMA} from '../common';
 
 /**Tìm kiếm thuốc theo từ khoá */
 export const searchLocation = async (keyword: string, index: number) => {

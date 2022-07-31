@@ -1,12 +1,12 @@
 import { LocationSchema } from "./models/location.model";
 import { MedicineSchema, RemindSchema, ScheduleSchema } from "./models/medicine.model";
-// import { UserSchema } from "./models/user.model";
+import { UserSchema } from "./models/user.model";
 import { PicNoteSchema, VisitedSchema } from "./models/visited.model";
 
 export const configureRealm = {
     path: 'HealthCare',
     schema: [
-        // UserSchema,
+        UserSchema,
         VisitedSchema,
         MedicineSchema,
         RemindSchema,

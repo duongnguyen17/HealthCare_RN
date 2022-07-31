@@ -53,17 +53,19 @@ export interface AuthStateType {
 }
 
 export interface UserStateType {
-  _id?: string;
+  _id?: number;
   customInfor: CustomInforType;
 }
 
 export interface CustomInforType {
-  username?: string;
+  _id?: number;
+  nickname?: string;
   avatar?: string;
-  sex?: number;
+  gender?: number;
   dob?: string;
   height?: number;
   weight?: number;
+  goalStep?: number;
 }
 
 export interface DeviceStateType {
@@ -81,7 +83,7 @@ export interface Device {
 }
 export interface HealthStateType {
   isAuthorized: boolean;
-  goalSteps?: number;
+  goalStep?: number;
   today?: {
     processSteps?: number;
     steps: Array<StepsResponse>;

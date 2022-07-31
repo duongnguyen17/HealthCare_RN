@@ -28,12 +28,18 @@ const OverView = ({}: TabViewProps) => {
   const {isAuthorized, today} = useSelector(
     (state: RootStateType) => state.healthState,
   );
-
+  const goalStep = useSelector(
+    (state: RootStateType) => state.userState.customInfor.goalStep,
+  );
+  console.log('isAuthorized, today', JSON.stringify(today));
   const [isReFresh, setIsReFresh] = useState(false);
 
   useEffect(() => {
     if (isAuthorized && focused) {
       dispatch(healthAction.getOverviewToday());
+    }
+    if (!isAuthorized) {
+      dispatch(healthAction.onAuthorize());
     }
   }, [isAuthorized, focused]);
 

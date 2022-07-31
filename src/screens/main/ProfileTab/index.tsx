@@ -10,40 +10,32 @@ import {
 } from 'react-native';
 import {BucketUnit} from 'react-native-google-fit';
 import {Avatar} from 'react-native-paper';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  COLORS,
-  DIMENS,
-  FONT_SIZE,
-  IMG_DEFAULT_AVATAR,
-  STORAGE_KEY,
-  STRINGS,
-} from '../../../common';
+import {COLORS, IMG_DEFAULT_AVATAR, STRINGS} from '../../../common';
 import ContainerView from '../../../components/ContainerView';
 import Frame from '../../../components/Frame';
 import HairLine from '../../../components/HairLine';
 import HIcon from '../../../components/HIcon';
 import {navigateTo} from '../../../navigator/NavigationServices';
 import {authAction} from '../../../reduxSaga/slices/authSlice';
-import {healthAction} from '../../../reduxSaga/slices/healthSlice';
 import {userAction} from '../../../reduxSaga/slices/userSlice';
 import {RootStateType} from '../../../type/type';
 import HGoogleCalendar from '../../../utils/HGoogleCalendar';
 import {HGoogleFit} from '../../../utils/HGoogleFit';
-import Storage from '../../../utils/Storage';
 const Profile = (prop: ViewProps) => {
   const isFocused = useIsFocused();
-  const {isAuthorized} = useSelector(
-    (state: RootStateType) => state.healthState,
-  );
+  // const {isAuthorized} = useSelector(
+  //   (state: RootStateType) => state.healthState,
+  // );
   const RBSheetRefAccount = useRef<any>();
   const RBSheetRefHMM = useRef<any>();
-  const {avatar, username} = useSelector(
+  const {_id, avatar, nickname} = useSelector(
     (state: RootStateType) => state.userState.customInfor,
   );
-  const _id = useSelector((state: RootStateType) => state.authState._id);
+  // const _id = useSelector((state: RootStateType) => state.authState._id);
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     isFocused && dispatch(userAction.getUserProfile());
   }, [isFocused]);
@@ -63,22 +55,22 @@ const Profile = (prop: ViewProps) => {
   /**
    * choose GoogleFit monitoring health
    */
-  const chooseGF = async () => {
-    dispatch(healthAction.checkAuthorize());
-    if (!isAuthorized) {
-      dispatch(healthAction.onAuthorize());
-    }
-    await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT + _id, 1);
-    RBSheetRefHMM.current.close();
-  };
+  // const chooseGF = async () => {
+  //   dispatch(healthAction.checkAuthorize());
+  //   if (!isAuthorized) {
+  //     dispatch(healthAction.onAuthorize());
+  //   }
+  //   await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT , 1);
+  //   RBSheetRefHMM.current.close();
+  // };
 
   /**
    * choose other device monitoring health
    */
-  const chooseOtherDevice = async () => {
-    await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT + _id, 0);
-    RBSheetRefHMM.current.close();
-  };
+  // const chooseOtherDevice = async () => {
+  //   await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT , 0);
+  //   RBSheetRefHMM.current.close();
+  // };
 
   const createVisited = () => {
     navigateTo(STRINGS.ROUTE.DIARY.VISITED);
@@ -161,7 +153,7 @@ const Profile = (prop: ViewProps) => {
                   color: COLORS.BLACK,
                   marginTop: 4,
                 }}>
-                {username}
+                {nickname ?? 'Bạn chưa khởi tạo thông tin người dùng'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -177,7 +169,7 @@ const Profile = (prop: ViewProps) => {
             ]}
           />
         </Section>
-        <Section title="Thiết bị của tôi">
+        {/* <Section title="Thiết bị của tôi">
           <FrameButton
             buttons={[{title: 'Vòng đeo tay ', onPress: testGGFit}]}
           />
@@ -193,17 +185,17 @@ const Profile = (prop: ViewProps) => {
               },
             ]}
           />
-        </Section>
+        </Section> */}
         <Section title="Thêm">
           <FrameButton
             buttons={[
-              {title: 'Đặt mục tiêu', onPress: () => {}},
-              {
-                title: 'Thay đổi phương thức theo dõi sức khỏe',
-                onPress: () => {
-                  RBSheetRefHMM.current.open();
-                },
-              },
+              {title: 'Đặt mục tiêu', onPress: gotoProfileScreen},
+              // {
+              //   title: 'Thay đổi phương thức theo dõi sức khỏe',
+              //   onPress: () => {
+              //     RBSheetRefHMM.current.open();
+              //   },
+              // },
               {
                 title: 'Cài đặt',
                 onPress: () => {},
@@ -211,11 +203,11 @@ const Profile = (prop: ViewProps) => {
             ]}
           />
         </Section>
-        <Section>
+        {/* <Section>
           <FrameButton buttons={[{title: 'Đăng xuất', onPress: logout}]} />
-        </Section>
+        </Section> */}
       </ScrollView>
-      <RBSheet
+      {/* <RBSheet
         ref={RBSheetRefAccount}
         height={2 * DIMENS.BUTTON_RBSHEET_HEIGHT}
         openDuration={250}>
@@ -233,8 +225,8 @@ const Profile = (prop: ViewProps) => {
             Microsoft
           </Text>
         </TouchableOpacity>
-      </RBSheet>
-      <RBSheet
+      </RBSheet> */}
+      {/* <RBSheet
         ref={RBSheetRefHMM}
         openDuration={250}
         height={2 * DIMENS.BUTTON_RBSHEET_HEIGHT}>
@@ -253,7 +245,7 @@ const Profile = (prop: ViewProps) => {
             Thiết bị ngoại vi
           </Text>
         </TouchableOpacity>
-      </RBSheet>
+      </RBSheet> */}
     </ContainerView>
   );
 };
@@ -280,7 +272,7 @@ const FrameButton = ({
 }: {
   buttons: Array<{title: string; onPress: () => void}>;
 }) => (
-  <Frame>
+  <Frame style={{marginVertical: 2}}>
     {buttons.map((item, index) => (
       <View key={index}>
         {index === 0 ? null : <HairLine style={{width: '90%'}} />}

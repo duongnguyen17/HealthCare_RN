@@ -33,7 +33,7 @@ import {goBack, routeParam} from '../../navigator/NavigationServices';
 import {medicinesAction} from '../../reduxSaga/slices/medicinesSlice';
 import {RootStateType, ScreenProps} from '../../type/type';
 import {arrayUnique} from '../../utils/arrayUtils';
-import {getPictures, takePicture} from '../../utils/picture';
+import {getPictures, getUri, takePicture} from '../../utils/picture';
 import Tag from '../main/DiaryTab/components/Tag';
 import TagWithIcon from '../main/DiaryTab/components/TagWithIcon';
 
@@ -252,12 +252,7 @@ const MedicineScreen = (props: ScreenProps) => {
       ) : null,
     [schedules],
   );
-  const getUri = (photo: Asset[]): Array<string | undefined> => {
-    const arrayUri = photo.map((value, index) =>
-      Platform.OS === 'ios' ? value.uri?.replace('file://', '') : value.uri,
-    );
-    return arrayUri;
-  };
+
   const getPic = async () => {
     RBSheetImagePicker.current.close();
     const photo = await getPictures();
