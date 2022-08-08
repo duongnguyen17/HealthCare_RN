@@ -186,8 +186,8 @@ function* updateScheduleSaga({payload}: any) {
   try {
     const {_id, schedule} = payload;
     showLoading();
-    // yield call(updateSchedule, _id, schedule);
-    //@ts-ignore
+    yield call(updateSchedule, _id, schedule);
+    // @ts-ignore
     const medicine = yield call(getMedicine, _id);
     NotifiSchedule.genNotifiSchedule(schedule, medicine);
   } catch (error) {

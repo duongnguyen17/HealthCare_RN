@@ -163,6 +163,7 @@ const _getEventMedicine = async (date: Date, index: number) => {
         events.push({date: eMedicine.date, event: [eMedicine]});
       }
     });
+    console.log('events', events);
     return events;
   } catch (error: any) {
     console.log(

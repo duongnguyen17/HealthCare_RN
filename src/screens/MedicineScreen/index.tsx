@@ -359,13 +359,13 @@ const MedicineScreen = (props: ScreenProps) => {
               type={'normal'}
               onPress={onSubmit}
             />
-            <HButton
+            {/* <HButton
               style={styles.btnSave}
               title="Xóa"
               textStyle={styles.textBtnLogin}
               type={'delete'}
               onPress={deleteMedicine}
-            />
+            /> */}
           </ScrollView>
         </View>
       </TouchableWithoutFeedback>

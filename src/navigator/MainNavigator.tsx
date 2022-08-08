@@ -38,13 +38,13 @@ const TabNavigator = () => {
         tabBarLabel: ({focused, color}) => {
           let title: any;
           switch (route.name) {
-            case STRINGS.ROUTE.MAIN_TABS.PRACTICE:
-              title = (
-                <Text style={[styles.labelTabBar, {color: color}]}>
-                  Luyện tập
-                </Text>
-              );
-              break;
+            // case STRINGS.ROUTE.MAIN_TABS.PRACTICE:
+            //   title = (
+            //     <Text style={[styles.labelTabBar, {color: color}]}>
+            //       Luyện tập
+            //     </Text>
+            //   );
+            //   break;
             case STRINGS.ROUTE.MAIN_TABS.DIARY:
               title = (
                 <Text style={[styles.labelTabBar, {color: color}]}>
@@ -72,15 +72,15 @@ const TabNavigator = () => {
         tabBarIcon: ({focused, color}) => {
           let icon: any;
           switch (route.name) {
-            case STRINGS.ROUTE.MAIN_TABS.PRACTICE:
-              icon = (
-                <MaterialIcons
-                  name={'sports'}
-                  size={focused ? 37 : 28}
-                  color={color}
-                />
-              );
-              break;
+            // case STRINGS.ROUTE.MAIN_TABS.PRACTICE:
+            //   icon = (
+            //     <MaterialIcons
+            //       name={'sports'}
+            //       size={focused ? 37 : 28}
+            //       color={color}
+            //     />
+            //   );
+            //   break;
             case STRINGS.ROUTE.MAIN_TABS.DIARY:
               icon = (
                 <MaterialIcons
@@ -121,10 +121,10 @@ const TabNavigator = () => {
         tabBarLabelStyle: {fontSize: 14},
       })}>
       <Tab.Screen component={Report} name={STRINGS.ROUTE.MAIN_TABS.REPORT} />
-      <Tab.Screen
+      {/* <Tab.Screen
         component={Practice}
         name={STRINGS.ROUTE.MAIN_TABS.PRACTICE}
-      />
+      /> */}
       <Tab.Screen component={Diary} name={STRINGS.ROUTE.MAIN_TABS.DIARY} />
       <Tab.Screen component={Profile} name={STRINGS.ROUTE.MAIN_TABS.PROFILE} />
     </Tab.Navigator>

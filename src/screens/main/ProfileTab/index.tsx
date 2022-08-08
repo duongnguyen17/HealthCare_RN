@@ -162,7 +162,7 @@ const Profile = (prop: ViewProps) => {
           <FrameButton
             buttons={[
               {title: 'Danh sách nhật kí khám bệnh', onPress: listVisited},
-              {title: 'Danh sách các thuốc đã uống', onPress: listMedicine},
+              {title: 'Danh sách các thuốc', onPress: listMedicine},
               {title: 'Tạo nhật kí khám bệnh', onPress: createVisited},
               // {title: 'Thêm thuốc', onPress: listVisited},
               {title: 'Danh sách địa điểm từng khám', onPress: listLocation},

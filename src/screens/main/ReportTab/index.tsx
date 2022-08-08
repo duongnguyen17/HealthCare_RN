@@ -1,6 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  Image,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -14,6 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
 import SendIntentAndroid from 'zepp-health-care-hasley';
 import {COLORS, DIMENS, FONT_SIZE, STRINGS} from '../../../common';
+import {LOGO_ZEPP} from '../../../common/image';
 import ContainerView from '../../../components/ContainerView';
 import Frame from '../../../components/Frame';
 import HairLine from '../../../components/HairLine';
@@ -101,7 +103,14 @@ const OverView = ({}: TabViewProps) => {
           style={{paddingVertical: 4, paddingHorizontal: 8}}
           activeOpacity={0.7}
           onPress={goZepp}>
-          <HIcon name="plus" font="AntDesign" color="white" size={22} />
+          <Image
+            source={LOGO_ZEPP}
+            style={{
+              width: 20,
+              height: 20,
+              resizeMode: 'center',
+            }}
+          />
         </TouchableOpacity>
       </View>
       <ScrollView
@@ -208,13 +217,13 @@ const OverView = ({}: TabViewProps) => {
             </View>
           </View>
         </Frame>
-        <Frame style={styles.frame}>
+        {/* <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
             <View>
               <Text style={{fontSize: FONT_SIZE.HEADER}}>
                 {STRINGS.REPORT_TAB.SOME_PRODUCTS_FOR_YOU}
               </Text>
-              <View>{/* <HSwipe data={dataRe} /> */}</View>
+              <View><HSwipe data={dataRe} /></View>
             </View>
             <HairLine style={{width: '60%'}} />
             <TouchableOpacity
@@ -225,7 +234,7 @@ const OverView = ({}: TabViewProps) => {
               <Text style={{marginTop: 8}}>{STRINGS.REPORT_TAB.SEE_MORE}</Text>
             </TouchableOpacity>
           </View>
-        </Frame>
+        </Frame> */}
         <Frame style={styles.frame}>
           <View style={styles.inLineFrame}>
             <Text style={styles.title_frame}>{STRINGS.REPORT_TAB.SLEEP}</Text>

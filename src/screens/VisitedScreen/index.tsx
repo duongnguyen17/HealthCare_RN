@@ -118,6 +118,7 @@ const VisitedScreen = (props: ScreenProps) => {
         // dispatch(visitedsAction.updateVisited(tempVisited));
       }
       if (schedules.size != 0) {
+        console.log('schedules', schedules)
         schedules.forEach((value, key) => {
           dispatch(medicinesAction.updateSchedule({_id: key, schedule: value}));
         });
