@@ -44,6 +44,8 @@ export const updateUserProfile = async (custominfor: any) => {
       user.weight = custominfor.weight ?? user.weight;
       //@ts-ignore
       user.goalStep = custominfor.goalStep ?? user.goalStep;
+      //@ts-ignore
+      user.dob = custominfor.dob ?? user.dob;
     });
     return realm.objectForPrimaryKey(SCHEMA.USER, custominfor._id);
   } catch (error) {

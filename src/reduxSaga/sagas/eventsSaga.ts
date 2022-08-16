@@ -17,7 +17,7 @@ import {
 } from '../../realm/controllers/medicine.controller';
 import {searchVisited} from '../../realm/controllers/visited.controller';
 import {isEqualDay, setHoursMinutes} from '../../utils/dateutils';
-import {eventsAction} from '../slices/eventsSlice';
+import {eventsAction, eventsReducer} from '../slices/eventsSlice';
 
 export default [
   takeLatest(eventsAction.getListEvent.type, getListEventSaga),
@@ -34,14 +34,14 @@ function* getListEventSaga({payload}: any) {
     switch (type) {
       case TYPE_SHOW.VISITED:
         //@ts-ignore
-        events = yield call(_getEventVisited, date);
+        events = yield call(_getEventVisited, undefined, undefined, date);
         break;
       case TYPE_SHOW.MEDICINE:
         //@ts-ignore
-        events = yield call(_getEventMedicine);
+        events = yield call(_getEventMedicine, undefined, undefined, undefined);
         break;
       default:
-        events = yield call(_getEventVisited, date);
+        events = yield call(_getEventVisited, undefined, undefined, date);
         //@ts-ignore
         listEventMedicine = yield call(_getEventMedicine);
         listEventMedicine.forEach((eventMedicine: any) => {
@@ -77,12 +77,16 @@ function* getListEventSaga({payload}: any) {
   }
 }
 
-const _getEventVisited = async (date: Date) => {
+const _getEventVisited = async (
+  keyword: string | undefined | null,
+  index: number | null | undefined,
+  date: Date | null | undefined,
+) => {
   try {
     let events: Array<HEvent> = [];
     //lấy tất cả visited để xếp vào list event
     //@ts-ignore
-    let allVisited = await searchVisited('', null, date);
+    let allVisited = await searchVisited(keyword ?? '', index, date);
     allVisited.forEach(element => {
       let eTemp: HEventVisited = {
         _id: element._id,
@@ -111,12 +115,16 @@ const _getEventVisited = async (date: Date) => {
   }
 };
 
-const _getEventMedicine = async (date: Date, index: number) => {
+const _getEventMedicine = async (
+  keyword: string | null | undefined,
+  index: number | null | undefined,
+  date: Date | null | undefined,
+) => {
   try {
     let events: Array<HEvent> = [];
     //lấy tất cả các thuốc uống để ren ra event
     //@ts-ignore
-    let allMedicines = await searchMedicine();
+    let allMedicines = await searchMedicine(keyword, index);
     // console.log('allMedicines', JSON.stringify(allMedicines));
     let eventMedicines: Array<HEventMedicine> = [];
     allMedicines.forEach((medicine: Medicine) => {
@@ -188,27 +196,50 @@ function getAllEventInMonth({payload}: any) {
 // }
 function* searchEventSaga({payload}: any) {
   try {
-    showLoading();
-    const keyword: String = payload.keyword;
-    const searchType: SearchType = payload.searchType;
-    let searchResult: Array<HEvent> = [];
+    const keyword: string = payload.keyword;
+    const type: SearchType = payload.searchType;
+    let events: Array<HEvent> = [];
+    let listEventMedicine;
     if (keyword == '') {
-      yield put(eventsAction.searchEventSuccess({searchResult}));
+      yield put(eventsAction.searchEventSuccess({searchResult: events}));
       return;
     }
-    switch (searchType) {
-      case SearchType.MEDICINE:
-        searchResult = yield call(_searchMedicine, keyword);
-        break;
+    showLoading();
+    switch (type) {
       case SearchType.VISITED:
-        searchResult = yield call(_searchVisited, keyword);
+        //@ts-ignore
+        events = yield call(_getEventVisited, keyword, undefined, undefined);
+        break;
+      case SearchType.MEDICINE:
+        //@ts-ignore
+        events = yield call(_getEventMedicine, keyword, undefined, undefined);
         break;
       default:
-        searchResult = yield call(_searchAll, keyword);
+        events = yield call(_getEventVisited, keyword, undefined, undefined);
+        //@ts-ignore
+        listEventMedicine = yield call(_getEventMedicine, keyword, undefined, undefined);
+        listEventMedicine.forEach((eventMedicine: any) => {
+          let index = events.findIndex(event =>
+            isEqualDay(event.date, eventMedicine.date),
+          );
+          if (index >= 0) {
+            events[index].event = [
+              ...events[index].event,
+              ...eventMedicine.event,
+            ];
+          } else {
+            events.push(eventMedicine);
+          }
+        });
         break;
     }
 
-    yield put(eventsAction.searchEventSuccess({searchResult}));
+    // sắp xếp lại các event theo thứ tự thời gian
+    events.forEach(value => {
+      //@ts-ignore
+      value?.event?.sort((a, b) => a.date.getTime() - b.date.getTime());
+    });
+    yield put(eventsAction.searchEventSuccess({searchResult: events}));
   } catch (error) {
     console.log(
       '🚀 ~ file: eventsSaga.ts ~ line 134 ~ function*searchEventSaga ~ error',

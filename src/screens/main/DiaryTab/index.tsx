@@ -108,21 +108,14 @@ const Diary = () => {
           }}>
           <HIcon name="three-bars" font="Octicons" size={30} />
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-          }}
+        <TriangleAnimated
+          state={calendarVisible}
+          date={current}
           onPress={() => {
             showHideExtend(TypeExtend.calendar);
             setCalendarVisible(!calendarVisible);
-          }}>
-          <Text style={{fontSize: FONT_SIZE.CONTENT}}>Tháng 12</Text>
-          <TriangleAnimated state={calendarVisible} />
-        </TouchableOpacity>
+          }}
+        />
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={gotoSearchScreen}

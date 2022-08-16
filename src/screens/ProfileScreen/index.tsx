@@ -1,4 +1,5 @@
 import Clipboard from '@react-native-clipboard/clipboard';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
@@ -24,6 +25,7 @@ import {showAlert} from '../../components/HAlert';
 import HIcon from '../../components/HIcon';
 import {userAction} from '../../reduxSaga/slices/userSlice';
 import {RootStateType, ScreenProps} from '../../type/type';
+import {showFullDate} from '../../utils/dateutils';
 import {getPicture, getUri, takePicture} from '../../utils/picture';
 import {showSuccessToast} from '../../utils/toast';
 
@@ -40,7 +42,16 @@ const Item = ({
     itemPress(item._id, item.value);
   };
   const source = item?.value ? {uri: item?.value} : IMG_DEFAULT_AVATAR;
-
+  const genValue = () => {
+    switch (item._id) {
+      case 'gender':
+        return item.value == Sex.Male ? 'Nam' : 'Nữ';
+      case 'dob':
+        return showFullDate(item.value);
+      default:
+        return item?.value;
+    }
+  };
   return (
     <View>
       <TouchableOpacity style={styles.item_container} onPress={onPress}>
@@ -62,14 +73,14 @@ const Item = ({
             />
           ) : (
             <View style={{flexDirection: 'row'}}>
+              <Text style={styles.text_value}>{genValue()}</Text>
               <Text style={styles.text_value}>
-                {item._id == 'gender'
-                  ? item.value == Sex.Male
-                    ? 'Nam'
-                    : 'Nữ'
-                  : item?.value}
+                {item._id == 'height'
+                  ? ' cm'
+                  : item._id == 'weight'
+                  ? ' kg'
+                  : null}
               </Text>
-              <Text>{item._id == ' height' ? 'cm' : null}</Text>
             </View>
           )}
           {item._id == 'id' ? null : (
@@ -154,7 +165,7 @@ const ProfileScreen = (props: ScreenProps) => {
   const [height, setHeight] = useState(customInfor?.height?.toString());
   const [weight, setWeight] = useState(customInfor?.weight?.toString());
   const [goalStep, setGoalSteps] = useState(customInfor?.goalStep?.toString());
-
+  const [pickerVisible, setPickervisible] = useState(false);
   useEffect(() => {
     setData(
       BUTTONS.map((item, index) => {
@@ -223,6 +234,9 @@ const ProfileScreen = (props: ScreenProps) => {
           break;
         case 'goalStep':
           RBSheetGoalSteps.current.open();
+          break;
+        case 'dob':
+          setPickervisible(true);
           break;
         default:
           console.log('Item press default');
@@ -568,6 +582,16 @@ const ProfileScreen = (props: ScreenProps) => {
             </View>
           </View>
         </RBSheet>
+        {pickerVisible && (
+          <RNDateTimePicker
+            mode="date"
+            value={new Date(customInfor?.dob ?? Date.now())}
+            onChange={({nativeEvent}) => {
+              onChangeItem('dob', nativeEvent.timestamp.getTime());
+              setPickervisible(false);
+            }}
+          />
+        )}
       </View>
     </ContainerView>
   );

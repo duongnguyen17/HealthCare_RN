@@ -52,26 +52,6 @@ const Profile = (prop: ViewProps) => {
     navigateTo(STRINGS.ROUTE.PROFILE);
   };
 
-  /**
-   * choose GoogleFit monitoring health
-   */
-  // const chooseGF = async () => {
-  //   dispatch(healthAction.checkAuthorize());
-  //   if (!isAuthorized) {
-  //     dispatch(healthAction.onAuthorize());
-  //   }
-  //   await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT , 1);
-  //   RBSheetRefHMM.current.close();
-  // };
-
-  /**
-   * choose other device monitoring health
-   */
-  // const chooseOtherDevice = async () => {
-  //   await Storage.setItem(STORAGE_KEY.USE_GOOGLEFIT , 0);
-  //   RBSheetRefHMM.current.close();
-  // };
-
   const createVisited = () => {
     navigateTo(STRINGS.ROUTE.DIARY.VISITED);
   };
@@ -86,35 +66,6 @@ const Profile = (prop: ViewProps) => {
 
   const listLocation = () => {
     navigateTo(STRINGS.ROUTE.LIST_LOCATION_SCREEN);
-  };
-
-  const testGGFit = () => {
-    // HGoogleFit.authorize()
-
-    // HGoogleFit.disconnect()
-    // HGoogleFit.openFit()
-    // HGoogleFit.getAllActivities()
-    HGoogleFit.getDailyDistanceSamples({
-      startDate: '2022-06-20T19:16:09.175Z', // required
-      endDate: '2022-06-21T19:16:09.175Z', // required
-      bucketUnit: BucketUnit.DAY, // optional - default "DAY". Valid values: "NANOSECOND" | "MICROSECOND" | "MILLISECOND" | "SECOND" | "MINUTE" | "HOUR" | "DAY"
-      bucketInterval: 1, // optional - default 1.
-    });
-
-    // HGoogleFit.getMoveMinutes({
-    //   startDate: "2022-06-20T19:16:09.175Z", // required
-    //   endDate: "2022-06-21T19:16:09.175Z", // required
-    //   bucketUnit: BucketUnit.DAY, // optional - default "DAY". Valid values: "NANOSECOND" | "MICROSECOND" | "MILLISECOND" | "SECOND" | "MINUTE" | "HOUR" | "DAY"
-    //   bucketInterval: 1, // optional - default 1.
-    // })
-
-    // HGoogleFit.getDailyStepCountSamples({
-    //   startDate: "2022-06-20T19:16:09.175Z", // required
-    //   endDate: "2022-06-21T19:16:09.175Z", // required
-    //   bucketUnit: BucketUnit.DAY, // optional - default "DAY". Valid values: "NANOSECOND" | "MICROSECOND" | "MILLISECOND" | "SECOND" | "MINUTE" | "HOUR" | "DAY"
-    //   bucketInterval: 1, // optional - default 1.
-    // })
-    // HGoogleFit.observeSteps()
   };
 
   return (

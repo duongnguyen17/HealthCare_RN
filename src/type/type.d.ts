@@ -40,6 +40,7 @@ export interface VisitedsStateType {
 }
 export interface EventsStateType {
   listEvent: Array<HEvent>;
+  searchResult: Array<HEvent>;
 }
 
 export interface SearchStateType {

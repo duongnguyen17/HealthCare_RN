@@ -136,7 +136,8 @@ export const searchMedicine = async (keyword: string = '', index?: number) => {
     const allMedicines = realm.objects(SCHEMA.MEDICINE);
     let listMedicine = allMedicines?.filter(value =>
       //@ts-ignore
-      value?.title?.toLowerCase().startsWith(keyword?.toLowerCase()),
+      // value?.title?.toLowerCase().startsWith(keyword?.toLowerCase()),
+      value?.title?.toLowerCase().includes(keyword?.toLowerCase()),
     );
     if (index != null && index != undefined) {
       listMedicine = listMedicine?.slice(index, index + NUM_RESULT);

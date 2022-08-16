@@ -224,3 +224,12 @@ export const showDateTime = (date: number | Date = Date.now()) => {
   const temp = new Date(date).toString();
   return temp.slice(0, 10) + '  ' + temp.slice(16, 21);
 };
+
+export const showFullDate = (date: number | Date = Date.now()) => {
+  try {
+    const temp = new Date(date).toISOString();
+    return temp.slice(0, 10);
+  } catch (error) {
+    return 'chưa khởi tạo';
+  }
+};

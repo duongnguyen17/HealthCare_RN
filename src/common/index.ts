@@ -111,7 +111,7 @@ export const COLORS = {
   BLACK: '#000000',
   ORANGE: '#F9593A',
   GREEN: '#0bb895',
-  LIGHT_GREEN: '##00c474',
+  LIGHT_GREEN: '#00c474',
   BLUE: '#007fff',
   PURPLE: '#9032ff',
   WHITE: '#fff',

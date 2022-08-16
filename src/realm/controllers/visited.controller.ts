@@ -14,7 +14,8 @@ export const searchVisited = async (
     const allVisited = realm.objects(SCHEMA.VISITED);
     let listVisited = allVisited?.filter(value =>
       //@ts-ignore
-      value?.title?.toLowerCase().startsWith(keyword?.toLowerCase()),
+      // value?.title?.toLowerCase().startsWith(keyword?.toLowerCase()),
+      value?.title?.toLowerCase().includes(keyword?.toLowerCase()),
     );
     if (index != null && index != undefined) {
       listVisited = listVisited?.slice(index, index + NUM_RESULT);

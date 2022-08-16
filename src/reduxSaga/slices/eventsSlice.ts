@@ -4,6 +4,7 @@ import {EventsStateType} from '../../type/type';
 
 const initialState: EventsStateType = {
   listEvent: [],
+  searchResult: [],
 };
 
 const eventsSlice = createSlice({
@@ -14,18 +15,13 @@ const eventsSlice = createSlice({
     getListEventSuccess: (state, {payload}) => {
       state.listEvent = payload.listEvent;
     },
-
+    searchEvent: (state, {payload}) => {},
+    searchEventSuccess: (state, {payload}) => {
+      state.searchResult = payload.searchResult;
+    },
 
     getEventInMonth: action => {},
     getEventInMonthSuccess: (state, {payload}) => {},
-    searchEvent: (state, {payload}) => {},
-    searchEventSuccess: (state, {payload}) => {
-      // console.log(`payload.searchResult`, payload.searchResult)
-      state.searchResult = payload.searchResult.sort(
-        (a: HEvent, b: HEvent) =>
-          new Date(a.date).getTime() - new Date(b.date).getTime(),
-      );
-    },
   },
 });
 
