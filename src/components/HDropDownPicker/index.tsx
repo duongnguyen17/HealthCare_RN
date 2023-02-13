@@ -1,13 +1,14 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   FlatList,
   LayoutAnimation,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
   ViewProps,
 } from 'react-native';
-import {COLORS} from '../../common';
+import { COLORS } from '../../common';
 
 const HDropDownPicker = ({
   data,
@@ -31,15 +32,13 @@ const HDropDownPicker = ({
   };
   return (
     <View
-      style={{
+      style={[{
         width: width,
         height: height,
-        
-      }}>
+      }, styles.container]}>
       <View
         style={[
           {
-            borderRadius: 5,
             borderWidth: 1,
             borderColor: COLORS.BLUE,
             position: 'absolute',
@@ -47,28 +46,28 @@ const HDropDownPicker = ({
           },
           style,
         ]}
-        onLayout={({nativeEvent}) => {
+        onLayout={({ nativeEvent }) => {
           if (!isOpen) {
             setWidth(nativeEvent.layout.width);
             setHeight(nativeEvent.layout.height);
           }
         }}>
         <TouchableOpacity onPress={openClose}>
-          <View style={{marginHorizontal: 10, marginVertical: 3}}>
+          <View style={{ marginHorizontal: 10, marginVertical: 3 }}>
             <Text>{data.find(e => e.value == selected).key}</Text>
           </View>
         </TouchableOpacity>
         <FlatList
-          style={[isOpen ? (scrollable ? {height: 50} : null) : {height: 0},{zIndex:999}]}
+          style={[isOpen ? (scrollable ? { height: 50 } : null) : { height: 0 }, { zIndex: 999 }]}
           data={data.filter(element => element.value != selected)}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <TouchableOpacity
               key={index}
               onPress={() => {
                 setSelected(item?.value);
                 openClose();
               }}>
-              <View style={{marginHorizontal: 10, marginVertical: 3}}>
+              <View style={{ marginHorizontal: 10, marginVertical: 3 }}>
                 <Text>{item?.key}</Text>
               </View>
             </TouchableOpacity>
@@ -80,6 +79,15 @@ const HDropDownPicker = ({
 };
 
 export default HDropDownPicker;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    overflow: 'hidden',
+
+  }
+})
 
 interface HDropDownPickerProps {
   data: Array<any>;

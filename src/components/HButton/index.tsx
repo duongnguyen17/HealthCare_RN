@@ -28,7 +28,7 @@ export default function HButton(props: HButtonProps) {
         {...props}
         style={[
           styles.buttonNomal,
-          type === 'white' && styles.buttonWhite,
+          type === 'delete' && styles.buttonWhite,
           (type === 'disabled' || loading) && styles.button_disable,
         ]}
         disabled={disabled || loading}
@@ -88,7 +88,7 @@ export default function HButton(props: HButtonProps) {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    // width: '100%',
   },
   buttonNomal: {
     paddingHorizontal: 15,
@@ -111,9 +111,9 @@ const styles = StyleSheet.create({
     color: COLORS.PRIMARY_COLOR,
   },
   buttonWhite: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.ERROR_COLOR,
     borderWidth: 1,
-    borderColor: COLORS.PRIMARY_COLOR,
+    borderColor: COLORS.ERROR_COLOR,
   },
   button_disable: {
     backgroundColor: '#F3F2F1',

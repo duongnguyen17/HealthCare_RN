@@ -68,7 +68,7 @@ const HDayTag = ({ data }: HDayTagProps) => {
           </View>
         ) : null}
 
-        {data?.event.map((value, index) => (
+        {data?.event?.map((value, index) => (
           <EventTag key={index} data={value} />
         ))}
       </View>

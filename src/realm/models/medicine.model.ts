@@ -4,23 +4,31 @@ export const MedicineSchema = {
     name: SCHEMA.MEDICINE,
     properties: {
         _id: 'int',
-        visitedId: 'double',
         title: 'string',
-        // isDone: 'bool',
-        remind: 'Remind[]',
-        start: 'double',
-        during: 'double'
+        infor: 'PicNote?',
+        schedules: 'Schedule[]',
     },
     primaryKey: '_id'
+}
+
+export const ScheduleSchema = {
+    name: SCHEMA.SCHEDULE,
+    embedded: true, // default: false
+    properties: {
+        visitedId: 'double?',
+        reminds: 'Remind[]',
+        start: 'double?',
+        during: 'double?',
+    }
 }
 
 export const RemindSchema = {
     name: SCHEMA.REMIND,
     embedded: true, // default: false
     properties: {
-        time: 'string',
-        descript: 'string',
-        repeat: 'bool',
-        amount: 'string',
+        time: 'string?',
+        descript: 'string?',
+        repeat: 'bool?',
+        amount: 'string?',
     }
 }

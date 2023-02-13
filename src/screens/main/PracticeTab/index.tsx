@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { TabBar, TabView } from 'react-native-tab-view';
 import { COLORS, DIMENS, STRINGS } from '../../../common';
 import ContainerView from '../../../components/ContainerView';
+import { navigateTo } from '../../../navigator/NavigationServices';
 import { ScreenProps } from '../../../type/type';
 import TabBarIndicator from './components/TabBarIndicator';
 import TabBarItem from './components/TabBarItem';

@@ -7,7 +7,7 @@ const Tag = ({ children, styles }: TagProps) => (
     style={[
       {
         borderBottomWidth: 1,
-        borderColor: COLORS.GRAY_DECOR,
+        borderColor: COLORS.GRAY_TEXT_1,
       },
       styles,
     ]}>

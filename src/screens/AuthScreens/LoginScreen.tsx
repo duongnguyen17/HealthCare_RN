@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,180 +7,85 @@ import {
   Image,
   Platform,
 } from 'react-native';
-import {TextInput} from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 
-import {ScreenProps} from '../../type/type';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { ScreenProps } from '../../type/type';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import {COLORS, FONT_SIZE, STRINGS} from '../../common';
+import { COLORS, DIMENS, FONT_SIZE, STRINGS } from '../../common';
 import HButton from '../../components/HButton';
 import Frame from '../../components/Frame';
 import { navigateTo } from '../../navigator/NavigationServices';
+import LinearGradient from 'react-native-linear-gradient';
+import { validatePhone, validatePassword } from '../../utils/validate'
+import { useDispatch } from 'react-redux';
+import { authAction } from '../../reduxSaga/slices/authSlice';
+import HairLine from '../../components/HairLine';
 
-const LoginScreen = ({navigation}: ScreenProps) => {
-  const [phonenumber, setPhonenumber] = useState<string>('');
+
+const LoginScreen = ({ navigation }: ScreenProps) => {
+  const passInputRef = useRef()
+  const dispatch = useDispatch()
+
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const [submitCheck, setSubmitCheck] = useState(false);
-  const disableSave = phonenumber === '' || password === '';
-  const passwordRef = useRef<any>(null);
-  const onLogin = () => {};
+  
+  const onLogin = () => {
+    dispatch(authAction.login({ phoneNumber: phoneNumber, password: password, type: 'phone' }))
+  };
+
+  useEffect(() => {
+    setSubmitCheck(validatePhone(phoneNumber) && validatePassword(password))
+  }, [
+    phoneNumber, password
+  ])
+
+  const showHidePass = () => {
+    setIsShowPassword(!isShowPassword)
+  }
+
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-      }}
-      keyboardShouldPersistTaps="handled">
+    <KeyboardAwareScrollView>
       <View style={styles.container}>
-        <View style={styles.logoView}>
-          <Text>Logo, slogan</Text>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text style={styles.text_title_app}>
+            Health Care
+          </Text>
+          <Text style={styles.text_login}>
+            Login
+          </Text>
+          <Text style={styles.text_title_detail}>
+            Please enter detail to login
+          </Text>
         </View>
-        <Frame style={styles.contentView}>
-          <View style={styles.backgroundMain}>
-            {/* <Text style={styles.login}>Đăng nhập</Text> */}
+        <View style={{ paddingTop: 10, flex: 2 }}>
+          <TextInput label='Phone number' value={phoneNumber} onChangeText={setPhoneNumber} style={styles.text_input} keyboardType={'phone-pad'} onEndEditing={() => { passInputRef.current.focus() }} />
+          <TextInput onChangeText={setPassword} secureTextEntry={!isShowPassword} ref={passInputRef} label='Password' value={password} onChangeText={setPassword} style={styles.text_input} right={<TextInput.Icon name={isShowPassword ? "eye-off" : "eye"} onPress={showHidePass} />} />
+          <HButton
+            style={styles.button}
+            title="Đăng nhập"
+            textStyle={styles.text_btn_login}
+            type={submitCheck ? 'normal' : 'disabled'}
+            disabled={submitCheck ? false : true}
+            onPress={onLogin}
 
-            <TextInput
-              label="Số điện thoại của bạn"
-              value={phonenumber}
-              onChangeText={setPhonenumber}
-              mode="outlined"
-              style={styles.phoneInput}
-            />
-
-            <TextInput
-              label="Mật khẩu"
-              value={password}
-              onChangeText={setPassword}
-              mode="outlined"
-              secureTextEntry={isShowPassword}
-              right={
-                <TextInput.Icon
-                  name={isShowPassword ? 'eye-off' : 'eye'}
-                  onPress={() => setIsShowPassword(!isShowPassword)}
-                />
-              }
-              style={styles.inputPassword}
-            />
-            <Text
-              style={styles.forgetPass}
-              onPress={() => navigateTo(STRINGS.SCREEN.AUTH.FORGOT_PASSWORD)}>
-              Quên mật khẩu?
-            </Text>
-            <HButton
-              title="Đăng nhập"
-              textStyle={styles.textLogin}
-              type={!disableSave && submitCheck ? 'normal' : 'disabled'}
-              disabled={!disableSave && submitCheck ? false : true}
-              onPress={onLogin}
-            />
-            <View style={{width: '100%', alignItems: 'center'}}>
-              <View style={styles.divider}></View>
-              <Text style={styles.or}>hoặc</Text>
-            </View>
-            <View style={styles.thirdloginView}>
-              <TouchableOpacity onPress={() => {}}>
-                <Image
-                  source={require('../../../assets/images/facebook_icon.png')}
-                  style={styles.logoIcon}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => {}}>
-                <Image
-                  source={require('../../../assets/images/google_icon.png')}
-                  style={styles.logoIcon}
-                />
-              </TouchableOpacity>
-              {Platform.OS === 'ios' && (
-                <TouchableOpacity onPress={() => {}}>
-                  <Image
-                    source={require('../../../assets/images/apple_icon.png')}
-                    style={styles.logoIcon}
-                  />
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity onPress={() => {}}>
-                <Image
-                  source={require('../../../assets/images/zalo_icon.png')}
-                  style={styles.logoIcon}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.line} />
-            <Text style={styles.noAccText}>
+          />
+          <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+            <HairLine style={{ width: '90%' }} />
+            <Text style={styles.text_have_acc}>
               Bạn chưa có tài khoản?{' '}
               <Text
-                style={styles.signUpText}
-                onPress={() => navigateTo(STRINGS.ROUTE.AUTH.REGISTER)}>
-                Đăng ký
+                style={styles.text_regist}
+                onPress={() => { navigateTo(STRINGS.ROUTE.AUTH.REGISTER) }}>
+                Đăng kí
               </Text>
             </Text>
           </View>
-        </Frame>
+        </View>
       </View>
     </KeyboardAwareScrollView>
-
-    // <SafeAreaView style={styles.container}>
-    //   <View style={styles.logoContainer}>
-    //     <View style={styles.logo}>
-    //       <Text>Logo, slogan</Text>
-    //     </View>
-    //   </View>
-    //   <View style={styles.form}>
-    //     <TextInput
-    //       mode={'outlined'}
-    //       keyboardType={'phone-pad'}
-    //       label="Phonenumber"
-    //       value={phonenumber}
-    //       onChangeText={text => {
-    //         setPhonenumber(text);
-    //       }}
-    //     />
-    //     <TextInput
-    //       mode={'outlined'}
-    //       label="Password"
-    //       value={password}
-    //       secureTextEntry={isShowPassword}
-    //       onChangeText={text => {
-    //         setPassword(text);
-    //       }}
-    //       right={
-    //         <TextInput.Icon
-    //           name={isShowPassword ? 'eye-outline' : 'eye-off-outline'}
-    //           onPress={() => {
-    //             setIsShowPassword(!isShowPassword);
-    //           }}
-    //         />
-    //       }
-    //     />
-    //   </View>
-    //   <Button
-    //     title="Login"
-    //     color="blue"
-    //     onPress={() => {
-    //       console.log(`phone, pass:`, phonenumber, password);
-    //     }}
-    //   />
-    //   <View style={styles.thirdPartyLoginContainer}>
-    //     <TouchableOpacity style={styles.thirdPartyLogin}>
-    //       <View style={styles.logoThirPart} />
-    //     </TouchableOpacity>
-    //     <TouchableOpacity>
-    //       <View style={styles.logoThirPart} />
-    //     </TouchableOpacity>
-    //   </View>
-    //   <View style={styles.footer}>
-    //     <Text>
-    //       Have no account?{' '}
-    //       <Text
-    //         style={{color: 'blue'}}
-    //         onPress={() => {
-    //           navigate(SCREEN.AUTH.REGISTER);
-    //         }}>
-    //         Signup
-    //       </Text>
-    //     </Text>
-    //   </View>
-    // </SafeAreaView>
   );
 };
 
@@ -188,117 +93,45 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-around',
-    flex: 2,
-    alignItems: 'center',
-    marginHorizontal: 16,
+    height: DIMENS.SCREEN_HEIGHT,
+    width: DIMENS.SCREEN_WIDTH,
+    backgroundColor: COLORS.WHITE,
+    paddingHorizontal: 10
   },
-
-  logoView: {
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '50%',
-    height: 100,
+  text_title_app: {
+    color: COLORS.LIGHT_BLUE,
+    fontWeight: 'bold',
+    fontSize: 42,
   },
-  contentView: {
-    marginHorizontal: 30,
-    height: '60%',
+  text_login: {
+    marginTop: 20,
+    color: COLORS.LIGHT_BLUE,
+    fontWeight: 'bold',
+    fontSize: 26
   },
-  backgroundMain: {
-    // backgroundColor: '#fff',
-    // alignItems: 'center',
-    // borderRadius: 8,
-    // paddingTop: 23,
-    // paddingBottom: 12,
-    // paddingHorizontal: 15,
-    // overflow: 'hidden',
+  text_title_detail: {
+    color: COLORS.GRAY_TEXT_2,
+    fontSize: FONT_SIZE.TITLE
   },
-  login: {
-    color: COLORS.PRIMARY_COLOR,
-    fontSize: 24,
+  text_input: {
+    backgroundColor: COLORS.WHITE,
+    marginTop: 10
   },
-  forgetPass: {
-    alignSelf: 'flex-end',
-    paddingTop: 10,
-    paddingBottom: 16,
-    color: COLORS.PRIMARY_COLOR,
-    fontSize: 14,
+  text_regist: {
+    fontSize: FONT_SIZE.CONTENT,
+    fontWeight: 'bold',
+    color: COLORS.BLUE,
   },
-  textLogin: {
+  button: {
+    marginTop: 50,
+    marginHorizontal: 40
+  },
+  text_btn_login: {
     fontSize: 16,
   },
-  or: {
-    marginTop: 21,
-    marginBottom: 16,
-    color: '#ACACAC',
-    fontSize: 14,
-    backgroundColor: '#fff',
-    paddingHorizontal: 8,
+  text_have_acc: {
+    fontSize: FONT_SIZE.CONTENT,
+    marginTop: 8,
+    color: COLORS.BLACK,
   },
-  thirdloginView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: 28,
-  },
-  line: {
-    width: '150%',
-    height: 0.5,
-    backgroundColor: '#ACACAC',
-    marginTop: 32,
-    marginBottom: 9,
-  },
-  noAccText: {
-    fontSize: 14,
-    color: '#5F6368',
-  },
-  signUpText: {
-    color: COLORS.PRIMARY_COLOR,
-  },
-  desText: {
-    textAlign: 'center',
-    fontSize: FONT_SIZE.TINY,
-    color: COLORS.TEXT_COLOR_SEMI_BLUR,
-    position: 'absolute',
-    bottom: 30,
-  },
-  serviceText: {
-    color: COLORS.TEXT_COLOR_BLUE,
-    fontStyle: 'italic',
-    fontWeight: '700',
-    textDecorationLine: 'underline',
-    fontSize: FONT_SIZE.TINY,
-  },
-  logoIcon: {
-    height: 40,
-    width: 40,
-    resizeMode: 'contain',
-  },
-  bg1: {
-    position: 'absolute',
-  },
-  divider: {
-    width: '100%',
-    borderTopColor: '#ACACAC',
-    borderTopWidth: 0.5,
-    position: 'absolute',
-    top: 30,
-  },
-  phoneInput: {
-    marginTop: 24,
-    paddingHorizontal: 25,
-  },
-  inputPassword: {
-    marginTop: 24,
-    paddingHorizontal: 25,
-  },
-  textWrapper: {
-    position: 'absolute',
-    bottom: -30,
-    left: 32,
-  },
-  text: {
-    fontSize: 12,
-  },
-});
+})

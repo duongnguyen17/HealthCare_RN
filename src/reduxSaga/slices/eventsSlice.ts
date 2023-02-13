@@ -1,38 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { HEvent } from "../../common"
-import { EventsStateType } from "../../type/type"
-
+import {createSlice} from '@reduxjs/toolkit';
+import {HEvent} from '../../common';
+import {EventsStateType} from '../../type/type';
 
 const initialState: EventsStateType = {
-    all: [],
-    searchResult: []
-}
+  listEvent: [],
+  searchResult: [],
+};
 
 const eventsSlice = createSlice({
-    name: 'event',
-    initialState,
-    reducers: {
-        getAllEvent: (action) => {
+  name: 'event',
+  initialState,
+  reducers: {
+    getListEvent: (state, {payload}) => {},
+    getListEventSuccess: (state, {payload}) => {
+      state.listEvent = payload.listEvent;
+    },
+    searchEvent: (state, {payload}) => {},
+    searchEventSuccess: (state, {payload}) => {
+      state.searchResult = payload.searchResult;
+    },
 
-        },
-        getAllEventSuccess: (state, { payload }) => {
-            state.all = payload.all.sort((a: HEvent, b: HEvent) => (new Date(a.date).getTime() - new Date(b.date).getTime()))
-        },
-        getEventInMonth: (action) => {
+    getEventInMonth: action => {},
+    getEventInMonthSuccess: (state, {payload}) => {},
+  },
+});
 
-        },
-        getEventInMonthSuccess: (state, { payload }) => {
-
-        },
-        searchEvent: (state, { payload }) => {
-
-        },
-        searchEventSuccess: (state, { payload }) => {
-            // console.log(`payload.searchResult`, payload.searchResult)
-            state.searchResult = payload.searchResult.sort((a: HEvent, b: HEvent) => (a.date.getTime() - b.date.getTime()))
-        }
-    }
-})
-
-export const eventsAction = eventsSlice.actions
-export const eventsReducer = eventsSlice.reducer
+export const eventsAction = eventsSlice.actions;
+export const eventsReducer = eventsSlice.reducer;
